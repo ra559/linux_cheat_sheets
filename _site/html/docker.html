@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Docker Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#docker-cheat-sheet-for-debian-13" id="toc-docker-cheat-sheet-for-debian-13">Docker Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of Contents</a></li>
+<li><a href="#1-docker-overview" id="toc-1-docker-overview">1. Docker Overview</a></li>
+<li><a href="#2-install-docker-engine" id="toc-2-install-docker-engine">2. Install Docker Engine</a>
+<ul>
+<li><a href="#remove-potentially-conflicting-packages" id="toc-remove-potentially-conflicting-packages">Remove potentially conflicting packages</a></li>
+<li><a href="#install-prerequisites-and-add-dockers-signing-key" id="toc-install-prerequisites-and-add-dockers-signing-key">Install prerequisites and add Docker's signing key</a></li>
+</ul>
+</li>
+<li><a href="#3-verify-and-configure-docker" id="toc-3-verify-and-configure-docker">3. Verify and Configure Docker</a>
+<ul>
+<li><a href="#optional-run-docker-without-sudo" id="toc-optional-run-docker-without-sudo">Optional: run Docker without <code class="language-plaintext highlighter-rouge">sudo</code></a></li>
+</ul>
+</li>
+<li><a href="#4-images" id="toc-4-images">4. Images</a></li>
+<li><a href="#5-containers" id="toc-5-containers">5. Containers</a>
+<ul>
+<li><a href="#run-containers" id="toc-run-containers">Run containers</a></li>
+<li><a href="#start-stop-restart-and-remove" id="toc-start-stop-restart-and-remove">Start, stop, restart, and remove</a></li>
+<li><a href="#restart-policies" id="toc-restart-policies">Restart policies</a></li>
+</ul>
+</li>
+<li><a href="#6-ports-and-networking-basics" id="toc-6-ports-and-networking-basics">6. Ports and Networking Basics</a></li>
+<li><a href="#7-volumes-and-persistent-data" id="toc-7-volumes-and-persistent-data">7. Volumes and Persistent Data</a>
+<ul>
+<li><a href="#bind-mounts-share-a-host-directory" id="toc-bind-mounts-share-a-host-directory">Bind mounts: share a host directory</a></li>
+</ul>
+</li>
+<li><a href="#8-networks" id="toc-8-networks">8. Networks</a></li>
+<li><a href="#9-logs-and-inspection" id="toc-9-logs-and-inspection">9. Logs and Inspection</a></li>
+<li><a href="#10-execute-commands-and-copy-files" id="toc-10-execute-commands-and-copy-files">10. Execute Commands and Copy Files</a></li>
+<li><a href="#11-build-images-with-a-dockerfile" id="toc-11-build-images-with-a-dockerfile">11. Build Images with a Dockerfile</a></li>
+<li><a href="#12-docker-compose" id="toc-12-docker-compose">12. Docker Compose</a></li>
+<li><a href="#13-resource-usage-and-limits" id="toc-13-resource-usage-and-limits">13. Resource Usage and Limits</a></li>
+<li><a href="#14-troubleshooting" id="toc-14-troubleshooting">14. Troubleshooting</a>
+<ul>
+<li><a href="#docker-daemon-is-not-running" id="toc-docker-daemon-is-not-running">Docker daemon is not running</a></li>
+<li><a href="#permission-denied" id="toc-permission-denied">Permission denied</a></li>
+<li><a href="#container-exits-immediately" id="toc-container-exits-immediately">Container exits immediately</a></li>
+<li><a href="#port-is-already-in-use" id="toc-port-is-already-in-use">Port is already in use</a></li>
+<li><a href="#containers-cannot-resolve-each-other-by-name" id="toc-containers-cannot-resolve-each-other-by-name">Containers cannot resolve each other by name</a></li>
+<li><a href="#image-pull-fails" id="toc-image-pull-fails">Image pull fails</a></li>
+<li><a href="#inspect-daemon-logs" id="toc-inspect-daemon-logs">Inspect daemon logs</a></li>
+<li><a href="#check-disk-usage" id="toc-check-disk-usage">Check disk usage</a></li>
+</ul>
+</li>
+<li><a href="#15-cleanup-and-disk-space" id="toc-15-cleanup-and-disk-space">15. Cleanup and Disk Space</a></li>
+<li><a href="#16-security-notes" id="toc-16-security-notes">16. Security Notes</a></li>
+<li><a href="#17-quick-reference" id="toc-17-quick-reference">17. Quick Reference</a></li>
+<li><a href="#18-help-and-documentation" id="toc-18-help-and-documentation">18. Help and Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="docker-cheat-sheet-for-debian-13">Docker Cheat Sheet for Debian 13</h1>
+
+<p>A practical command reference for Docker Engine on Debian 13 (Trixie), including installation, images, containers, volumes, networks, logs, troubleshooting, and cleanup.</p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+  <li><a href="#1-docker-overview">1. Docker Overview</a></li>
+  <li><a href="#2-install-docker-engine">2. Install Docker Engine</a></li>
+  <li><a href="#3-verify-and-configure-docker">3. Verify and Configure Docker</a></li>
+  <li><a href="#4-images">4. Images</a></li>
+  <li><a href="#5-containers">5. Containers</a></li>
+  <li><a href="#6-ports-and-networking-basics">6. Ports and Networking Basics</a></li>
+  <li><a href="#7-volumes-and-persistent-data">7. Volumes and Persistent Data</a></li>
+  <li><a href="#8-networks">8. Networks</a></li>
+  <li><a href="#9-logs-and-inspection">9. Logs and Inspection</a></li>
+  <li><a href="#10-execute-commands-and-copy-files">10. Execute Commands and Copy Files</a></li>
+  <li><a href="#11-build-images-with-a-dockerfile">11. Build Images with a Dockerfile</a></li>
+  <li><a href="#12-docker-compose">12. Docker Compose</a></li>
+  <li><a href="#13-resource-usage-and-limits">13. Resource Usage and Limits</a></li>
+  <li><a href="#14-troubleshooting">14. Troubleshooting</a></li>
+  <li><a href="#15-cleanup-and-disk-space">15. Cleanup and Disk Space</a></li>
+  <li><a href="#16-security-notes">16. Security Notes</a></li>
+  <li><a href="#17-quick-reference">17. Quick Reference</a></li>
+  <li><a href="#18-help-and-documentation">18. Help and Documentation</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-docker-overview">1. Docker Overview</h2>
+
+<p>Docker runs applications in containers. Containers share the host's Linux kernel while providing isolation for processes, filesystems, and networking.</p>
+
+<ul>
+  <li><strong>Image:</strong> A template used to create containers.</li>
+  <li><strong>Container:</strong> A running or stopped instance of an image.</li>
+  <li><strong>Volume:</strong> Persistent storage managed by Docker.</li>
+  <li><strong>Network:</strong> A virtual network that connects containers.</li>
+  <li><strong>Dockerfile:</strong> Instructions for building an image.</li>
+  <li><strong>Docker Compose:</strong> A tool for defining and managing multi-container applications.</li>
+</ul>
+
+<p>Typical command structure:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker OBJECT COMMAND <span class="o">[</span>OPTIONS]
+</code></pre></div></div>
+
+<p>Examples: <code class="language-plaintext highlighter-rouge">docker image ls</code>, <code class="language-plaintext highlighter-rouge">docker container ls</code>, <code class="language-plaintext highlighter-rouge">docker volume ls</code>.</p>
+
+<h2 id="2-install-docker-engine">2. Install Docker Engine</h2>
+
+<p>This section uses Docker's official APT repository for Debian. Debian's <code class="language-plaintext highlighter-rouge">docker.io</code> package is a separate installation option; avoid mixing package sources without a plan.</p>
+
+<h3 id="remove-potentially-conflicting-packages">Remove potentially conflicting packages</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt remove docker.io docker-doc docker-compose podman-docker containerd runc
+</code></pre></div></div>
+
+<p>Review APT's proposed changes before confirming. This does not normally remove Docker data stored in <code class="language-plaintext highlighter-rouge">/var/lib/docker</code>, but do not rely on that directory as a backup.</p>
+
+<h3 id="install-prerequisites-and-add-dockers-signing-key">Install prerequisites and add Docker's signing key</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>ca-certificates curl
+<span class="nb">sudo install</span> <span class="nt">-m</span> 0755 <span class="nt">-d</span> /etc/apt/keyrings
+<span class="nb">sudo </span>curl <span class="nt">-fsSL</span> https://download.docker.com/linux/debian/gpg <span class="se">\</span>
+  <span class="nt">-o</span> /etc/apt/keyrings/docker.asc
+<span class="nb">sudo chmod </span>a+r /etc/apt/keyrings/docker.asc
+</code></pre></div></div>
+
+<p>Add the official repository using the Debian codename and architecture detected on your system:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo tee</span> /etc/apt/sources.list.d/docker.sources <span class="o">&gt;</span> /dev/null <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh">
+Types: deb
+URIs: https://download.docker.com/linux/debian
+Suites: </span><span class="si">$(</span><span class="nb">.</span> /etc/os-release <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$VERSION_CODENAME</span><span class="s2">"</span><span class="si">)</span><span class="sh">
+Components: stable
+Architectures: </span><span class="si">$(</span>dpkg <span class="nt">--print-architecture</span><span class="si">)</span><span class="sh">
+Signed-By: /etc/apt/keyrings/docker.asc
+</span><span class="no">EOF
+</span></code></pre></div></div>
+
+<p>Install Docker Engine, the CLI, containerd, Buildx, and Compose:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+</code></pre></div></div>
+
+<p>Enable and start Docker:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable</span> <span class="nt">--now</span> docker
+<span class="nb">sudo </span>systemctl status docker
+</code></pre></div></div>
+
+<h2 id="3-verify-and-configure-docker">3. Verify and Configure Docker</h2>
+
+<p>Check versions and installation:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nt">--version</span>
+docker compose version
+<span class="nb">sudo </span>docker run <span class="nt">--rm</span> hello-world
+</code></pre></div></div>
+
+<p>Show Docker's server configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>docker info
+</code></pre></div></div>
+
+<p>Check service status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl is-active docker
+systemctl is-enabled docker
+</code></pre></div></div>
+
+<h3 id="optional-run-docker-without-sudo">Optional: run Docker without <code class="language-plaintext highlighter-rouge">sudo</code></h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">docker</code> group grants root-level privileges on the host. Only add trusted users:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>usermod <span class="nt">-aG</span> docker <span class="s2">"</span><span class="nv">$USER</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Log out and back in for the group change to take effect, then check:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">id
+</span>docker ps
+</code></pre></div></div>
+
+<p>If you do not want to grant this level of access, keep using <code class="language-plaintext highlighter-rouge">sudo docker ...</code>.</p>
+
+<h2 id="4-images">4. Images</h2>
+
+<p>List local images:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker image <span class="nb">ls</span>
+</code></pre></div></div>
+
+<p>Download an image:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull debian:13
+docker pull nginx:stable
+</code></pre></div></div>
+
+<p>Search Docker Hub:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker search nginx
+</code></pre></div></div>
+
+<p>Inspect image metadata and layers:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker image inspect debian:13
+docker image <span class="nb">history </span>debian:13
+</code></pre></div></div>
+
+<p>Tag an image:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker image tag local-app:latest username/local-app:1.0
+</code></pre></div></div>
+
+<p>Remove an image:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker image <span class="nb">rm </span>debian:13
+</code></pre></div></div>
+
+<p>Remove dangling images:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker image prune
+</code></pre></div></div>
+
+<p>Remove images not referenced by any existing container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker image prune <span class="nt">-a</span>
+</code></pre></div></div>
+
+<p>Review prune prompts carefully before confirming.</p>
+
+<h2 id="5-containers">5. Containers</h2>
+
+<h3 id="run-containers">Run containers</h3>
+
+<p>Start an interactive Debian shell and remove the container when it exits:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">--rm</span> <span class="nt">-it</span> debian:13 bash
+</code></pre></div></div>
+
+<p>Run Nginx in the background:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> web nginx:stable
+</code></pre></div></div>
+
+<p>Run with an environment variable:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> app <span class="nt">-e</span> <span class="nv">APP_ENV</span><span class="o">=</span>production nginx:stable
+</code></pre></div></div>
+
+<p>List running containers:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps
+</code></pre></div></div>
+
+<p>List all containers, including stopped ones:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps <span class="nt">-a</span>
+</code></pre></div></div>
+
+<p>List only container IDs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps <span class="nt">-aq</span>
+</code></pre></div></div>
+
+<h3 id="start-stop-restart-and-remove">Start, stop, restart, and remove</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker start web
+docker stop web
+docker restart web
+docker <span class="nb">rm </span>web
+</code></pre></div></div>
+
+<p>Force-remove a running container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">rm</span> <span class="nt">-f</span> web
+</code></pre></div></div>
+
+<p>Removing a container deletes its writable layer. Named volumes generally remain unless you explicitly remove them.</p>
+
+<h3 id="restart-policies">Restart policies</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> web <span class="nt">--restart</span> unless-stopped nginx:stable
+docker update <span class="nt">--restart</span> unless-stopped web
+</code></pre></div></div>
+
+<p>Common policies:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">no</code>: never automatically restart (default).</li>
+  <li><code class="language-plaintext highlighter-rouge">on-failure</code>: restart after a non-zero exit status.</li>
+  <li><code class="language-plaintext highlighter-rouge">always</code>: restart according to Docker's restart behavior.</li>
+  <li><code class="language-plaintext highlighter-rouge">unless-stopped</code>: restart unless explicitly stopped.</li>
+</ul>
+
+<p>Inspect container configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker inspect web
+</code></pre></div></div>
+
+<h2 id="6-ports-and-networking-basics">6. Ports and Networking Basics</h2>
+
+<p>Publish host port <code class="language-plaintext highlighter-rouge">8080</code> to container port <code class="language-plaintext highlighter-rouge">80</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> web <span class="nt">-p</span> 8080:80 nginx:stable
+</code></pre></div></div>
+
+<p>Visit <code class="language-plaintext highlighter-rouge">http://localhost:8080</code> on the Docker host.</p>
+
+<p>Bind only to the host's loopback interface:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> local-web <span class="nt">-p</span> 127.0.0.1:8080:80 nginx:stable
+</code></pre></div></div>
+
+<p>Show port mappings:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker port web
+</code></pre></div></div>
+
+<p>Check listening host ports:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span>
+</code></pre></div></div>
+
+<h2 id="7-volumes-and-persistent-data">7. Volumes and Persistent Data</h2>
+
+<p>Use volumes for data that must survive container replacement.</p>
+
+<p>List and create volumes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker volume <span class="nb">ls
+</span>docker volume create app-data
+docker volume inspect app-data
+</code></pre></div></div>
+
+<p>Mount a named volume:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> web <span class="nt">-p</span> 8080:80 <span class="se">\</span>
+  <span class="nt">-v</span> web-data:/usr/share/nginx/html nginx:stable
+</code></pre></div></div>
+
+<p>Open a temporary shell with a volume mounted:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">--rm</span> <span class="nt">-it</span> <span class="nt">-v</span> app-data:/data debian:13 bash
+</code></pre></div></div>
+
+<p>Remove a volume:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker volume <span class="nb">rm </span>app-data
+</code></pre></div></div>
+
+<p>Remove unused volumes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker volume prune
+</code></pre></div></div>
+
+<p><strong>Warning:</strong> volume removal can permanently delete stored data. Check the volume's contents and backups first.</p>
+
+<h3 id="bind-mounts-share-a-host-directory">Bind mounts: share a host directory</h3>
+
+<p>Mount the current directory into a container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">--rm</span> <span class="nt">-it</span> <span class="se">\</span>
+  <span class="nt">--mount</span> <span class="nb">type</span><span class="o">=</span><span class="nb">bind</span>,source<span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>,target<span class="o">=</span>/workspace <span class="se">\</span>
+  debian:13 bash
+</code></pre></div></div>
+
+<p>Read-only bind mount:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">--rm</span> <span class="nt">-it</span> <span class="se">\</span>
+  <span class="nt">--mount</span> <span class="nb">type</span><span class="o">=</span><span class="nb">bind</span>,source<span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>,target<span class="o">=</span>/workspace,readonly <span class="se">\</span>
+  debian:13 bash
+</code></pre></div></div>
+
+<p>Bind mounts expose host files directly to the container. Verify the source path and permissions before running the command.</p>
+
+<h2 id="8-networks">8. Networks</h2>
+
+<p>List and inspect networks:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker network <span class="nb">ls
+</span>docker network inspect bridge
+</code></pre></div></div>
+
+<p>Create a user-defined bridge network:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker network create app-net
+</code></pre></div></div>
+
+<p>Run containers on it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> web <span class="nt">--network</span> app-net nginx:stable
+docker run <span class="nt">--rm</span> <span class="nt">-it</span> <span class="nt">--network</span> app-net debian:13 bash
+</code></pre></div></div>
+
+<p>Containers on a user-defined bridge network can generally resolve each other by container name. The second container can test <code class="language-plaintext highlighter-rouge">curl http://web</code> if curl is installed and Nginx is listening.</p>
+
+<p>Connect or disconnect an existing container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker network connect app-net web
+docker network disconnect app-net web
+</code></pre></div></div>
+
+<p>Remove a network or prune unused networks:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker network <span class="nb">rm </span>app-net
+docker network prune
+</code></pre></div></div>
+
+<h2 id="9-logs-and-inspection">9. Logs and Inspection</h2>
+
+<p>Display logs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker logs web
+</code></pre></div></div>
+
+<p>Follow logs live:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker logs <span class="nt">-f</span> web
+</code></pre></div></div>
+
+<p>Show the last 100 lines with timestamps:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker logs <span class="nt">--tail</span> 100 <span class="nt">--timestamps</span> web
+</code></pre></div></div>
+
+<p>Inspect a container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker inspect web
+</code></pre></div></div>
+
+<p>Print its current state and exit code:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker inspect <span class="nt">-f</span> <span class="s1">'{{.State.Status}}'</span> web
+docker inspect <span class="nt">-f</span> <span class="s1">'{{.State.ExitCode}}'</span> web
+</code></pre></div></div>
+
+<p>Show processes running inside a container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker top web
+</code></pre></div></div>
+
+<p>View resource usage:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stats
+docker stats <span class="nt">--no-stream</span>
+</code></pre></div></div>
+
+<h2 id="10-execute-commands-and-copy-files">10. Execute Commands and Copy Files</h2>
+
+<p>Open a shell in a running container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">exec</span> <span class="nt">-it</span> web sh
+</code></pre></div></div>
+
+<p>If Bash is installed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">exec</span> <span class="nt">-it</span> web bash
+</code></pre></div></div>
+
+<p>Run a one-off command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">exec </span>web nginx <span class="nt">-t</span>
+</code></pre></div></div>
+
+<p>Copy a host file into a container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">cp</span> ./index.html web:/usr/share/nginx/html/index.html
+</code></pre></div></div>
+
+<p>Copy a file from a container to the host:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">cp </span>web:/etc/nginx/nginx.conf ./nginx.conf
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">docker cp</code> works with running or stopped containers. Files in a container's writable layer can be lost when that container is removed; use a volume or bind mount for persistent data.</p>
+
+<h2 id="11-build-images-with-a-dockerfile">11. Build Images with a Dockerfile</h2>
+
+<p>Create a file named <code class="language-plaintext highlighter-rouge">Dockerfile</code>:</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> debian:13</span>
+
+<span class="k">RUN </span>apt-get update <span class="se">\
+</span>    <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nt">--no-install-recommends</span> nginx <span class="se">\
+</span>    <span class="o">&amp;&amp;</span> <span class="nb">rm</span> <span class="nt">-rf</span> /var/lib/apt/lists/<span class="k">*</span>
+
+<span class="k">EXPOSE</span><span class="s"> 80</span>
+
+<span class="k">CMD</span><span class="s"> ["nginx", "-g", "daemon off;"]</span>
+</code></pre></div></div>
+
+<p>Build an image from the current directory:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build <span class="nt">-t</span> my-nginx:1.0 <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>The final <code class="language-plaintext highlighter-rouge">.</code> is the build context. Run the image:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> my-nginx <span class="nt">-p</span> 8080:80 my-nginx:1.0
+</code></pre></div></div>
+
+<p>Example <code class="language-plaintext highlighter-rouge">.dockerignore</code> file:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.git
+.env
+*.log
+tmp/
+node_modules/
+</code></pre></div></div>
+
+<p>Adjust the entries to your project. Exclude secrets and unnecessary files from the build context, but do not exclude files required for the build.</p>
+
+<h2 id="12-docker-compose">12. Docker Compose</h2>
+
+<p>The official repository's <code class="language-plaintext highlighter-rouge">docker-compose-plugin</code> package provides the <code class="language-plaintext highlighter-rouge">docker compose</code> command.</p>
+
+<p>Example <code class="language-plaintext highlighter-rouge">compose.yaml</code>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:stable</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">8080:80"</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>
+</code></pre></div></div>
+
+<p>Start the project in the background:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p>List project containers:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose ps
+</code></pre></div></div>
+
+<p>Follow logs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose logs <span class="nt">-f</span>
+</code></pre></div></div>
+
+<p>Stop and remove project containers and networks:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose down
+</code></pre></div></div>
+
+<p>Pull newer images and recreate services:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose pull
+docker compose up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p><strong>Caution:</strong> <code class="language-plaintext highlighter-rouge">docker compose down -v</code> also removes project-declared named volumes and attached anonymous volumes. Use it only if you intend to delete that stored data.</p>
+
+<h2 id="13-resource-usage-and-limits">13. Resource Usage and Limits</h2>
+
+<p>Show live CPU, memory, network, and block I/O statistics:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stats
+</code></pre></div></div>
+
+<p>Set a 512 MiB memory limit:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> limited-web <span class="nt">--memory</span> 512m nginx:stable
+</code></pre></div></div>
+
+<p>Limit CPU use to approximately one CPU's worth of processing time:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> cpu-limited <span class="nt">--cpus</span> 1.0 nginx:stable
+</code></pre></div></div>
+
+<p>Set both limits:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-d</span> <span class="nt">--name</span> limited-app <span class="se">\</span>
+  <span class="nt">--memory</span> 512m <span class="nt">--cpus</span> 1.0 nginx:stable
+</code></pre></div></div>
+
+<p>Limits depend on kernel and cgroup support. Check the container's settings and behavior after applying them.</p>
+
+<h2 id="14-troubleshooting">14. Troubleshooting</h2>
+
+<h3 id="docker-daemon-is-not-running">Docker daemon is not running</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl status docker
+<span class="nb">sudo </span>systemctl start docker
+<span class="nb">sudo </span>journalctl <span class="nt">-u</span> docker <span class="nt">--since</span> <span class="s2">"30 minutes ago"</span>
+</code></pre></div></div>
+
+<h3 id="permission-denied">Permission denied</h3>
+
+<p>Try <code class="language-plaintext highlighter-rouge">sudo</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>docker ps
+</code></pre></div></div>
+
+<p>If using the <code class="language-plaintext highlighter-rouge">docker</code> group, verify group membership and start a new login session after adding yourself. Remember that group access is effectively root-level access.</p>
+
+<h3 id="container-exits-immediately">Container exits immediately</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps <span class="nt">-a</span>
+docker logs CONTAINER
+docker inspect <span class="nt">-f</span> <span class="s1">'{{.State.ExitCode}}'</span> CONTAINER
+</code></pre></div></div>
+
+<p>A container stops when its main process exits. It does not behave like a full virtual machine that stays running independently.</p>
+
+<h3 id="port-is-already-in-use">Port is already in use</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span>
+</code></pre></div></div>
+
+<p>Choose another host port, for example <code class="language-plaintext highlighter-rouge">-p 8081:80</code>.</p>
+
+<h3 id="containers-cannot-resolve-each-other-by-name">Containers cannot resolve each other by name</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker network <span class="nb">ls
+</span>docker network inspect app-net
+docker inspect web
+</code></pre></div></div>
+
+<p>Put related containers on the same user-defined bridge network or Compose network. The default bridge does not provide the same automatic name-based discovery behavior.</p>
+
+<h3 id="image-pull-fails">Image pull fails</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info
+docker pull nginx:stable
+</code></pre></div></div>
+
+<p>Check network connectivity, DNS, registry status, image name and tag, and authentication. Use <code class="language-plaintext highlighter-rouge">docker login</code> for private registries and follow your credential policy.</p>
+
+<h3 id="inspect-daemon-logs">Inspect daemon logs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>journalctl <span class="nt">-u</span> docker <span class="nt">-b</span>
+<span class="nb">sudo </span>journalctl <span class="nt">-u</span> docker <span class="nt">-f</span>
+</code></pre></div></div>
+
+<h3 id="check-disk-usage">Check disk usage</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker system <span class="nb">df
+</span>docker system <span class="nb">df</span> <span class="nt">-v</span>
+</code></pre></div></div>
+
+<h2 id="15-cleanup-and-disk-space">15. Cleanup and Disk Space</h2>
+
+<p>Remove a stopped container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker container <span class="nb">rm </span>web
+</code></pre></div></div>
+
+<p>Remove an image:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker image <span class="nb">rm </span>nginx:stable
+</code></pre></div></div>
+
+<p>Remove unused containers, dangling images, or unused networks:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker container prune
+docker image prune
+docker network prune
+</code></pre></div></div>
+
+<p>Remove unused volumes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker volume prune
+</code></pre></div></div>
+
+<p>Remove several categories of unused Docker objects:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker system prune
+</code></pre></div></div>
+
+<p>Also remove images not referenced by any container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker system prune <span class="nt">-a</span>
+</code></pre></div></div>
+
+<p>Check disk usage before cleanup:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker system <span class="nb">df</span>
+</code></pre></div></div>
+
+<p><strong>Be careful with prune commands.</strong> They can delete objects you intended to keep. <code class="language-plaintext highlighter-rouge">docker system prune -a --volumes</code> is especially destructive because it can remove unused images and volumes. Confirm important data is backed up before removing volumes.</p>
+
+<h2 id="16-security-notes">16. Security Notes</h2>
+
+<ul>
+  <li>Treat access to the Docker daemon and membership in the <code class="language-plaintext highlighter-rouge">docker</code> group as highly privileged.</li>
+  <li>Prefer trusted, maintained images. Pin versions where reproducibility matters; use image digests for strict pinning when appropriate.</li>
+  <li>Do not put passwords, API keys, or tokens in Dockerfiles or image layers.</li>
+  <li>Avoid publishing administrative services to every network interface unless necessary. Use <code class="language-plaintext highlighter-rouge">127.0.0.1</code> binding for host-only access when appropriate.</li>
+  <li>Use read-only mounts when containers only need to read data.</li>
+  <li>Be cautious with <code class="language-plaintext highlighter-rouge">--privileged</code>, host networking, mounting <code class="language-plaintext highlighter-rouge">/var/run/docker.sock</code>, and bind-mounting sensitive host directories.</li>
+  <li>Keep Docker Engine and images updated, and remove unused resources.</li>
+</ul>
+
+<h2 id="17-quick-reference">17. Quick Reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Show running containers</td>
+      <td><code class="language-plaintext highlighter-rouge">docker ps</code></td>
+    </tr>
+    <tr>
+      <td>Show all containers</td>
+      <td><code class="language-plaintext highlighter-rouge">docker ps -a</code></td>
+    </tr>
+    <tr>
+      <td>Pull an image</td>
+      <td><code class="language-plaintext highlighter-rouge">docker pull IMAGE</code></td>
+    </tr>
+    <tr>
+      <td>Run a container</td>
+      <td><code class="language-plaintext highlighter-rouge">docker run IMAGE</code></td>
+    </tr>
+    <tr>
+      <td>Run in background</td>
+      <td><code class="language-plaintext highlighter-rouge">docker run -d IMAGE</code></td>
+    </tr>
+    <tr>
+      <td>Stop a container</td>
+      <td><code class="language-plaintext highlighter-rouge">docker stop CONTAINER</code></td>
+    </tr>
+    <tr>
+      <td>Start a container</td>
+      <td><code class="language-plaintext highlighter-rouge">docker start CONTAINER</code></td>
+    </tr>
+    <tr>
+      <td>Restart a container</td>
+      <td><code class="language-plaintext highlighter-rouge">docker restart CONTAINER</code></td>
+    </tr>
+    <tr>
+      <td>Remove a container</td>
+      <td><code class="language-plaintext highlighter-rouge">docker rm CONTAINER</code></td>
+    </tr>
+    <tr>
+      <td>List images</td>
+      <td><code class="language-plaintext highlighter-rouge">docker image ls</code></td>
+    </tr>
+    <tr>
+      <td>Remove an image</td>
+      <td><code class="language-plaintext highlighter-rouge">docker image rm IMAGE</code></td>
+    </tr>
+    <tr>
+      <td>Show logs</td>
+      <td><code class="language-plaintext highlighter-rouge">docker logs CONTAINER</code></td>
+    </tr>
+    <tr>
+      <td>Follow logs</td>
+      <td><code class="language-plaintext highlighter-rouge">docker logs -f CONTAINER</code></td>
+    </tr>
+    <tr>
+      <td>Open a shell</td>
+      <td><code class="language-plaintext highlighter-rouge">docker exec -it CONTAINER sh</code></td>
+    </tr>
+    <tr>
+      <td>Inspect a container</td>
+      <td><code class="language-plaintext highlighter-rouge">docker inspect CONTAINER</code></td>
+    </tr>
+    <tr>
+      <td>Show resource usage</td>
+      <td><code class="language-plaintext highlighter-rouge">docker stats</code></td>
+    </tr>
+    <tr>
+      <td>List volumes</td>
+      <td><code class="language-plaintext highlighter-rouge">docker volume ls</code></td>
+    </tr>
+    <tr>
+      <td>List networks</td>
+      <td><code class="language-plaintext highlighter-rouge">docker network ls</code></td>
+    </tr>
+    <tr>
+      <td>Show disk usage</td>
+      <td><code class="language-plaintext highlighter-rouge">docker system df</code></td>
+    </tr>
+    <tr>
+      <td>Start Compose project</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose up -d</code></td>
+    </tr>
+    <tr>
+      <td>Stop Compose project</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose down</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Replace placeholders such as <code class="language-plaintext highlighter-rouge">IMAGE</code> and <code class="language-plaintext highlighter-rouge">CONTAINER</code> with actual image names, container names, or IDs.</p>
+
+<h2 id="18-help-and-documentation">18. Help and Documentation</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nt">--help</span>
+docker run <span class="nt">--help</span>
+docker compose <span class="nt">--help</span>
+docker version
+docker info
+</code></pre></div></div>
+
+<p>Official documentation:</p>
+
+<ul>
+  <li>Docker Engine on Debian: https://docs.docker.com/engine/install/debian/</li>
+  <li>Docker CLI reference: https://docs.docker.com/reference/cli/docker/</li>
+  <li>Docker Compose: https://docs.docker.com/compose/</li>
+  <li>Dockerfile reference: https://docs.docker.com/reference/dockerfile/</li>
+</ul>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

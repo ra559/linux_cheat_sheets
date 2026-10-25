@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Debian Package Management Cheat Sheet</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#debian-package-management-cheat-sheet" id="toc-debian-package-management-cheat-sheet">Debian Package Management Cheat Sheet</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of Contents</a></li>
+<li><a href="#1-understanding-software-installation-on-debian" id="toc-1-understanding-software-installation-on-debian">1. Understanding Software Installation on Debian</a>
+<ul>
+<li><a href="#choosing-an-installation-method" id="toc-choosing-an-installation-method">Choosing an installation method</a></li>
+</ul>
+</li>
+<li><a href="#2-apt-package-management" id="toc-2-apt-package-management">2. APT Package Management</a>
+<ul>
+<li><a href="#update-package-indexes" id="toc-update-package-indexes">Update package indexes</a></li>
+<li><a href="#upgrade-installed-packages" id="toc-upgrade-installed-packages">Upgrade installed packages</a></li>
+<li><a href="#install-packages" id="toc-install-packages">Install packages</a></li>
+<li><a href="#remove-packages" id="toc-remove-packages">Remove packages</a></li>
+<li><a href="#search-for-software" id="toc-search-for-software">Search for software</a></li>
+<li><a href="#simulate-an-operation" id="toc-simulate-an-operation">Simulate an operation</a></li>
+<li><a href="#repair-dependency-problems" id="toc-repair-dependency-problems">Repair dependency problems</a></li>
+<li><a href="#clean-cached-packages" id="toc-clean-cached-packages">Clean cached packages</a></li>
+<li><a href="#repository-configuration" id="toc-repository-configuration">Repository configuration</a></li>
+</ul>
+</li>
+<li><a href="#3-flatpak" id="toc-3-flatpak">3. Flatpak</a>
+<ul>
+<li><a href="#install-flatpak" id="toc-install-flatpak">Install Flatpak</a></li>
+<li><a href="#add-flathub" id="toc-add-flathub">Add Flathub</a></li>
+<li><a href="#search-for-applications" id="toc-search-for-applications">Search for applications</a></li>
+<li><a href="#install-an-application" id="toc-install-an-application">Install an application</a></li>
+<li><a href="#run-an-application" id="toc-run-an-application">Run an application</a></li>
+<li><a href="#list-installed-applications" id="toc-list-installed-applications">List installed applications</a></li>
+<li><a href="#update-applications" id="toc-update-applications">Update applications</a></li>
+<li><a href="#remove-applications" id="toc-remove-applications">Remove applications</a></li>
+<li><a href="#inspect-application-information" id="toc-inspect-application-information">Inspect application information</a></li>
+<li><a href="#inspect-permissions" id="toc-inspect-permissions">Inspect permissions</a></li>
+</ul>
+</li>
+<li><a href="#4-snap" id="toc-4-snap">4. Snap</a>
+<ul>
+<li><a href="#install-snap-support" id="toc-install-snap-support">Install Snap support</a></li>
+<li><a href="#search-for-applications-1" id="toc-search-for-applications-1">Search for applications</a></li>
+<li><a href="#install-an-application-1" id="toc-install-an-application-1">Install an application</a></li>
+<li><a href="#list-installed-snaps" id="toc-list-installed-snaps">List installed Snaps</a></li>
+<li><a href="#display-package-information" id="toc-display-package-information">Display package information</a></li>
+<li><a href="#update-snaps" id="toc-update-snaps">Update Snaps</a></li>
+<li><a href="#remove-a-snap" id="toc-remove-a-snap">Remove a Snap</a></li>
+<li><a href="#check-snap-services" id="toc-check-snap-services">Check Snap services</a></li>
+</ul>
+</li>
+<li><a href="#5-building-software-from-source" id="toc-5-building-software-from-source">5. Building Software from Source</a>
+<ul>
+<li><a href="#install-common-build-tools" id="toc-install-common-build-tools">Install common build tools</a></li>
+<li><a href="#obtain-source-code" id="toc-obtain-source-code">Obtain source code</a></li>
+<li><a href="#inspect-project-instructions" id="toc-inspect-project-instructions">Inspect project instructions</a></li>
+<li><a href="#common-build-workflows" id="toc-common-build-workflows">Common build workflows</a></li>
+<li><a href="#installing-a-built-application" id="toc-installing-a-built-application">Installing a built application</a></li>
+</ul>
+</li>
+<li><a href="#6-rust-applications" id="toc-6-rust-applications">6. Rust Applications</a>
+<ul>
+<li><a href="#install-rust-through-debian-packages" id="toc-install-rust-through-debian-packages">Install Rust through Debian packages</a></li>
+<li><a href="#install-rust-using-rustup" id="toc-install-rust-using-rustup">Install Rust using rustup</a></li>
+<li><a href="#build-a-rust-project" id="toc-build-a-rust-project">Build a Rust project</a></li>
+<li><a href="#install-a-rust-application-from-source" id="toc-install-a-rust-application-from-source">Install a Rust application from source</a></li>
+<li><a href="#update-and-remove-cargo-installed-applications" id="toc-update-and-remove-cargo-installed-applications">Update and remove Cargo-installed applications</a></li>
+</ul>
+</li>
+<li><a href="#7-c-applications" id="toc-7-c-applications">7. C Applications</a>
+<ul>
+<li><a href="#install-a-c-compiler" id="toc-install-a-c-compiler">Install a C compiler</a></li>
+<li><a href="#create-a-c-program" id="toc-create-a-c-program">Create a C program</a></li>
+<li><a href="#compile-the-program" id="toc-compile-the-program">Compile the program</a></li>
+<li><a href="#compile-with-warnings" id="toc-compile-with-warnings">Compile with warnings</a></li>
+<li><a href="#compile-with-optimization" id="toc-compile-with-optimization">Compile with optimization</a></li>
+<li><a href="#install-development-libraries" id="toc-install-development-libraries">Install development libraries</a></li>
+<li><a href="#inspect-linked-shared-libraries" id="toc-inspect-linked-shared-libraries">Inspect linked shared libraries</a></li>
+</ul>
+</li>
+<li><a href="#8-c-applications" id="toc-8-c-applications">8. C++ Applications</a>
+<ul>
+<li><a href="#install-a-c-compiler-1" id="toc-install-a-c-compiler-1">Install a C++ compiler</a></li>
+<li><a href="#create-a-c-program-1" id="toc-create-a-c-program-1">Create a C++ program</a></li>
+<li><a href="#compile-the-program-1" id="toc-compile-the-program-1">Compile the program</a></li>
+<li><a href="#specify-the-c-language-standard" id="toc-specify-the-c-language-standard">Specify the C++ language standard</a></li>
+<li><a href="#enable-compiler-warnings" id="toc-enable-compiler-warnings">Enable compiler warnings</a></li>
+<li><a href="#build-a-cmake-project" id="toc-build-a-cmake-project">Build a CMake project</a></li>
+</ul>
+</li>
+<li><a href="#9-troubleshooting" id="toc-9-troubleshooting">9. Troubleshooting</a>
+<ul>
+<li><a href="#apt-cannot-find-a-package" id="toc-apt-cannot-find-a-package">APT cannot find a package</a></li>
+<li><a href="#flatpak-cannot-find-an-application" id="toc-flatpak-cannot-find-an-application">Flatpak cannot find an application</a></li>
+<li><a href="#snap-commands-fail" id="toc-snap-commands-fail">Snap commands fail</a></li>
+<li><a href="#a-source-build-fails" id="toc-a-source-build-fails">A source build fails</a></li>
+<li><a href="#an-executable-cannot-be-found" id="toc-an-executable-cannot-be-found">An executable cannot be found</a></li>
+</ul>
+</li>
+<li><a href="#10-quick-reference" id="toc-10-quick-reference">10. Quick Reference</a>
+<ul>
+<li><a href="#final-notes" id="toc-final-notes">Final Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="debian-package-management-cheat-sheet">Debian Package Management Cheat Sheet</h1>
+
+<p><strong>Platform:</strong> Debian GNU/Linux<br />
+<strong>Default environment:</strong> Debian 13 (Trixie)</p>
+
+<p>This cheat sheet covers the installation, updating, removal, and maintenance of software on Debian using APT, Flatpak, Snap, and source builds. It also includes the basic toolchains required to compile Rust, C, and C++ applications.</p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+  <li><a href="#1-understanding-software-installation-on-debian">1. Understanding Software Installation on Debian</a></li>
+  <li><a href="#2-apt-package-management">2. APT Package Management</a></li>
+  <li><a href="#3-flatpak">3. Flatpak</a></li>
+  <li><a href="#4-snap">4. Snap</a></li>
+  <li><a href="#5-building-software-from-source">5. Building Software from Source</a></li>
+  <li><a href="#6-rust-applications">6. Rust Applications</a></li>
+  <li><a href="#7-c-applications">7. C Applications</a></li>
+  <li><a href="#8-c-applications">8. C++ Applications</a></li>
+  <li><a href="#9-troubleshooting">9. Troubleshooting</a></li>
+  <li><a href="#10-quick-reference">10. Quick Reference</a></li>
+</ul>
+
+<h2 id="1-understanding-software-installation-on-debian">1. Understanding Software Installation on Debian</h2>
+
+<p>Debian supports several ways to install software. Each method has different strengths, requirements, and maintenance procedures.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Description</th>
+      <th>Typical use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>APT</td>
+      <td>Installs packages from configured Debian and third-party repositories.</td>
+      <td>System software, libraries, command-line utilities, and desktop applications.</td>
+    </tr>
+    <tr>
+      <td>Flatpak</td>
+      <td>Distributes applications in portable bundles, commonly using a sandbox.</td>
+      <td>Desktop applications distributed independently of the base operating system.</td>
+    </tr>
+    <tr>
+      <td>Snap</td>
+      <td>Distributes applications in self-contained Snap packages managed by the Snap daemon.</td>
+      <td>Applications distributed through the Snap ecosystem.</td>
+    </tr>
+    <tr>
+      <td>Build from source</td>
+      <td>Compiles or builds software from its source code.</td>
+      <td>Development, customization, newer versions, and software unavailable as a package.</td>
+    </tr>
+    <tr>
+      <td>Cargo</td>
+      <td>Rust's package manager and build tool.</td>
+      <td>Building and installing Rust applications.</td>
+    </tr>
+    <tr>
+      <td>GCC and Clang</td>
+      <td>Compiler toolchains for C and C++.</td>
+      <td>Building native applications and libraries.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="choosing-an-installation-method">Choosing an installation method</h3>
+
+<ul>
+  <li>Prefer <strong>APT</strong> for software available in Debian's repositories.</li>
+  <li>Use <strong>Flatpak</strong> for desktop applications when its packaging and update model are appropriate.</li>
+  <li>Use <strong>Snap</strong> when an application is distributed through Snap or requires that ecosystem.</li>
+  <li>Build from source when you need control over the build, a version unavailable through existing packages, or a development workflow.</li>
+</ul>
+
+<p>Avoid installing the same application through multiple package managers unless there is a specific reason. Multiple installations can create confusion about executable paths, configuration files, and update mechanisms.</p>
+
+<h2 id="2-apt-package-management">2. APT Package Management</h2>
+
+<p>APT (Advanced Package Tool) is Debian's primary high-level package management system.</p>
+
+<h3 id="update-package-indexes">Update package indexes</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+</code></pre></div></div>
+
+<p>Refreshes local package indexes. It does not upgrade installed software.</p>
+
+<h3 id="upgrade-installed-packages">Upgrade installed packages</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt upgrade
+</code></pre></div></div>
+
+<p>Upgrades installed packages without removing installed packages to resolve dependency changes.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt full-upgrade
+</code></pre></div></div>
+
+<p>Performs a broader upgrade and may remove packages when required to resolve dependencies.</p>
+
+<h3 id="install-packages">Install packages</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>PACKAGE
+</code></pre></div></div>
+
+<p>Install multiple packages:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>PACKAGE1 PACKAGE2
+</code></pre></div></div>
+
+<p>Install a local Debian package:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install</span> ./package.deb
+</code></pre></div></div>
+
+<p>Reinstall a package:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install</span> <span class="nt">--reinstall</span> PACKAGE
+</code></pre></div></div>
+
+<h3 id="remove-packages">Remove packages</h3>
+
+<p>Remove an application while generally retaining system-wide package configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt remove PACKAGE
+</code></pre></div></div>
+
+<p>Remove a package and its package-managed system configuration files:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt purge PACKAGE
+</code></pre></div></div>
+
+<p>Remove automatically installed dependencies that are no longer needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt autoremove
+</code></pre></div></div>
+
+<h3 id="search-for-software">Search for software</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt search KEYWORD
+</code></pre></div></div>
+
+<p>Display package information:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt show PACKAGE
+</code></pre></div></div>
+
+<p>Check installed and available versions:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-cache policy PACKAGE
+</code></pre></div></div>
+
+<p>List installed packages:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt list <span class="nt">--installed</span>
+</code></pre></div></div>
+
+<p>List packages with available upgrades:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt list <span class="nt">--upgradable</span>
+</code></pre></div></div>
+
+<h3 id="simulate-an-operation">Simulate an operation</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt <span class="nt">-s</span> <span class="nb">install </span>PACKAGE
+</code></pre></div></div>
+
+<p>Simulates an installation without making the package changes.</p>
+
+<h3 id="repair-dependency-problems">Repair dependency problems</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nt">--fix-broken</span> <span class="nb">install</span>
+</code></pre></div></div>
+
+<p>Configure unpacked packages that have not finished configuring:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>dpkg <span class="nt">--configure</span> <span class="nt">-a</span>
+</code></pre></div></div>
+
+<p>Check package dependency consistency:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt check
+</code></pre></div></div>
+
+<h3 id="clean-cached-packages">Clean cached packages</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt clean
+</code></pre></div></div>
+
+<p>Removes downloaded package archives from APT's cache.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt autoclean
+</code></pre></div></div>
+
+<p>Removes cached package archives that are no longer downloadable from configured repositories.</p>
+
+<h3 id="repository-configuration">Repository configuration</h3>
+
+<p>Common configuration locations:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Path</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/etc/apt/sources.list</code></td>
+      <td>Traditional repository configuration.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/etc/apt/sources.list.d/</code></td>
+      <td>Additional repository configuration files.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/etc/apt/sources.list.d/*.sources</code></td>
+      <td>Common location for deb822-format sources.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/etc/apt/preferences.d/</code></td>
+      <td>Package version pinning preferences.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/var/lib/apt/lists/</code></td>
+      <td>Downloaded repository index data.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/var/cache/apt/archives/</code></td>
+      <td>Cached package archives.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Inspect repository files:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> <span class="nt">-l</span> /etc/apt/sources.list.d/
+</code></pre></div></div>
+
+<p>After changing repository configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+</code></pre></div></div>
+
+<p><strong>Important:</strong> Do not mix Debian releases casually. Third-party repositories must be trusted and configured correctly.</p>
+
+<h2 id="3-flatpak">3. Flatpak</h2>
+
+<p>Flatpak is an application distribution system commonly used for desktop software. Applications can run in a sandbox with access controlled by permissions. Many Flatpak applications use the Flathub repository.</p>
+
+<h3 id="install-flatpak">Install Flatpak</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>flatpak
+</code></pre></div></div>
+
+<p>For GNOME Software integration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>gnome-software-plugin-flatpak
+</code></pre></div></div>
+
+<p>The GNOME Software plugin is optional and is intended for systems using GNOME Software.</p>
+
+<h3 id="add-flathub">Add Flathub</h3>
+
+<p>Add the Flathub remote for the current user:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak remote-add <span class="nt">--if-not-exists</span> flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+</code></pre></div></div>
+
+<p>This configures Flathub as a per-user remote. For a system-wide remote, use <code class="language-plaintext highlighter-rouge">sudo flatpak remote-add</code> with the same options.</p>
+
+<h3 id="search-for-applications">Search for applications</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak search APPLICATION
+</code></pre></div></div>
+
+<h3 id="install-an-application">Install an application</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak <span class="nb">install </span>flathub APPLICATION_ID
+</code></pre></div></div>
+
+<p>Example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak <span class="nb">install </span>flathub org.videolan.VLC
+</code></pre></div></div>
+
+<h3 id="run-an-application">Run an application</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak run APPLICATION_ID
+</code></pre></div></div>
+
+<p>Example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak run org.videolan.VLC
+</code></pre></div></div>
+
+<h3 id="list-installed-applications">List installed applications</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak list
+</code></pre></div></div>
+
+<p>List configured remotes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak remotes
+</code></pre></div></div>
+
+<h3 id="update-applications">Update applications</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak update
+</code></pre></div></div>
+
+<p>Updates installed applications and their relevant runtimes.</p>
+
+<h3 id="remove-applications">Remove applications</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak uninstall APPLICATION_ID
+</code></pre></div></div>
+
+<p>Remove unused runtimes and dependencies:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak uninstall <span class="nt">--unused</span>
+</code></pre></div></div>
+
+<h3 id="inspect-application-information">Inspect application information</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak info APPLICATION_ID
+</code></pre></div></div>
+
+<h3 id="inspect-permissions">Inspect permissions</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak info <span class="nt">--show-permissions</span> APPLICATION_ID
+</code></pre></div></div>
+
+<p><strong>Note:</strong> Flatpak application IDs are not necessarily the same as Debian package names. Use the exact application ID provided by the remote.</p>
+
+<h2 id="4-snap">4. Snap</h2>
+
+<p>Snap is a software packaging and distribution system that uses the Snap daemon, <code class="language-plaintext highlighter-rouge">snapd</code>, to install and manage Snap packages.</p>
+
+<p>Snap is not installed by default on a standard Debian installation.</p>
+
+<h3 id="install-snap-support">Install Snap support</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>snapd
+</code></pre></div></div>
+
+<p>Enable and start the daemon if necessary:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable</span> <span class="nt">--now</span> snapd.socket
+</code></pre></div></div>
+
+<p>Some installations may require a logout or reboot before all Snap integration works correctly.</p>
+
+<h3 id="search-for-applications-1">Search for applications</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>snap find APPLICATION
+</code></pre></div></div>
+
+<h3 id="install-an-application-1">Install an application</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>snap <span class="nb">install </span>APPLICATION
+</code></pre></div></div>
+
+<p>Install a classic-confinement application when required by its publisher:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>snap <span class="nb">install</span> <span class="nt">--classic</span> APPLICATION
+</code></pre></div></div>
+
+<p>Classic confinement grants broader system access than strict confinement. Use it only when the application requires it and the publisher is trusted.</p>
+
+<h3 id="list-installed-snaps">List installed Snaps</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>snap list
+</code></pre></div></div>
+
+<h3 id="display-package-information">Display package information</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>snap info APPLICATION
+</code></pre></div></div>
+
+<h3 id="update-snaps">Update Snaps</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>snap refresh
+</code></pre></div></div>
+
+<p>Refresh a specific application:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>snap refresh APPLICATION
+</code></pre></div></div>
+
+<h3 id="remove-a-snap">Remove a Snap</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>snap remove APPLICATION
+</code></pre></div></div>
+
+<p>Remove a Snap and discard its saved data where supported:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>snap remove <span class="nt">--purge</span> APPLICATION
+</code></pre></div></div>
+
+<h3 id="check-snap-services">Check Snap services</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status snapd.socket
+</code></pre></div></div>
+
+<p><strong>Note:</strong> Snap applications are managed independently of APT packages, although <code class="language-plaintext highlighter-rouge">snapd</code> itself is installed and maintained through APT on Debian.</p>
+
+<h2 id="5-building-software-from-source">5. Building Software from Source</h2>
+
+<p>Building from source means obtaining a project's source code and running its build system to produce an executable, library, or package.</p>
+
+<p>The exact process depends on the project's programming language and build system. Always read the project's README and installation instructions first.</p>
+
+<h3 id="install-common-build-tools">Install common build tools</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>build-essential git cmake pkg-config
+</code></pre></div></div>
+
+<p>This installs common tools for native compilation, including GCC, G++, GNU Make, and development utilities.</p>
+
+<p>Additional dependencies may be required by individual projects.</p>
+
+<h3 id="obtain-source-code">Obtain source code</h3>
+
+<p>Clone a Git repository:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone REPOSITORY_URL
+</code></pre></div></div>
+
+<p>Enter the project directory:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>PROJECT_DIRECTORY
+</code></pre></div></div>
+
+<p>For a release archive, download it from the project's official release page and extract it using the appropriate tool.</p>
+
+<h3 id="inspect-project-instructions">Inspect project instructions</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> <span class="nt">-la</span>
+</code></pre></div></div>
+
+<p>Look for files such as:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">README.md</code></li>
+  <li><code class="language-plaintext highlighter-rouge">INSTALL</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Makefile</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CMakeLists.txt</code></li>
+  <li><code class="language-plaintext highlighter-rouge">configure</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Cargo.toml</code></li>
+</ul>
+
+<p>These files often identify the build system, dependencies, configuration options, and installation procedure.</p>
+
+<h3 id="common-build-workflows">Common build workflows</h3>
+
+<p>For projects that provide a Makefile:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make
+</code></pre></div></div>
+
+<p>For projects using CMake:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmake <span class="nt">-S</span> <span class="nb">.</span> <span class="nt">-B</span> build
+cmake <span class="nt">--build</span> build
+</code></pre></div></div>
+
+<p>For projects using a configure script:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure
+make
+</code></pre></div></div>
+
+<p>These are examples, not interchangeable universal commands. Use only the workflow supported by the project.</p>
+
+<h3 id="installing-a-built-application">Installing a built application</h3>
+
+<p>Some projects provide an installation target:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>make <span class="nb">install</span>
+</code></pre></div></div>
+
+<p>Others provide a package, an executable that can be run directly, or their own installation command.</p>
+
+<p><strong>Caution:</strong> Avoid <code class="language-plaintext highlighter-rouge">sudo make install</code> unless the project explicitly documents it. Installing manually can place files outside APT's control, making upgrades and removal more difficult.</p>
+
+<p>Prefer a Debian package when the project provides one. For a custom build, consider installing into a dedicated directory or using a packaging tool so the installed files can be tracked and removed safely.</p>
+
+<h2 id="6-rust-applications">6. Rust Applications</h2>
+
+<p>Rust projects commonly use Cargo, the official Rust package manager and build tool.</p>
+
+<h3 id="install-rust-through-debian-packages">Install Rust through Debian packages</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>rustc cargo
+</code></pre></div></div>
+
+<p>This uses the versions provided by the configured Debian repositories.</p>
+
+<p>Check installed versions:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rustc <span class="nt">--version</span>
+cargo <span class="nt">--version</span>
+</code></pre></div></div>
+
+<h3 id="install-rust-using-rustup">Install Rust using rustup</h3>
+
+<p><code class="language-plaintext highlighter-rouge">rustup</code> manages Rust toolchains and allows users to select different compiler versions. It is often useful when a project requires a newer Rust version than Debian provides.</p>
+
+<p>Follow the installation instructions at the official Rust website:</p>
+
+<p>https://www.rust-lang.org/tools/install</p>
+
+<p>Avoid mixing a <code class="language-plaintext highlighter-rouge">rustup</code> toolchain and Debian's Rust packages without understanding which executable takes precedence in <code class="language-plaintext highlighter-rouge">PATH</code>.</p>
+
+<h3 id="build-a-rust-project">Build a Rust project</h3>
+
+<p>Clone the source:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone REPOSITORY_URL
+<span class="nb">cd </span>PROJECT_DIRECTORY
+</code></pre></div></div>
+
+<p>Build the project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo build
+</code></pre></div></div>
+
+<p>Build an optimized release executable:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo build <span class="nt">--release</span>
+</code></pre></div></div>
+
+<p>Run the project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo run
+</code></pre></div></div>
+
+<p>Run it with release optimizations:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo run <span class="nt">--release</span>
+</code></pre></div></div>
+
+<h3 id="install-a-rust-application-from-source">Install a Rust application from source</h3>
+
+<p>For a Rust project that supports Cargo installation:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo <span class="nb">install </span>APPLICATION
+</code></pre></div></div>
+
+<p>This generally builds the application and places its executable in Cargo's binary directory, commonly <code class="language-plaintext highlighter-rouge">~/.cargo/bin/</code>.</p>
+
+<p>For a local project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo <span class="nb">install</span> <span class="nt">--path</span> <span class="nb">.</span>
+</code></pre></div></div>
+
+<h3 id="update-and-remove-cargo-installed-applications">Update and remove Cargo-installed applications</h3>
+
+<p>Update an installed Cargo application:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo <span class="nb">install </span>APPLICATION
+</code></pre></div></div>
+
+<p>Cargo can reinstall an application when a newer compatible version is available.</p>
+
+<p>Remove an installed Cargo application:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo uninstall APPLICATION
+</code></pre></div></div>
+
+<p><strong>Note:</strong> Cargo-installed applications are not managed by APT. Their dependencies and update procedures are separate from Debian package management.</p>
+
+<h2 id="7-c-applications">7. C Applications</h2>
+
+<p>C is a compiled programming language. C source files are typically compiled with GCC or Clang.</p>
+
+<h3 id="install-a-c-compiler">Install a C compiler</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>build-essential
+</code></pre></div></div>
+
+<p>Check the compiler version:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">--version</span>
+</code></pre></div></div>
+
+<h3 id="create-a-c-program">Create a C program</h3>
+
+<p>Create a file named <code class="language-plaintext highlighter-rouge">hello.c</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Hello, Debian!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="compile-the-program">Compile the program</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc hello.c <span class="nt">-o</span> hello
+</code></pre></div></div>
+
+<p>Run it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./hello
+</code></pre></div></div>
+
+<h3 id="compile-with-warnings">Compile with warnings</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">-Wall</span> <span class="nt">-Wextra</span> <span class="nt">-Wpedantic</span> hello.c <span class="nt">-o</span> hello
+</code></pre></div></div>
+
+<p>These options enable useful compiler diagnostics.</p>
+
+<h3 id="compile-with-optimization">Compile with optimization</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">-O2</span> hello.c <span class="nt">-o</span> hello
+</code></pre></div></div>
+
+<p>Optimization options can improve performance but may make debugging more difficult.</p>
+
+<h3 id="install-development-libraries">Install development libraries</h3>
+
+<p>C applications may require development headers and libraries. On Debian, development packages commonly use the <code class="language-plaintext highlighter-rouge">-dev</code> suffix.</p>
+
+<p>For example, to install OpenSSL development files:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>libssl-dev
+</code></pre></div></div>
+
+<p>The actual dependencies depend on the application.</p>
+
+<h3 id="inspect-linked-shared-libraries">Inspect linked shared libraries</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ldd ./hello
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">ldd</code> only on trusted executables. It displays the shared libraries an executable depends on.</p>
+
+<h2 id="8-c-applications">8. C++ Applications</h2>
+
+<p>C++ is a compiled programming language. Debian provides GCC's C++ compiler and Clang as common options.</p>
+
+<h3 id="install-a-c-compiler-1">Install a C++ compiler</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>g++
+</code></pre></div></div>
+
+<p>Alternatively, install the standard native build tools:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>build-essential
+</code></pre></div></div>
+
+<p>Check the compiler version:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>g++ <span class="nt">--version</span>
+</code></pre></div></div>
+
+<h3 id="create-a-c-program-1">Create a C++ program</h3>
+
+<p>Create a file named <code class="language-plaintext highlighter-rouge">hello.cpp</code>:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Hello, Debian!"</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="compile-the-program-1">Compile the program</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>g++ hello.cpp <span class="nt">-o</span> hello
+</code></pre></div></div>
+
+<p>Run it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./hello
+</code></pre></div></div>
+
+<h3 id="specify-the-c-language-standard">Specify the C++ language standard</h3>
+
+<p>For C++17:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>g++ <span class="nt">-std</span><span class="o">=</span>c++17 hello.cpp <span class="nt">-o</span> hello
+</code></pre></div></div>
+
+<p>For C++20:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>g++ <span class="nt">-std</span><span class="o">=</span>c++20 hello.cpp <span class="nt">-o</span> hello
+</code></pre></div></div>
+
+<p>The selected standard must be supported by the installed compiler.</p>
+
+<h3 id="enable-compiler-warnings">Enable compiler warnings</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>g++ <span class="nt">-Wall</span> <span class="nt">-Wextra</span> <span class="nt">-Wpedantic</span> hello.cpp <span class="nt">-o</span> hello
+</code></pre></div></div>
+
+<h3 id="build-a-cmake-project">Build a CMake project</h3>
+
+<p>Install CMake:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>cmake
+</code></pre></div></div>
+
+<p>Configure and build a project containing <code class="language-plaintext highlighter-rouge">CMakeLists.txt</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmake <span class="nt">-S</span> <span class="nb">.</span> <span class="nt">-B</span> build
+cmake <span class="nt">--build</span> build
+</code></pre></div></div>
+
+<p>This workflow is common for C++ projects and also works for many C projects using CMake.</p>
+
+<h2 id="9-troubleshooting">9. Troubleshooting</h2>
+
+<h3 id="apt-cannot-find-a-package">APT cannot find a package</h3>
+
+<p>Refresh the package indexes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+</code></pre></div></div>
+
+<p>Search for the package:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt search KEYWORD
+</code></pre></div></div>
+
+<p>Check the configured repositories and package availability:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-cache policy PACKAGE
+</code></pre></div></div>
+
+<h3 id="flatpak-cannot-find-an-application">Flatpak cannot find an application</h3>
+
+<p>Check configured remotes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak remotes
+</code></pre></div></div>
+
+<p>Search Flathub:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak search APPLICATION
+</code></pre></div></div>
+
+<p>Confirm that you are using the correct application ID.</p>
+
+<h3 id="snap-commands-fail">Snap commands fail</h3>
+
+<p>Check whether the Snap daemon is running:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status snapd.socket
+</code></pre></div></div>
+
+<p>Confirm that Snap is installed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>snap version
+</code></pre></div></div>
+
+<h3 id="a-source-build-fails">A source build fails</h3>
+
+<p>Read the error output and the project's build instructions. Common causes include missing development headers, incompatible compiler versions, missing build tools, and unavailable dependencies.</p>
+
+<p>Check whether a required tool exists:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command</span> <span class="nt">-v</span> gcc
+<span class="nb">command</span> <span class="nt">-v</span> g++
+<span class="nb">command</span> <span class="nt">-v</span> cmake
+<span class="nb">command</span> <span class="nt">-v</span> make
+<span class="nb">command</span> <span class="nt">-v</span> cargo
+</code></pre></div></div>
+
+<h3 id="an-executable-cannot-be-found">An executable cannot be found</h3>
+
+<p>Check its location:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command</span> <span class="nt">-v</span> APPLICATION
+</code></pre></div></div>
+
+<p>Inspect the executable search path:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="nv">$PATH</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Rust applications installed with Cargo commonly reside in <code class="language-plaintext highlighter-rouge">~/.cargo/bin/</code>. That directory must be included in <code class="language-plaintext highlighter-rouge">PATH</code> for the commands to be found.</p>
+
+<h2 id="10-quick-reference">10. Quick Reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Goal</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Refresh APT indexes</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo apt update</code></td>
+    </tr>
+    <tr>
+      <td>Upgrade Debian packages</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo apt upgrade</code></td>
+    </tr>
+    <tr>
+      <td>Install an APT package</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo apt install PACKAGE</code></td>
+    </tr>
+    <tr>
+      <td>Remove an APT package</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo apt remove PACKAGE</code></td>
+    </tr>
+    <tr>
+      <td>Search APT packages</td>
+      <td><code class="language-plaintext highlighter-rouge">apt search KEYWORD</code></td>
+    </tr>
+    <tr>
+      <td>Install Flatpak</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo apt install flatpak</code></td>
+    </tr>
+    <tr>
+      <td>Install a Flatpak application</td>
+      <td><code class="language-plaintext highlighter-rouge">flatpak install flathub APPLICATION_ID</code></td>
+    </tr>
+    <tr>
+      <td>Update Flatpak applications</td>
+      <td><code class="language-plaintext highlighter-rouge">flatpak update</code></td>
+    </tr>
+    <tr>
+      <td>Install Snap support</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo apt install snapd</code></td>
+    </tr>
+    <tr>
+      <td>Install a Snap application</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo snap install APPLICATION</code></td>
+    </tr>
+    <tr>
+      <td>Update Snaps</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo snap refresh</code></td>
+    </tr>
+    <tr>
+      <td>Install native build tools</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo apt install build-essential</code></td>
+    </tr>
+    <tr>
+      <td>Install CMake</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo apt install cmake</code></td>
+    </tr>
+    <tr>
+      <td>Install Debian's Rust toolchain</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo apt install rustc cargo</code></td>
+    </tr>
+    <tr>
+      <td>Compile a C program</td>
+      <td><code class="language-plaintext highlighter-rouge">gcc hello.c -o hello</code></td>
+    </tr>
+    <tr>
+      <td>Compile a C++ program</td>
+      <td><code class="language-plaintext highlighter-rouge">g++ hello.cpp -o hello</code></td>
+    </tr>
+    <tr>
+      <td>Build a Rust project</td>
+      <td><code class="language-plaintext highlighter-rouge">cargo build</code></td>
+    </tr>
+    <tr>
+      <td>Build a Rust release executable</td>
+      <td><code class="language-plaintext highlighter-rouge">cargo build --release</code></td>
+    </tr>
+    <tr>
+      <td>Build a CMake project</td>
+      <td><code class="language-plaintext highlighter-rouge">cmake -S . -B build &amp;&amp; cmake --build build</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="final-notes">Final Notes</h3>
+
+<ul>
+  <li>APT, Flatpak, Snap, Cargo, and manual source installations maintain software independently.</li>
+  <li>Prefer Debian packages for core system components and libraries unless a specific requirement calls for another method.</li>
+  <li>Read each project's official build and installation instructions before compiling software.</li>
+  <li>Keep track of manually installed applications so they can be updated and removed safely.</li>
+  <li>Use trusted repositories and source code. Building from source does not automatically make software safer.</li>
+</ul>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

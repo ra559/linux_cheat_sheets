@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>C Programming Language Cheat Sheet</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#c-programming-language-cheat-sheet" id="toc-c-programming-language-cheat-sheet">C Programming Language Cheat Sheet</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-compile-and-run-c-programs" id="toc-1-compile-and-run-c-programs">1. Compile and run C programs</a>
+<ul>
+<li><a href="#install-a-compiler-on-debian" id="toc-install-a-compiler-on-debian">Install a compiler on Debian</a></li>
+<li><a href="#compile-a-source-file" id="toc-compile-a-source-file">Compile a source file</a></li>
+<li><a href="#compile-with-useful-warnings" id="toc-compile-with-useful-warnings">Compile with useful warnings</a></li>
+<li><a href="#compile-with-clang" id="toc-compile-with-clang">Compile with Clang</a></li>
+<li><a href="#address-and-undefined-behavior-sanitizers" id="toc-address-and-undefined-behavior-sanitizers">Address and undefined-behavior sanitizers</a></li>
+</ul>
+</li>
+<li><a href="#2-basic-program-structure" id="toc-2-basic-program-structure">2. Basic program structure</a>
+<ul>
+<li><a href="#program-arguments" id="toc-program-arguments">Program arguments</a></li>
+</ul>
+</li>
+<li><a href="#3-comments-and-formatting" id="toc-3-comments-and-formatting">3. Comments and formatting</a></li>
+<li><a href="#4-variables-and-fundamental-types" id="toc-4-variables-and-fundamental-types">4. Variables and fundamental types</a>
+<ul>
+<li><a href="#check-sizes-with-sizeof" id="toc-check-sizes-with-sizeof">Check sizes with <code class="language-plaintext highlighter-rouge">sizeof</code></a></li>
+<li><a href="#signed-and-unsigned-integers" id="toc-signed-and-unsigned-integers">Signed and unsigned integers</a></li>
+<li><a href="#fixed-width-integer-types" id="toc-fixed-width-integer-types">Fixed-width integer types</a></li>
+<li><a href="#integer-format-specifiers" id="toc-integer-format-specifiers">Integer format specifiers</a></li>
+</ul>
+</li>
+<li><a href="#5-type-qualifiers-and-modifiers" id="toc-5-type-qualifiers-and-modifiers">5. Type qualifiers and modifiers</a>
+<ul>
+<li><a href="#qualifiers" id="toc-qualifiers">Qualifiers</a></li>
+<li><a href="#integer-type-modifiers" id="toc-integer-type-modifiers">Integer type modifiers</a></li>
+<li><a href="#const-with-pointers" id="toc-const-with-pointers"><code class="language-plaintext highlighter-rouge">const</code> with pointers</a></li>
+</ul>
+</li>
+<li><a href="#6-constants-and-literals" id="toc-6-constants-and-literals">6. Constants and literals</a>
+<ul>
+<li><a href="#numeric-literals" id="toc-numeric-literals">Numeric literals</a></li>
+<li><a href="#character-and-string-literals" id="toc-character-and-string-literals">Character and string literals</a></li>
+</ul>
+</li>
+<li><a href="#7-input-and-output" id="toc-7-input-and-output">7. Input and output</a>
+<ul>
+<li><a href="#print-formatted-output-with-printf" id="toc-print-formatted-output-with-printf">Print formatted output with <code class="language-plaintext highlighter-rouge">printf</code></a></li>
+<li><a href="#read-input-with-fgets" id="toc-read-input-with-fgets">Read input with <code class="language-plaintext highlighter-rouge">fgets</code></a></li>
+<li><a href="#read-an-integer-with-scanf" id="toc-read-an-integer-with-scanf">Read an integer with <code class="language-plaintext highlighter-rouge">scanf</code></a></li>
+<li><a href="#print-errors-to-standard-error" id="toc-print-errors-to-standard-error">Print errors to standard error</a></li>
+</ul>
+</li>
+<li><a href="#8-operators" id="toc-8-operators">8. Operators</a>
+<ul>
+<li><a href="#arithmetic" id="toc-arithmetic">Arithmetic</a></li>
+<li><a href="#assignment-and-compound-assignment" id="toc-assignment-and-compound-assignment">Assignment and compound assignment</a></li>
+<li><a href="#increment-and-decrement" id="toc-increment-and-decrement">Increment and decrement</a></li>
+<li><a href="#comparison" id="toc-comparison">Comparison</a></li>
+<li><a href="#logical-operators" id="toc-logical-operators">Logical operators</a></li>
+<li><a href="#conditional-operator" id="toc-conditional-operator">Conditional operator</a></li>
+<li><a href="#operator-precedence" id="toc-operator-precedence">Operator precedence</a></li>
+</ul>
+</li>
+<li><a href="#9-type-conversions" id="toc-9-type-conversions">9. Type conversions</a>
+<ul>
+<li><a href="#implicit-conversion" id="toc-implicit-conversion">Implicit conversion</a></li>
+<li><a href="#explicit-cast" id="toc-explicit-cast">Explicit cast</a></li>
+</ul>
+</li>
+<li><a href="#10-conditional-statements" id="toc-10-conditional-statements">10. Conditional statements</a>
+<ul>
+<li><a href="#if-else-if-and-else" id="toc-if-else-if-and-else"><code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">else if</code>, and <code class="language-plaintext highlighter-rouge">else</code></a></li>
+<li><a href="#switch" id="toc-switch"><code class="language-plaintext highlighter-rouge">switch</code></a></li>
+</ul>
+</li>
+<li><a href="#11-loops" id="toc-11-loops">11. Loops</a>
+<ul>
+<li><a href="#for" id="toc-for"><code class="language-plaintext highlighter-rouge">for</code></a></li>
+<li><a href="#while" id="toc-while"><code class="language-plaintext highlighter-rouge">while</code></a></li>
+<li><a href="#do-while" id="toc-do-while"><code class="language-plaintext highlighter-rouge">do while</code></a></li>
+<li><a href="#break-and-continue" id="toc-break-and-continue"><code class="language-plaintext highlighter-rouge">break</code> and <code class="language-plaintext highlighter-rouge">continue</code></a></li>
+</ul>
+</li>
+<li><a href="#12-functions" id="toc-12-functions">12. Functions</a>
+<ul>
+<li><a href="#function-that-returns-no-value" id="toc-function-that-returns-no-value">Function that returns no value</a></li>
+<li><a href="#pass-by-value" id="toc-pass-by-value">Pass-by-value</a></li>
+<li><a href="#recursion" id="toc-recursion">Recursion</a></li>
+</ul>
+</li>
+<li><a href="#13-arrays" id="toc-13-arrays">13. Arrays</a>
+<ul>
+<li><a href="#iterate-through-an-array" id="toc-iterate-through-an-array">Iterate through an array</a></li>
+<li><a href="#initialize-arrays" id="toc-initialize-arrays">Initialize arrays</a></li>
+</ul>
+</li>
+<li><a href="#14-strings" id="toc-14-strings">14. Strings</a>
+<ul>
+<li><a href="#common-string-functions" id="toc-common-string-functions">Common string functions</a></li>
+<li><a href="#compare-strings-correctly" id="toc-compare-strings-correctly">Compare strings correctly</a></li>
+<li><a href="#copy-text-safely" id="toc-copy-text-safely">Copy text safely</a></li>
+</ul>
+</li>
+<li><a href="#15-pointers" id="toc-15-pointers">15. Pointers</a>
+<ul>
+<li><a href="#modify-a-value-through-a-pointer" id="toc-modify-a-value-through-a-pointer">Modify a value through a pointer</a></li>
+<li><a href="#null-pointers" id="toc-null-pointers">Null pointers</a></li>
+<li><a href="#pointers-and-arrays" id="toc-pointers-and-arrays">Pointers and arrays</a></li>
+<li><a href="#const-and-pointer-parameters" id="toc-const-and-pointer-parameters"><code class="language-plaintext highlighter-rouge">const</code> and pointer parameters</a></li>
+</ul>
+</li>
+<li><a href="#16-dynamic-memory-allocation" id="toc-16-dynamic-memory-allocation">16. Dynamic memory allocation</a>
+<ul>
+<li><a href="#malloc" id="toc-malloc"><code class="language-plaintext highlighter-rouge">malloc</code></a></li>
+<li><a href="#calloc" id="toc-calloc"><code class="language-plaintext highlighter-rouge">calloc</code></a></li>
+<li><a href="#realloc" id="toc-realloc"><code class="language-plaintext highlighter-rouge">realloc</code></a></li>
+<li><a href="#memory-rules" id="toc-memory-rules">Memory rules</a></li>
+</ul>
+</li>
+<li><a href="#17-structures-unions-and-enumerations" id="toc-17-structures-unions-and-enumerations">17. Structures, unions, and enumerations</a>
+<ul>
+<li><a href="#struct" id="toc-struct"><code class="language-plaintext highlighter-rouge">struct</code></a></li>
+<li><a href="#typedef" id="toc-typedef"><code class="language-plaintext highlighter-rouge">typedef</code></a></li>
+<li><a href="#enum" id="toc-enum"><code class="language-plaintext highlighter-rouge">enum</code></a></li>
+<li><a href="#union" id="toc-union"><code class="language-plaintext highlighter-rouge">union</code></a></li>
+</ul>
+</li>
+<li><a href="#18-scope-lifetime-and-storage-duration" id="toc-18-scope-lifetime-and-storage-duration">18. Scope, lifetime, and storage duration</a>
+<ul>
+<li><a href="#local-variable" id="toc-local-variable">Local variable</a></li>
+<li><a href="#static-local-variable" id="toc-static-local-variable">Static local variable</a></li>
+<li><a href="#extern-and-static-at-file-scope" id="toc-extern-and-static-at-file-scope"><code class="language-plaintext highlighter-rouge">extern</code> and <code class="language-plaintext highlighter-rouge">static</code> at file scope</a></li>
+</ul>
+</li>
+<li><a href="#19-header-files-and-preprocessor" id="toc-19-header-files-and-preprocessor">19. Header files and preprocessor</a>
+<ul>
+<li><a href="#include-standard-headers" id="toc-include-standard-headers">Include standard headers</a></li>
+<li><a href="#header-guards" id="toc-header-guards">Header guards</a></li>
+<li><a href="#macros" id="toc-macros">Macros</a></li>
+<li><a href="#conditional-compilation" id="toc-conditional-compilation">Conditional compilation</a></li>
+</ul>
+</li>
+<li><a href="#20-file-input-and-output" id="toc-20-file-input-and-output">20. File input and output</a>
+<ul>
+<li><a href="#open-read-and-close-a-file" id="toc-open-read-and-close-a-file">Open, read, and close a file</a></li>
+<li><a href="#common-file-modes" id="toc-common-file-modes">Common file modes</a></li>
+<li><a href="#write-text-to-a-file" id="toc-write-text-to-a-file">Write text to a file</a></li>
+</ul>
+</li>
+<li><a href="#21-error-handling-and-debugging" id="toc-21-error-handling-and-debugging">21. Error handling and debugging</a>
+<ul>
+<li><a href="#return-status-codes" id="toc-return-status-codes">Return status codes</a></li>
+<li><a href="#perror" id="toc-perror"><code class="language-plaintext highlighter-rouge">perror</code></a></li>
+<li><a href="#debug-with-gdb" id="toc-debug-with-gdb">Debug with GDB</a></li>
+<li><a href="#inspect-program-exit-status-in-bash" id="toc-inspect-program-exit-status-in-bash">Inspect program exit status in Bash</a></li>
+</ul>
+</li>
+<li><a href="#22-bitwise-operations" id="toc-22-bitwise-operations">22. Bitwise operations</a>
+<ul>
+<li><a href="#test-set-and-clear-a-bit" id="toc-test-set-and-clear-a-bit">Test, set, and clear a bit</a></li>
+</ul>
+</li>
+<li><a href="#23-common-standard-library-headers" id="toc-23-common-standard-library-headers">23. Common standard library headers</a></li>
+<li><a href="#24-common-mistakes-and-safe-practices" id="toc-24-common-mistakes-and-safe-practices">24. Common mistakes and safe practices</a></li>
+<li><a href="#25-small-complete-examples" id="toc-25-small-complete-examples">25. Small complete examples</a>
+<ul>
+<li><a href="#example-a-read-two-integers-and-add-them" id="toc-example-a-read-two-integers-and-add-them">Example A: Read two integers and add them</a></li>
+<li><a href="#example-b-count-characters-in-a-line" id="toc-example-b-count-characters-in-a-line">Example B: Count characters in a line</a></li>
+<li><a href="#example-c-find-the-largest-number-in-an-array" id="toc-example-c-find-the-largest-number-in-an-array">Example C: Find the largest number in an array</a></li>
+</ul>
+</li>
+<li><a href="#quick-command-reference" id="toc-quick-command-reference">Quick command reference</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="c-programming-language-cheat-sheet">C Programming Language Cheat Sheet</h1>
+
+<p>A practical C reference for beginners and everyday development on Linux, including Debian 13. Examples use standard C and can be compiled with GCC or Clang.</p>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#1-compile-and-run-c-programs">1. Compile and run C programs</a></li>
+  <li><a href="#2-basic-program-structure">2. Basic program structure</a></li>
+  <li><a href="#3-comments-and-formatting">3. Comments and formatting</a></li>
+  <li><a href="#4-variables-and-fundamental-types">4. Variables and fundamental types</a></li>
+  <li><a href="#5-type-qualifiers-and-modifiers">5. Type qualifiers and modifiers</a></li>
+  <li><a href="#6-constants-and-literals">6. Constants and literals</a></li>
+  <li><a href="#7-input-and-output">7. Input and output</a></li>
+  <li><a href="#8-operators">8. Operators</a></li>
+  <li><a href="#9-type-conversions">9. Type conversions</a></li>
+  <li><a href="#10-conditional-statements">10. Conditional statements</a></li>
+  <li><a href="#11-loops">11. Loops</a></li>
+  <li><a href="#12-functions">12. Functions</a></li>
+  <li><a href="#13-arrays">13. Arrays</a></li>
+  <li><a href="#14-strings">14. Strings</a></li>
+  <li><a href="#15-pointers">15. Pointers</a></li>
+  <li><a href="#16-dynamic-memory-allocation">16. Dynamic memory allocation</a></li>
+  <li><a href="#17-structures-unions-and-enumerations">17. Structures, unions, and enumerations</a></li>
+  <li><a href="#18-scope-lifetime-and-storage-duration">18. Scope, lifetime, and storage duration</a></li>
+  <li><a href="#19-header-files-and-preprocessor">19. Header files and preprocessor</a></li>
+  <li><a href="#20-file-input-and-output">20. File input and output</a></li>
+  <li><a href="#21-error-handling-and-debugging">21. Error handling and debugging</a></li>
+  <li><a href="#22-bitwise-operations">22. Bitwise operations</a></li>
+  <li><a href="#23-common-standard-library-headers">23. Common standard library headers</a></li>
+  <li><a href="#24-common-mistakes-and-safe-practices">24. Common mistakes and safe practices</a></li>
+  <li><a href="#25-small-complete-examples">25. Small complete examples</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-compile-and-run-c-programs">1. Compile and run C programs</h2>
+
+<h3 id="install-a-compiler-on-debian">Install a compiler on Debian</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>build-essential gdb
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">build-essential</code> installs GCC and the basic tools needed to compile many C programs. <code class="language-plaintext highlighter-rouge">gdb</code> is a debugger.</p>
+
+<p>Check versions:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">--version</span>
+gdb <span class="nt">--version</span>
+</code></pre></div></div>
+
+<h3 id="compile-a-source-file">Compile a source file</h3>
+
+<p>Suppose the file is named <code class="language-plaintext highlighter-rouge">hello.c</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc hello.c <span class="nt">-o</span> hello
+./hello
+</code></pre></div></div>
+
+<h3 id="compile-with-useful-warnings">Compile with useful warnings</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">-std</span><span class="o">=</span>c17 <span class="nt">-Wall</span> <span class="nt">-Wextra</span> <span class="nt">-Wpedantic</span> <span class="nt">-g</span> hello.c <span class="nt">-o</span> hello
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-std=c17</code>: use the C17 language standard.</li>
+  <li><code class="language-plaintext highlighter-rouge">-Wall -Wextra -Wpedantic</code>: enable many useful diagnostics.</li>
+  <li><code class="language-plaintext highlighter-rouge">-g</code>: include debugging information.</li>
+  <li><code class="language-plaintext highlighter-rouge">-o hello</code>: name the output executable <code class="language-plaintext highlighter-rouge">hello</code>.</li>
+</ul>
+
+<p>Warnings are useful feedback. Fix them instead of routinely suppressing them.</p>
+
+<h3 id="compile-with-clang">Compile with Clang</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>clang
+clang <span class="nt">-std</span><span class="o">=</span>c17 <span class="nt">-Wall</span> <span class="nt">-Wextra</span> <span class="nt">-Wpedantic</span> <span class="nt">-g</span> hello.c <span class="nt">-o</span> hello
+</code></pre></div></div>
+
+<h3 id="address-and-undefined-behavior-sanitizers">Address and undefined-behavior sanitizers</h3>
+
+<p>For supported GCC/Clang environments, these can help find memory errors during development:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">-std</span><span class="o">=</span>c17 <span class="nt">-Wall</span> <span class="nt">-Wextra</span> <span class="nt">-g</span> <span class="se">\</span>
+  <span class="nt">-fsanitize</span><span class="o">=</span>address,undefined <span class="se">\</span>
+  program.c <span class="nt">-o</span> program
+./program
+</code></pre></div></div>
+
+<p>Sanitizers are development tools, not a replacement for careful code.</p>
+
+<hr />
+
+<h2 id="2-basic-program-structure">2. Basic program structure</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Hello, world!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">#include &lt;stdio.h&gt;</code> makes declarations for standard input/output functions available.</li>
+  <li><code class="language-plaintext highlighter-rouge">int main(void)</code> defines the program's entry point and takes no arguments.</li>
+  <li><code class="language-plaintext highlighter-rouge">{ ... }</code> marks a block of code.</li>
+  <li><code class="language-plaintext highlighter-rouge">printf()</code> writes formatted output.</li>
+  <li><code class="language-plaintext highlighter-rouge">\n</code> is a newline character.</li>
+  <li><code class="language-plaintext highlighter-rouge">return 0;</code> indicates successful completion to the operating system.</li>
+</ul>
+
+<p>In hosted C programs, reaching the closing brace of <code class="language-plaintext highlighter-rouge">main</code> is equivalent to returning <code class="language-plaintext highlighter-rouge">0</code>.</p>
+
+<h3 id="program-arguments">Program arguments</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Argument count: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">argc</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"argv[%d] = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">argc</code>: number of command-line arguments, including the program name.</li>
+  <li><code class="language-plaintext highlighter-rouge">argv</code>: array of strings containing the arguments.</li>
+  <li><code class="language-plaintext highlighter-rouge">argv[0]</code> usually contains the program name or path.</li>
+</ul>
+
+<hr />
+
+<h2 id="3-comments-and-formatting">3. Comments and formatting</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Single-line comment</span>
+
+<span class="cm">/*
+   Multi-line comment.
+*/</span>
+</code></pre></div></div>
+
+<p>C comments do not nest. Keep indentation consistent and use meaningful variable names.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">item_count</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">item_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Items available</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>A semicolon ends most declarations and statements. Braces group multiple statements into a block.</p>
+
+<hr />
+
+<h2 id="4-variables-and-fundamental-types">4. Variables and fundamental types</h2>
+
+<p>A variable has a type, a name, and a value.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">temperature</span> <span class="o">=</span> <span class="mi">21</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">distance</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">.</span><span class="mi">567</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">initial</span> <span class="o">=</span> <span class="sc">'A'</span><span class="p">;</span>
+<span class="kt">_Bool</span> <span class="n">is_ready</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>In typical beginner programs, <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">double</code>, and <code class="language-plaintext highlighter-rouge">char</code> are common starting points. The exact size of most C types depends on the implementation.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Purpose</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">char</code></td>
+      <td>Character-sized integer type; often stores a character</td>
+      <td><code class="language-plaintext highlighter-rouge">char letter = 'A';</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Integer</td>
+      <td><code class="language-plaintext highlighter-rouge">int count = 42;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Single-precision floating point</td>
+      <td><code class="language-plaintext highlighter-rouge">float rate = 1.5f;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">double</code></td>
+      <td>Double-precision floating point</td>
+      <td><code class="language-plaintext highlighter-rouge">double pi = 3.14159;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">_Bool</code></td>
+      <td>Boolean value, <code class="language-plaintext highlighter-rouge">0</code> or <code class="language-plaintext highlighter-rouge">1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">_Bool active = 1;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">void</code></td>
+      <td>No value / no type</td>
+      <td><code class="language-plaintext highlighter-rouge">void print_message(void);</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Include <code class="language-plaintext highlighter-rouge">&lt;stdbool.h&gt;</code> to use the <code class="language-plaintext highlighter-rouge">bool</code>, <code class="language-plaintext highlighter-rouge">true</code>, and <code class="language-plaintext highlighter-rouge">false</code> names in C versions that provide them (C23 makes these keywords).</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdbool.h&gt;</span><span class="cp">
+</span>
+<span class="n">bool</span> <span class="n">is_logged_in</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">has_error</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="check-sizes-with-sizeof">Check sizes with <code class="language-plaintext highlighter-rouge">sizeof</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"char: %zu bytes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"int: %zu bytes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"float: %zu bytes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"double: %zu bytes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">sizeof</code> returns a value of type <code class="language-plaintext highlighter-rouge">size_t</code>; <code class="language-plaintext highlighter-rouge">%zu</code> is the matching <code class="language-plaintext highlighter-rouge">printf</code> format specifier.</p>
+
+<h3 id="signed-and-unsigned-integers">Signed and unsigned integers</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">signed</span> <span class="kt">int</span> <span class="n">temperature</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">quantity</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Signed integer types can represent negative and nonnegative values.</li>
+  <li>Unsigned integer types represent nonnegative values and use their range differently.</li>
+  <li>Unsigned arithmetic wraps modulo one more than the type's maximum value.</li>
+  <li>Signed integer overflow is undefined behavior in C. Do not rely on it wrapping.</li>
+</ul>
+
+<h3 id="fixed-width-integer-types">Fixed-width integer types</h3>
+
+<p>For exact-width integer types when available, include <code class="language-plaintext highlighter-rouge">&lt;stdint.h&gt;</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int32_t</span> <span class="n">signed_value</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span><span class="p">;</span>
+<span class="kt">uint32_t</span> <span class="n">unsigned_value</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="kt">uint64_t</span> <span class="n">large_value</span> <span class="o">=</span> <span class="mi">123456789ULL</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>An exact-width type such as <code class="language-plaintext highlighter-rouge">uint32_t</code> is provided only if the implementation supports a type of exactly that width without padding bits.</p>
+
+<h3 id="integer-format-specifiers">Integer format specifiers</h3>
+
+<p>Include <code class="language-plaintext highlighter-rouge">&lt;inttypes.h&gt;</code> for portable formatting macros for fixed-width integers.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;inttypes.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int32_t</span> <span class="n">value</span> <span class="o">=</span> <span class="o">-</span><span class="mi">123</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%"</span> <span class="n">PRId32</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="5-type-qualifiers-and-modifiers">5. Type qualifiers and modifiers</h2>
+
+<p>Qualifiers and type modifiers serve different purposes.</p>
+
+<h3 id="qualifiers">Qualifiers</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">const</code>: the object cannot be modified through this identifier.</li>
+  <li><code class="language-plaintext highlighter-rouge">volatile</code>: accesses are observable in ways the implementation must respect; it is not a general thread-synchronization mechanism.</li>
+  <li><code class="language-plaintext highlighter-rouge">restrict</code>: a promise about pointer-based access that can enable optimization; violating its rules can cause undefined behavior.</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">double</span> <span class="n">tax_rate</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">15</span><span class="p">;</span>
+<span class="k">volatile</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">hardware_status</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">const</code> does not automatically make an object globally immutable, and it does not mean the value must be a compile-time constant in every context.</p>
+
+<h3 id="integer-type-modifiers">Integer type modifiers</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">signed</code></li>
+  <li><code class="language-plaintext highlighter-rouge">unsigned</code></li>
+  <li><code class="language-plaintext highlighter-rouge">short</code></li>
+  <li><code class="language-plaintext highlighter-rouge">long</code></li>
+  <li><code class="language-plaintext highlighter-rouge">long long</code></li>
+</ul>
+
+<p>Examples:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">short</span> <span class="kt">int</span> <span class="n">small_number</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">int</span> <span class="n">population</span> <span class="o">=</span> <span class="mi">1000000L</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">very_large_number</span> <span class="o">=</span> <span class="mi">9000000000LL</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">42ULL</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The standard specifies minimum ranges and relationships, not one universal byte size for every type. Use <code class="language-plaintext highlighter-rouge">sizeof</code> or fixed-width types when the distinction matters.</p>
+
+<h3 id="const-with-pointers"><code class="language-plaintext highlighter-rouge">const</code> with pointers</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">p1</span><span class="p">;</span>        <span class="c1">// Pointer to const int; *p1 cannot be changed through p1</span>
+<span class="kt">int</span> <span class="o">*</span><span class="k">const</span> <span class="n">p2</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="c1">// Constant pointer; p2 cannot be reassigned</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="k">const</span> <span class="n">p3</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="c1">// Constant pointer to const int</span>
+</code></pre></div></div>
+
+<p>These declarations have different meanings: the location of <code class="language-plaintext highlighter-rouge">const</code> matters.</p>
+
+<hr />
+
+<h2 id="6-constants-and-literals">6. Constants and literals</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">max_users</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="cp">#define BUFFER_SIZE 256
+</span></code></pre></div></div>
+
+<p>Prefer a <code class="language-plaintext highlighter-rouge">const</code> object when you want a typed object. <code class="language-plaintext highlighter-rouge">#define</code> creates a preprocessor macro and does not declare a C variable.</p>
+
+<h3 id="numeric-literals">Numeric literals</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">decimal</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">octal</span> <span class="o">=</span> <span class="mo">052</span><span class="p">;</span>          <span class="c1">// Base 8, value 42</span>
+<span class="kt">int</span> <span class="n">hexadecimal</span> <span class="o">=</span> <span class="mh">0x2A</span><span class="p">;</span>   <span class="c1">// Base 16, value 42</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="mi">42U</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">42L</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">ll</span> <span class="o">=</span> <span class="mi">42LL</span><span class="p">;</span>
+
+<span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">3</span><span class="p">.</span><span class="mi">14</span><span class="n">f</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">3</span><span class="p">.</span><span class="mi">14</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>A leading zero on an integer literal means octal notation. Avoid accidental leading zeros.</p>
+
+<h3 id="character-and-string-literals">Character and string literals</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">letter</span> <span class="o">=</span> <span class="sc">'Z'</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">message</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Single quotes denote character constants; double quotes denote string literals.</p>
+
+<p>Common escapes:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Escape</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\n</code></td>
+      <td>Newline</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\t</code></td>
+      <td>Tab</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\\</code></td>
+      <td>Backslash</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\"</code></td>
+      <td>Double quote</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\'</code></td>
+      <td>Single quote</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\0</code></td>
+      <td>Null character</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="7-input-and-output">7. Input and output</h2>
+
+<p>Include <code class="language-plaintext highlighter-rouge">&lt;stdio.h&gt;</code> for standard I/O functions.</p>
+
+<h3 id="print-formatted-output-with-printf">Print formatted output with <code class="language-plaintext highlighter-rouge">printf</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">25</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">price</span> <span class="o">=</span> <span class="mi">19</span><span class="p">.</span><span class="mi">99</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">grade</span> <span class="o">=</span> <span class="sc">'B'</span><span class="p">;</span>
+
+<span class="n">printf</span><span class="p">(</span><span class="s">"Age: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">age</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"Price: %.2f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">price</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"Grade: %c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">grade</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Common <code class="language-plaintext highlighter-rouge">printf</code> format specifiers:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Specifier</th>
+      <th>Expected argument</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%d</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%u</code></td>
+      <td><code class="language-plaintext highlighter-rouge">unsigned int</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%ld</code></td>
+      <td><code class="language-plaintext highlighter-rouge">long int</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%lld</code></td>
+      <td><code class="language-plaintext highlighter-rouge">long long int</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%f</code></td>
+      <td><code class="language-plaintext highlighter-rouge">double</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%c</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code> value representing a character</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%s</code></td>
+      <td>Pointer to a null-terminated character string</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%p</code></td>
+      <td>Pointer, passed as <code class="language-plaintext highlighter-rouge">void *</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%zu</code></td>
+      <td><code class="language-plaintext highlighter-rouge">size_t</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">%%</code></td>
+      <td>A literal percent sign</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For <code class="language-plaintext highlighter-rouge">printf</code>, a <code class="language-plaintext highlighter-rouge">float</code> argument is promoted to <code class="language-plaintext highlighter-rouge">double</code>, so <code class="language-plaintext highlighter-rouge">%f</code> is used for both <code class="language-plaintext highlighter-rouge">float</code> values and <code class="language-plaintext highlighter-rouge">double</code> values.</p>
+
+<h3 id="read-input-with-fgets">Read input with <code class="language-plaintext highlighter-rouge">fgets</code></h3>
+
+<p>For beginner programs, <code class="language-plaintext highlighter-rouge">fgets</code> is often a better default than reading an unbounded string with <code class="language-plaintext highlighter-rouge">scanf("%s", ...)</code>.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Enter your name: "</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">name</span><span class="p">,</span> <span class="n">stdin</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">[</span><span class="n">strcspn</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Hello, %s!</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Could not read input.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">fgets</code> reads at most one less than the buffer capacity and null-terminates the string when successful. If the line is longer than the buffer, the remaining characters stay in the input stream and need to be handled if the application expects full lines.</p>
+
+<h3 id="read-an-integer-with-scanf">Read an integer with <code class="language-plaintext highlighter-rouge">scanf</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+
+<span class="n">printf</span><span class="p">(</span><span class="s">"Enter your age: "</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">age</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Age: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">age</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Invalid integer input.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">scanf</code> returns the number of assignments successfully made. Validate input carefully, especially for user-facing programs. The <code class="language-plaintext highlighter-rouge">&amp;</code> passes the address of <code class="language-plaintext highlighter-rouge">age</code> so <code class="language-plaintext highlighter-rouge">scanf</code> can store the result.</p>
+
+<p>Do not use <code class="language-plaintext highlighter-rouge">gets</code>; it was removed from the C standard because it cannot limit the input length.</p>
+
+<h3 id="print-errors-to-standard-error">Print errors to standard error</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Error: could not open file</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">stdout</code>: normal output.</li>
+  <li><code class="language-plaintext highlighter-rouge">stderr</code>: diagnostic/error output.</li>
+</ul>
+
+<hr />
+
+<h2 id="8-operators">8. Operators</h2>
+
+<h3 id="arithmetic">Arithmetic</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+<span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>  <span class="c1">// Addition: 13</span>
+<span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">;</span>  <span class="c1">// Subtraction: 7</span>
+<span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">;</span>  <span class="c1">// Multiplication: 30</span>
+<span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="p">;</span>  <span class="c1">// Integer division: 3</span>
+<span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="p">;</span>  <span class="c1">// Remainder: 1</span>
+</code></pre></div></div>
+
+<p>When both operands of <code class="language-plaintext highlighter-rouge">/</code> are integers, the fractional part is discarded toward zero.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">10</span><span class="p">.</span><span class="mi">0</span> <span class="o">/</span> <span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="assignment-and-compound-assignment">Assignment and compound assignment</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">count</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>  <span class="c1">// count = count + 2</span>
+<span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">count</span> <span class="o">*=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">count</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="n">count</span> <span class="o">%=</span> <span class="mi">4</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="increment-and-decrement">Increment and decrement</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="n">count</span><span class="o">--</span><span class="p">;</span>
+<span class="o">++</span><span class="n">count</span><span class="p">;</span>
+<span class="o">--</span><span class="n">count</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>In an expression, prefix forms produce the updated value; postfix forms produce the prior value. As standalone statements, both simply increment or decrement.</p>
+
+<h3 id="comparison">Comparison</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">==</span> <span class="n">b</span>  <span class="c1">// Equal</span>
+<span class="n">a</span> <span class="o">!=</span> <span class="n">b</span>  <span class="c1">// Not equal</span>
+<span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span>
+<span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span>
+<span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span>
+<span class="n">a</span> <span class="o">&gt;=</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<p>Comparison expressions produce an integer result of <code class="language-plaintext highlighter-rouge">0</code> (false) or <code class="language-plaintext highlighter-rouge">1</code> (true).</p>
+
+<h3 id="logical-operators">Logical operators</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">y</span>  <span class="c1">// Logical AND</span>
+<span class="n">x</span> <span class="o">||</span> <span class="n">y</span>  <span class="c1">// Logical OR</span>
+<span class="o">!</span><span class="n">x</span>      <span class="c1">// Logical NOT</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">&amp;&amp;</code> and <code class="language-plaintext highlighter-rouge">||</code> short-circuit: the right-hand operand may not be evaluated if the result is already known.</p>
+
+<h3 id="conditional-operator">Conditional operator</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">maximum</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">?</span> <span class="n">a</span> <span class="o">:</span> <span class="n">b</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="operator-precedence">Operator precedence</h3>
+
+<p>When in doubt, use parentheses:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Do not rely on memorizing the entire precedence table when parentheses make the intent clearer.</p>
+
+<hr />
+
+<h2 id="9-type-conversions">9. Type conversions</h2>
+
+<h3 id="implicit-conversion">Implicit conversion</h3>
+
+<p>C automatically converts values in many expressions and assignments.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">whole</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">precise</span> <span class="o">=</span> <span class="n">whole</span><span class="p">;</span>  <span class="c1">// 5.0</span>
+</code></pre></div></div>
+
+<p>Converting a floating-point value to an integer discards the fractional part toward zero, provided the result is representable:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="mi">3</span><span class="p">.</span><span class="mi">9</span><span class="p">;</span>  <span class="c1">// 3</span>
+</code></pre></div></div>
+
+<h3 id="explicit-cast">Explicit cast</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="n">average</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">total</span> <span class="o">/</span> <span class="n">count</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Without the cast, if both <code class="language-plaintext highlighter-rouge">total</code> and <code class="language-plaintext highlighter-rouge">count</code> are integers, integer division would occur before assignment.</p>
+
+<p>Casts do not make an unsafe conversion safe. Be careful when converting values outside the destination type's representable range.</p>
+
+<hr />
+
+<h2 id="10-conditional-statements">10. Conditional statements</h2>
+
+<h3 id="if-else-if-and-else"><code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">else if</code>, and <code class="language-plaintext highlighter-rouge">else</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">score</span> <span class="o">&gt;=</span> <span class="mi">90</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"A</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">score</span> <span class="o">&gt;=</span> <span class="mi">80</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"B</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Keep practicing</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In C, zero is false and nonzero is true in a condition.</p>
+
+<h3 id="switch"><code class="language-plaintext highlighter-rouge">switch</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">switch</span> <span class="p">(</span><span class="n">choice</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Start</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Settings</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Quit</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="nl">default:</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Unknown option</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">break</code> exits the <code class="language-plaintext highlighter-rouge">switch</code>. Without it, execution usually continues into the next case, a behavior called fall-through. <code class="language-plaintext highlighter-rouge">switch</code> works with integer types and enumerations, not strings.</p>
+
+<hr />
+
+<h2 id="11-loops">11. Loops</h2>
+
+<h3 id="for"><code class="language-plaintext highlighter-rouge">for</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Useful when initialization, condition, and update fit naturally together.</p>
+
+<h3 id="while"><code class="language-plaintext highlighter-rouge">while</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="n">count</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>
+    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="do-while"><code class="language-plaintext highlighter-rouge">do while</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">choice</span><span class="p">;</span>
+
+<span class="k">do</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Enter 0 to quit: "</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">choice</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">choice</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The body runs at least once before the condition is tested.</p>
+
+<h3 id="break-and-continue"><code class="language-plaintext highlighter-rouge">break</code> and <code class="language-plaintext highlighter-rouge">continue</code></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">break</code>: exits the nearest loop or <code class="language-plaintext highlighter-rouge">switch</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">continue</code>: skips to the next loop iteration.</li>
+</ul>
+
+<hr />
+
+<h2 id="12-functions">12. Functions</h2>
+
+<p>Functions let you divide a program into reusable pieces.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">));</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>A <strong>declaration/prototype</strong> tells the compiler the function's name, return type, and parameter types.</li>
+  <li>A <strong>definition</strong> supplies the function body.</li>
+  <li><code class="language-plaintext highlighter-rouge">return</code> sends a value back to the caller.</li>
+</ul>
+
+<h3 id="function-that-returns-no-value">Function that returns no value</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">print_separator</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"----------------"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In a parameter list, <code class="language-plaintext highlighter-rouge">void</code> explicitly indicates that the function takes no arguments.</p>
+
+<h3 id="pass-by-value">Pass-by-value</h3>
+
+<p>C passes function arguments by value. A function receives a copy of a scalar argument.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">set_to_zero</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Does not change the caller's variable</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>To modify the caller's object, pass a pointer to it:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">set_to_zero</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Call it with <code class="language-plaintext highlighter-rouge">set_to_zero(&amp;number);</code>.</p>
+
+<h3 id="recursion">Recursion</h3>
+
+<p>A recursive function calls itself. It must have a base case to stop recursion.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="nf">factorial</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This simple factorial function can overflow for large inputs and can exhaust the call stack for sufficiently large values.</p>
+
+<hr />
+
+<h2 id="13-arrays">13. Arrays</h2>
+
+<p>An array stores a fixed number of elements of the same type in contiguous memory.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">};</span>
+
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="c1">// First element</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">4</span><span class="p">]);</span> <span class="c1">// Last element</span>
+</code></pre></div></div>
+
+<p>C arrays use zero-based indexing. Valid indices for an array of length five are <code class="language-plaintext highlighter-rouge">0</code> through <code class="language-plaintext highlighter-rouge">4</code>. Out-of-bounds access is undefined behavior.</p>
+
+<h3 id="iterate-through-an-array">Iterate through an array</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="k">sizeof</span> <span class="n">numbers</span> <span class="o">/</span> <span class="k">sizeof</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This size calculation works when <code class="language-plaintext highlighter-rouge">numbers</code> is an actual array in the same scope. When an array is passed to a function, its parameter is adjusted to a pointer, so <code class="language-plaintext highlighter-rouge">sizeof</code> that parameter does not reveal the original array length. Pass the length separately.</p>
+
+<h3 id="initialize-arrays">Initialize arrays</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>       <span class="c1">// All elements are zero</span>
+<span class="kt">int</span> <span class="n">b</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>  <span class="c1">// Compiler infers length</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="14-strings">14. Strings</h2>
+
+<p>C has no built-in high-level string type. A C string is a sequence of <code class="language-plaintext highlighter-rouge">char</code> values ending with a null character, <code class="language-plaintext highlighter-rouge">'\0'</code>.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">greeting</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The array contains six characters including the final null terminator.</p>
+
+<h3 id="common-string-functions">Common string functions</h3>
+
+<p>Include <code class="language-plaintext highlighter-rouge">&lt;string.h&gt;</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">strlen</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>          <span class="c1">// Length before the null terminator</span>
+<span class="n">strcmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>          <span class="c1">// Compare strings</span>
+<span class="n">strchr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="sc">'x'</span><span class="p">);</span>     <span class="c1">// Find a character</span>
+<span class="n">strstr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s">"cat"</span><span class="p">);</span>   <span class="c1">// Find a substring</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">strlen</code> does not count the null terminator.</li>
+  <li><code class="language-plaintext highlighter-rouge">strcmp</code> returns a negative value, zero, or a positive value; do not assume it returns only <code class="language-plaintext highlighter-rouge">-1</code>, <code class="language-plaintext highlighter-rouge">0</code>, or <code class="language-plaintext highlighter-rouge">1</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">strcpy</code> and <code class="language-plaintext highlighter-rouge">strcat</code> require destination buffers large enough for the result. They do not check capacity.</li>
+</ul>
+
+<h3 id="compare-strings-correctly">Compare strings correctly</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="s">"quit"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* Handle quit command */</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Do not compare string contents with <code class="language-plaintext highlighter-rouge">==</code>; that compares pointer values in pointer expressions, not the text they point to.</p>
+
+<h3 id="copy-text-safely">Copy text safely</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">source</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Debian"</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">destination</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">snprintf</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">destination</span><span class="p">,</span> <span class="s">"%s"</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span> <span class="o">&gt;=</span>
+        <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="k">sizeof</span> <span class="n">destination</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Text was truncated</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="n">destination</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>For simple fixed-size buffers, <code class="language-plaintext highlighter-rouge">snprintf</code> can help avoid writing past the destination. Always check its return value when truncation matters.</p>
+
+<hr />
+
+<h2 id="15-pointers">15. Pointers</h2>
+
+<p>A pointer stores the address of an object or function, or can hold a null pointer.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+<span class="kt">int</span> <span class="o">*</span><span class="n">pointer</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">number</span><span class="p">;</span>
+
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">number</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">number</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">*</span><span class="n">pointer</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&amp;number</code>: address-of operator.</li>
+  <li><code class="language-plaintext highlighter-rouge">int *pointer</code>: pointer to an <code class="language-plaintext highlighter-rouge">int</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">*pointer</code>: dereference the pointer to access the pointed-to integer.</li>
+</ul>
+
+<h3 id="modify-a-value-through-a-pointer">Modify a value through a pointer</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span> <span class="o">*</span><span class="n">pointer</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">number</span><span class="p">;</span>
+
+<span class="o">*</span><span class="n">pointer</span> <span class="o">=</span> <span class="mi">99</span><span class="p">;</span>
+<span class="c1">// number is now 99</span>
+</code></pre></div></div>
+
+<h3 id="null-pointers">Null pointers</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="o">*</span><span class="n">pointer</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">pointer</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">*</span><span class="n">pointer</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Never dereference a null, uninitialized, dangling, or otherwise invalid pointer.</p>
+
+<h3 id="pointers-and-arrays">Pointers and arrays</h3>
+
+<p>In many expressions, an array name converts to a pointer to its first element.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">values</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">};</span>
+<span class="kt">int</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">values</span><span class="p">;</span>
+
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="p">);</span>       <span class="c1">// 10</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">*</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span> <span class="c1">// 20</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>     <span class="c1">// 30</span>
+</code></pre></div></div>
+
+<p>Pointer arithmetic is only defined within an array object and one position past its end. The one-past pointer must not be dereferenced.</p>
+
+<h3 id="const-and-pointer-parameters"><code class="language-plaintext highlighter-rouge">const</code> and pointer parameters</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">print_value</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">*</span><span class="n">value</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">const int *</code> communicates that the function will not modify the pointed-to integer through this pointer.</p>
+
+<hr />
+
+<h2 id="16-dynamic-memory-allocation">16. Dynamic memory allocation</h2>
+
+<p>Include <code class="language-plaintext highlighter-rouge">&lt;stdlib.h&gt;</code> for <code class="language-plaintext highlighter-rouge">malloc</code>, <code class="language-plaintext highlighter-rouge">calloc</code>, <code class="language-plaintext highlighter-rouge">realloc</code>, and <code class="language-plaintext highlighter-rouge">free</code>.</p>
+
+<p>Dynamic memory is useful when the amount of memory needed is determined at runtime. Every successful allocation that is no longer needed must be released, and pointers must not be used after their allocation is freed.</p>
+
+<h3 id="malloc"><code class="language-plaintext highlighter-rouge">malloc</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">size_t</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">values</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">count</span> <span class="o">*</span> <span class="k">sizeof</span> <span class="o">*</span><span class="n">values</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">values</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Memory allocation failed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">values</span><span class="p">);</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">malloc</code> returns uninitialized storage. Do not read values until you have initialized them.</p>
+
+<h3 id="calloc"><code class="language-plaintext highlighter-rouge">calloc</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="o">*</span><span class="n">values</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="k">sizeof</span> <span class="o">*</span><span class="n">values</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">calloc</code> allocates space for an array and initializes all bytes to zero. Check the result for <code class="language-plaintext highlighter-rouge">NULL</code>.</p>
+
+<h3 id="realloc"><code class="language-plaintext highlighter-rouge">realloc</code></h3>
+
+<p>Use a temporary pointer so the original allocation is not lost if <code class="language-plaintext highlighter-rouge">realloc</code> fails:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="o">*</span><span class="n">temporary</span> <span class="o">=</span> <span class="n">realloc</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">new_count</span> <span class="o">*</span> <span class="k">sizeof</span> <span class="o">*</span><span class="n">values</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">temporary</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* values is still valid; handle the failure */</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">temporary</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Check that <code class="language-plaintext highlighter-rouge">new_count * sizeof *values</code> cannot overflow before allocating when <code class="language-plaintext highlighter-rouge">new_count</code> may be large. If <code class="language-plaintext highlighter-rouge">realloc</code> succeeds, the old pointer must no longer be used. If it fails for a nonzero requested size, the original allocation remains valid.</p>
+
+<h3 id="memory-rules">Memory rules</h3>
+
+<ul>
+  <li>Do not access memory beyond the allocation.</li>
+  <li>Do not use memory after <code class="language-plaintext highlighter-rouge">free</code>.</li>
+  <li>Do not free the same allocation twice.</li>
+  <li>Do not free memory that was not dynamically allocated.</li>
+  <li>Free each allocation on all relevant code paths.</li>
+  <li>Prefer automatic/local variables when dynamic allocation is not necessary.</li>
+</ul>
+
+<hr />
+
+<h2 id="17-structures-unions-and-enumerations">17. Structures, unions, and enumerations</h2>
+
+<h3 id="struct"><code class="language-plaintext highlighter-rouge">struct</code></h3>
+
+<p>A structure groups related fields.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">Person</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="p">{</span><span class="s">"Alex"</span><span class="p">,</span> <span class="mi">30</span><span class="p">};</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%s is %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">person</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">person</span><span class="p">.</span><span class="n">age</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">.</code> to access a structure field, and <code class="language-plaintext highlighter-rouge">-&gt;</code> to access a field through a pointer to a structure.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">Person</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">person</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="typedef"><code class="language-plaintext highlighter-rouge">typedef</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">Point</span><span class="p">;</span>
+
+<span class="n">Point</span> <span class="n">origin</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">typedef</code> creates an alias for a type; it does not create a new distinct type.</p>
+
+<h3 id="enum"><code class="language-plaintext highlighter-rouge">enum</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">enum</span> <span class="n">Direction</span> <span class="p">{</span>
+    <span class="n">NORTH</span><span class="p">,</span>
+    <span class="n">EAST</span><span class="p">,</span>
+    <span class="n">SOUTH</span><span class="p">,</span>
+    <span class="n">WEST</span>
+<span class="p">};</span>
+
+<span class="k">enum</span> <span class="n">Direction</span> <span class="n">heading</span> <span class="o">=</span> <span class="n">NORTH</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>By default, enumeration constants start at zero and increase by one.</p>
+
+<h3 id="union"><code class="language-plaintext highlighter-rouge">union</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">union</span> <span class="n">Value</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">integer</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">decimal</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>A union's members share the same storage. It can hold a value represented by one member at a time; reading a different member than the one most recently written requires care and is subject to C's rules.</p>
+
+<hr />
+
+<h2 id="18-scope-lifetime-and-storage-duration">18. Scope, lifetime, and storage duration</h2>
+
+<ul>
+  <li><strong>Block scope:</strong> a name declared inside a block is generally visible from its declaration to the end of that block.</li>
+  <li><strong>File scope:</strong> a name declared outside functions is visible from its declaration to the end of the source file, subject to linkage rules.</li>
+  <li><strong>Automatic storage duration:</strong> common for local variables; storage exists during the relevant block execution.</li>
+  <li><strong>Static storage duration:</strong> objects declared at file scope and objects declared <code class="language-plaintext highlighter-rouge">static</code> in a block exist for the program's lifetime.</li>
+  <li><strong>Allocated storage duration:</strong> memory obtained dynamically, for example with <code class="language-plaintext highlighter-rouge">malloc</code>, remains allocated until released.</li>
+</ul>
+
+<h3 id="local-variable">Local variable</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">example</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Automatic storage duration</span>
+    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="static-local-variable">Static local variable</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">next_id</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">++</span><span class="n">id</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The static local variable retains its value between calls.</p>
+
+<h3 id="extern-and-static-at-file-scope"><code class="language-plaintext highlighter-rouge">extern</code> and <code class="language-plaintext highlighter-rouge">static</code> at file scope</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">extern</code> can declare an object or function defined elsewhere.</li>
+  <li><code class="language-plaintext highlighter-rouge">static</code> at file scope gives an object or function internal linkage, restricting its name to that translation unit.</li>
+</ul>
+
+<hr />
+
+<h2 id="19-header-files-and-preprocessor">19. Header files and preprocessor</h2>
+
+<h3 id="include-standard-headers">Include standard headers</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></code></pre></div></div>
+
+<p>Angle brackets are commonly used for system or standard headers. Quotation marks are commonly used for project headers:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"utils.h"</span><span class="cp">
+</span></code></pre></div></div>
+
+<h3 id="header-guards">Header guards</h3>
+
+<p>In <code class="language-plaintext highlighter-rouge">utils.h</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#ifndef UTILS_H
+#define UTILS_H
+</span>
+<span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
+
+<span class="cp">#endif
+</span></code></pre></div></div>
+
+<p>Header guards prevent the same header's contents from being processed repeatedly within a translation unit.</p>
+
+<h3 id="macros">Macros</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define ARRAY_LENGTH 10
+#define SQUARE(x) ((x) * (x))
+</span></code></pre></div></div>
+
+<p>Macros are text substitutions. Parentheses help prevent precedence surprises, but macros can still have pitfalls: <code class="language-plaintext highlighter-rouge">SQUARE(i++)</code> evaluates its argument more than once. Prefer functions when possible.</p>
+
+<h3 id="conditional-compilation">Conditional compilation</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#ifdef DEBUG
+</span>    <span class="n">puts</span><span class="p">(</span><span class="s">"Debug mode"</span><span class="p">);</span>
+<span class="cp">#endif
+</span></code></pre></div></div>
+
+<p>Compile with <code class="language-plaintext highlighter-rouge">-DDEBUG</code> to define <code class="language-plaintext highlighter-rouge">DEBUG</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">-DDEBUG</span> program.c <span class="nt">-o</span> program
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="20-file-input-and-output">20. File input and output</h2>
+
+<p>Include <code class="language-plaintext highlighter-rouge">&lt;stdio.h&gt;</code>.</p>
+
+<h3 id="open-read-and-close-a-file">Open, read, and close a file</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"notes.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">file</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="s">"notes.txt"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">char</span> <span class="n">line</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">line</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fputs</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">stdout</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">ferror</span><span class="p">(</span><span class="n">file</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="s">"Reading notes.txt"</span><span class="p">);</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="s">"Closing notes.txt"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="common-file-modes">Common file modes</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"r"</code></td>
+      <td>Read existing file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"w"</code></td>
+      <td>Write; create or truncate file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"a"</code></td>
+      <td>Append; create if needed</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"r+"</code></td>
+      <td>Read and write existing file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"w+"</code></td>
+      <td>Read and write; create or truncate</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"a+"</code></td>
+      <td>Read and append; create if needed</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"rb"</code> / <code class="language-plaintext highlighter-rouge">"wb"</code></td>
+      <td>Binary read/write modes</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>On Unix-like systems, text and binary modes are usually equivalent, but the distinction matters on some other platforms.</p>
+
+<h3 id="write-text-to-a-file">Write text to a file</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">FILE</span> <span class="o">*</span><span class="n">file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"output.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">file</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">perror</span><span class="p">(</span><span class="s">"output.txt"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">fprintf</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s">"Hello, file!</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">perror</span><span class="p">(</span><span class="s">"Writing output.txt"</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">perror</span><span class="p">(</span><span class="s">"Closing output.txt"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Check file operations for errors, especially when data must not be lost.</p>
+
+<hr />
+
+<h2 id="21-error-handling-and-debugging">21. Error handling and debugging</h2>
+
+<h3 id="return-status-codes">Return status codes</h3>
+
+<p>By convention, return <code class="language-plaintext highlighter-rouge">0</code> from <code class="language-plaintext highlighter-rouge">main</code> for success and a nonzero value for failure.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">something_failed</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Operation failed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="perror"><code class="language-plaintext highlighter-rouge">perror</code></h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">FILE</span> <span class="o">*</span><span class="n">file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"missing.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">file</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">perror</span><span class="p">(</span><span class="s">"fopen"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">perror</code> prints a message associated with the current <code class="language-plaintext highlighter-rouge">errno</code> value. Use it promptly after the failing operation.</p>
+
+<h3 id="debug-with-gdb">Debug with GDB</h3>
+
+<p>Compile with debugging information:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">-g</span> <span class="nt">-O0</span> <span class="nt">-Wall</span> <span class="nt">-Wextra</span> program.c <span class="nt">-o</span> program
+gdb ./program
+</code></pre></div></div>
+
+<p>Useful GDB commands:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>break main
+run
+next
+step
+print variable_name
+backtrace
+continue
+quit
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">break</code>: set a breakpoint.</li>
+  <li><code class="language-plaintext highlighter-rouge">run</code>: start the program.</li>
+  <li><code class="language-plaintext highlighter-rouge">next</code>: execute the next source line without stepping into a function.</li>
+  <li><code class="language-plaintext highlighter-rouge">step</code>: step into a function call.</li>
+  <li><code class="language-plaintext highlighter-rouge">print</code>: inspect a value.</li>
+  <li><code class="language-plaintext highlighter-rouge">backtrace</code>: show the call stack.</li>
+  <li><code class="language-plaintext highlighter-rouge">continue</code>: resume execution.</li>
+</ul>
+
+<h3 id="inspect-program-exit-status-in-bash">Inspect program exit status in Bash</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./program
+<span class="nb">echo</span> <span class="nv">$?</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">$?</code> contains the exit status of the most recently executed command.</p>
+
+<hr />
+
+<h2 id="22-bitwise-operations">22. Bitwise operations</h2>
+
+<p>Bitwise operators work on individual bits of integer values.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="n">b1100</span><span class="p">;</span> <span class="c1">// Binary literal is available in C23, not standard C17</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="n">b1010</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>For C17, use decimal or hexadecimal literals instead:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span> <span class="c1">// 1100 in binary</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// 1010 in binary</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Operator</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&amp;</code></td>
+      <td>Bitwise AND</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">|</code></td>
+      <td>Bitwise OR</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">^</code></td>
+      <td>Bitwise XOR</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">~</code></td>
+      <td>Bitwise complement</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;&lt;</code></td>
+      <td>Left shift</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&gt;&gt;</code></td>
+      <td>Right shift</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Example:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span> <span class="c1">// 1100</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// 1010</span>
+
+<span class="n">printf</span><span class="p">(</span><span class="s">"%u</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// 8  (1000)</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%u</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">a</span> <span class="o">|</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// 14 (1110)</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%u</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// 6  (0110)</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%u</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 24</span>
+</code></pre></div></div>
+
+<h3 id="test-set-and-clear-a-bit">Test, set, and clear a bit</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">mask</span> <span class="o">=</span> <span class="mi">1u</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// Bit 2</span>
+
+<span class="n">flags</span> <span class="o">|=</span> <span class="n">mask</span><span class="p">;</span>       <span class="c1">// Set bit 2</span>
+<span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"Bit is set"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">flags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">mask</span><span class="p">;</span>      <span class="c1">// Clear bit 2</span>
+<span class="n">flags</span> <span class="o">^=</span> <span class="n">mask</span><span class="p">;</span>       <span class="c1">// Toggle bit 2</span>
+</code></pre></div></div>
+
+<p>Use unsigned types for bit manipulation. Shift counts must be valid for the type width; invalid shifts can cause undefined behavior.</p>
+
+<hr />
+
+<h2 id="23-common-standard-library-headers">23. Common standard library headers</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Header</th>
+      <th>Common use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;stdio.h&gt;</code></td>
+      <td>Standard input/output and files</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;stdlib.h&gt;</code></td>
+      <td>Allocation, conversions, process utilities</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;string.h&gt;</code></td>
+      <td>String and memory operations</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;stdbool.h&gt;</code></td>
+      <td>Boolean aliases in pre-C23 code</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;stdint.h&gt;</code></td>
+      <td>Fixed-width integer types</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;inttypes.h&gt;</code></td>
+      <td>Formatting and scanning fixed-width integers</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;stddef.h&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">size_t</code>, <code class="language-plaintext highlighter-rouge">ptrdiff_t</code>, <code class="language-plaintext highlighter-rouge">NULL</code>, <code class="language-plaintext highlighter-rouge">offsetof</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;limits.h&gt;</code></td>
+      <td>Integer type limits</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;float.h&gt;</code></td>
+      <td>Floating-point limits</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;math.h&gt;</code></td>
+      <td>Mathematical functions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;ctype.h&gt;</code></td>
+      <td>Character classification/conversion</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;errno.h&gt;</code></td>
+      <td>Error number macros</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;time.h&gt;</code></td>
+      <td>Time and date functions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;assert.h&gt;</code></td>
+      <td>Development-time assertions</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Example using <code class="language-plaintext highlighter-rouge">&lt;math.h&gt;</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">result</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">81</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%.1f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>On many Linux GCC setups, link the math library with <code class="language-plaintext highlighter-rouge">-lm</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc program.c <span class="nt">-o</span> program <span class="nt">-lm</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="24-common-mistakes-and-safe-practices">24. Common mistakes and safe practices</h2>
+
+<ul>
+  <li><strong>Using <code class="language-plaintext highlighter-rouge">=</code> instead of <code class="language-plaintext highlighter-rouge">==</code>:</strong> <code class="language-plaintext highlighter-rouge">if (x = 5)</code> assigns <code class="language-plaintext highlighter-rouge">5</code>; <code class="language-plaintext highlighter-rouge">if (x == 5)</code> compares.</li>
+  <li><strong>Uninitialized variables:</strong> initialize local variables before reading them.</li>
+  <li><strong>Out-of-bounds arrays:</strong> check indices and buffer lengths.</li>
+  <li><strong>Invalid pointers:</strong> never dereference a pointer unless it points to a valid object.</li>
+  <li><strong>Memory leaks:</strong> release dynamically allocated memory when no longer needed.</li>
+  <li><strong>Use-after-free:</strong> do not use pointers to memory after it has been freed.</li>
+  <li><strong>String buffer overflow:</strong> ensure destination capacity; avoid <code class="language-plaintext highlighter-rouge">gets</code>.</li>
+  <li><strong>Incorrect format specifiers:</strong> match <code class="language-plaintext highlighter-rouge">printf</code>/<code class="language-plaintext highlighter-rouge">scanf</code> specifiers to argument types.</li>
+  <li><strong>Ignoring return values:</strong> check file operations, allocations, input, and other fallible calls.</li>
+  <li><strong>Integer division surprise:</strong> use floating-point operands when fractional results are intended.</li>
+  <li><strong>Signed overflow:</strong> do not rely on overflow wrapping.</li>
+  <li><strong>Confusing <code class="language-plaintext highlighter-rouge">&amp;</code> and <code class="language-plaintext highlighter-rouge">&amp;&amp;</code>:</strong> <code class="language-plaintext highlighter-rouge">&amp;</code> is bitwise AND (or address-of in unary form); <code class="language-plaintext highlighter-rouge">&amp;&amp;</code> is logical AND.</li>
+  <li><strong>Confusing <code class="language-plaintext highlighter-rouge">|</code> and <code class="language-plaintext highlighter-rouge">||</code>:</strong> <code class="language-plaintext highlighter-rouge">|</code> is bitwise OR; <code class="language-plaintext highlighter-rouge">||</code> is logical OR.</li>
+  <li><strong>Comparing strings with <code class="language-plaintext highlighter-rouge">==</code>:</strong> use <code class="language-plaintext highlighter-rouge">strcmp</code> for string contents.</li>
+  <li><strong>Relying on undefined behavior:</strong> the compiler is not required to make invalid operations behave as expected.</li>
+</ul>
+
+<p>A useful beginner compile command is:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">-std</span><span class="o">=</span>c17 <span class="nt">-Wall</span> <span class="nt">-Wextra</span> <span class="nt">-Wpedantic</span> <span class="nt">-g</span> program.c <span class="nt">-o</span> program
+</code></pre></div></div>
+
+<p>Treat warnings as opportunities to understand the code more deeply.</p>
+
+<hr />
+
+<h2 id="25-small-complete-examples">25. Small complete examples</h2>
+
+<h3 id="example-a-read-two-integers-and-add-them">Example A: Read two integers and add them</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Enter two integers: "</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d %d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Please enter two valid integers.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Sum: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Compile and run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">-std</span><span class="o">=</span>c17 <span class="nt">-Wall</span> <span class="nt">-Wextra</span> <span class="nt">-Wpedantic</span> add.c <span class="nt">-o</span> add
+./add
+</code></pre></div></div>
+
+<p>Note: for untrusted input or production-grade numeric parsing, use a more robust approach such as <code class="language-plaintext highlighter-rouge">fgets</code> followed by <code class="language-plaintext highlighter-rouge">strtol</code>, checking errors and range.</p>
+
+<h3 id="example-b-count-characters-in-a-line">Example B: Count characters in a line</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">line</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Enter a line: "</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">line</span><span class="p">,</span> <span class="n">stdin</span><span class="p">)</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Could not read input.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">size_t</span> <span class="n">length</span> <span class="o">=</span> <span class="n">strcspn</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Characters before newline: %zu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">length</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If the input line is longer than the buffer, this counts only the portion read. Handle long lines explicitly if that matters.</p>
+
+<h3 id="example-c-find-the-largest-number-in-an-array">Example C: Find the largest number in an array</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stddef.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">numbers</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">18</span><span class="p">};</span>
+    <span class="kt">size_t</span> <span class="n">count</span> <span class="o">=</span> <span class="k">sizeof</span> <span class="n">numbers</span> <span class="o">/</span> <span class="k">sizeof</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">largest</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">largest</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">largest</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Largest: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">largest</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This example assumes the array has at least one element.</p>
+
+<hr />
+
+<h2 id="quick-command-reference">Quick command reference</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Compile with warnings and debug symbols</span>
+gcc <span class="nt">-std</span><span class="o">=</span>c17 <span class="nt">-Wall</span> <span class="nt">-Wextra</span> <span class="nt">-Wpedantic</span> <span class="nt">-g</span> program.c <span class="nt">-o</span> program
+
+<span class="c"># Run</span>
+./program
+
+<span class="c"># Compile multiple source files</span>
+gcc <span class="nt">-std</span><span class="o">=</span>c17 <span class="nt">-Wall</span> <span class="nt">-Wextra</span> <span class="nt">-Wpedantic</span> main.c utils.c <span class="nt">-o</span> app
+
+<span class="c"># Debug</span>
+gdb ./program
+
+<span class="c"># Run with AddressSanitizer and UndefinedBehaviorSanitizer</span>
+gcc <span class="nt">-g</span> <span class="nt">-fsanitize</span><span class="o">=</span>address,undefined program.c <span class="nt">-o</span> program
+./program
+</code></pre></div></div>
+
+<p><strong>Beginner recommendation:</strong> learn types and expressions first, then conditionals and loops, functions, arrays and strings, pointers, and finally dynamic memory and file I/O. Write small programs, compile with warnings, and investigate each warning rather than simply removing it.</p>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>systemd Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#systemd-cheat-sheet-for-debian-13" id="toc-systemd-cheat-sheet-for-debian-13">systemd Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-what-is-systemd" id="toc-1-what-is-systemd">1. What is systemd?</a></li>
+<li><a href="#2-check-systemd-and-system-status" id="toc-2-check-systemd-and-system-status">2. Check systemd and system status</a>
+<ul>
+<li><a href="#general-system-status" id="toc-general-system-status">General system status</a></li>
+<li><a href="#list-failed-units" id="toc-list-failed-units">List failed units</a></li>
+<li><a href="#list-currently-active-units" id="toc-list-currently-active-units">List currently active units</a></li>
+<li><a href="#list-installed-unit-files" id="toc-list-installed-unit-files">List installed unit files</a></li>
+</ul>
+</li>
+<li><a href="#3-understand-units" id="toc-3-understand-units">3. Understand units</a>
+<ul>
+<li><a href="#unit-states-are-different-concepts" id="toc-unit-states-are-different-concepts">Unit states are different concepts</a></li>
+</ul>
+</li>
+<li><a href="#4-manage-services-with-systemctl" id="toc-4-manage-services-with-systemctl">4. Manage services with systemctl</a>
+<ul>
+<li><a href="#check-service-status" id="toc-check-service-status">Check service status</a></li>
+<li><a href="#start-stop-restart-and-reload" id="toc-start-stop-restart-and-reload">Start, stop, restart, and reload</a></li>
+<li><a href="#reload-systemds-unit-file-configuration" id="toc-reload-systemds-unit-file-configuration">Reload systemd's unit-file configuration</a></li>
+<li><a href="#reset-a-failed-state" id="toc-reset-a-failed-state">Reset a failed state</a></li>
+</ul>
+</li>
+<li><a href="#5-enable-services-at-boot" id="toc-5-enable-services-at-boot">5. Enable services at boot</a>
+<ul>
+<li><a href="#enable-a-service" id="toc-enable-a-service">Enable a service</a></li>
+<li><a href="#enable-and-start-now" id="toc-enable-and-start-now">Enable and start now</a></li>
+<li><a href="#disable-a-service" id="toc-disable-a-service">Disable a service</a></li>
+<li><a href="#stop-and-disable" id="toc-stop-and-disable">Stop and disable</a></li>
+<li><a href="#mask-and-unmask" id="toc-mask-and-unmask">Mask and unmask</a></li>
+<li><a href="#check-enablement-state" id="toc-check-enablement-state">Check enablement state</a></li>
+</ul>
+</li>
+<li><a href="#6-inspect-unit-files-and-properties" id="toc-6-inspect-unit-files-and-properties">6. Inspect unit files and properties</a>
+<ul>
+<li><a href="#show-the-units-definition" id="toc-show-the-units-definition">Show the unit's definition</a></li>
+<li><a href="#show-the-loaded-unit-file-path" id="toc-show-the-loaded-unit-file-path">Show the loaded unit file path</a></li>
+<li><a href="#inspect-selected-properties" id="toc-inspect-selected-properties">Inspect selected properties</a></li>
+<li><a href="#list-dependencies" id="toc-list-dependencies">List dependencies</a></li>
+<li><a href="#check-when-a-unit-started" id="toc-check-when-a-unit-started">Check when a unit started</a></li>
+</ul>
+</li>
+<li><a href="#7-read-logs-with-journalctl" id="toc-7-read-logs-with-journalctl">7. Read logs with journalctl</a>
+<ul>
+<li><a href="#view-recent-system-logs" id="toc-view-recent-system-logs">View recent system logs</a></li>
+<li><a href="#read-logs-for-a-service" id="toc-read-logs-for-a-service">Read logs for a service</a></li>
+<li><a href="#follow-logs-live" id="toc-follow-logs-live">Follow logs live</a></li>
+<li><a href="#limit-output" id="toc-limit-output">Limit output</a></li>
+<li><a href="#logs-for-the-current-boot-and-previous-boots" id="toc-logs-for-the-current-boot-and-previous-boots">Logs for the current boot and previous boots</a></li>
+<li><a href="#kernel-logs" id="toc-kernel-logs">Kernel logs</a></li>
+<li><a href="#disk-usage-and-cleanup" id="toc-disk-usage-and-cleanup">Disk usage and cleanup</a></li>
+</ul>
+</li>
+<li><a href="#8-create-a-custom-service" id="toc-8-create-a-custom-service">8. Create a custom service</a>
+<ul>
+<li><a href="#example-service-file" id="toc-example-service-file">Example service file</a></li>
+<li><a href="#load-start-and-enable-the-service" id="toc-load-start-and-enable-the-service">Load, start, and enable the service</a></li>
+<li><a href="#test-changes" id="toc-test-changes">Test changes</a></li>
+<li><a href="#choosing-a-service-type" id="toc-choosing-a-service-type">Choosing a service type</a></li>
+</ul>
+</li>
+<li><a href="#9-service-dependencies-and-ordering" id="toc-9-service-dependencies-and-ordering">9. Service dependencies and ordering</a></li>
+<li><a href="#10-systemd-timers" id="toc-10-systemd-timers">10. systemd timers</a>
+<ul>
+<li><a href="#example-run-a-script-daily" id="toc-example-run-a-script-daily">Example: run a script daily</a></li>
+<li><a href="#inspect-timers" id="toc-inspect-timers">Inspect timers</a></li>
+<li><a href="#validate-calendar-expressions" id="toc-validate-calendar-expressions">Validate calendar expressions</a></li>
+<li><a href="#run-the-service-manually" id="toc-run-the-service-manually">Run the service manually</a></li>
+<li><a href="#important-timer-safety-note" id="toc-important-timer-safety-note">Important timer safety note</a></li>
+</ul>
+</li>
+<li><a href="#11-mount-and-automount-units" id="toc-11-mount-and-automount-units">11. Mount and automount units</a></li>
+<li><a href="#12-targets-and-boot-behavior" id="toc-12-targets-and-boot-behavior">12. Targets and boot behavior</a>
+<ul>
+<li><a href="#show-the-default-target" id="toc-show-the-default-target">Show the default target</a></li>
+<li><a href="#set-the-default-target" id="toc-set-the-default-target">Set the default target</a></li>
+<li><a href="#switch-target-now" id="toc-switch-target-now">Switch target now</a></li>
+<li><a href="#analyze-boot-time" id="toc-analyze-boot-time">Analyze boot time</a></li>
+</ul>
+</li>
+<li><a href="#13-resource-controls-and-restart-policies" id="toc-13-resource-controls-and-restart-policies">13. Resource controls and restart policies</a>
+<ul>
+<li><a href="#restart-behavior" id="toc-restart-behavior">Restart behavior</a></li>
+<li><a href="#resource-controls" id="toc-resource-controls">Resource controls</a></li>
+<li><a href="#view-a-services-cgroup" id="toc-view-a-services-cgroup">View a service's cgroup</a></li>
+</ul>
+</li>
+<li><a href="#14-environment-variables-and-drop-in-overrides" id="toc-14-environment-variables-and-drop-in-overrides">14. Environment variables and drop-in overrides</a>
+<ul>
+<li><a href="#add-a-drop-in-override" id="toc-add-a-drop-in-override">Add a drop-in override</a></li>
+<li><a href="#set-environment-variables" id="toc-set-environment-variables">Set environment variables</a></li>
+</ul>
+</li>
+<li><a href="#15-troubleshooting-systemd" id="toc-15-troubleshooting-systemd">15. Troubleshooting systemd</a>
+<ul>
+<li><a href="#a-service-fails-to-start" id="toc-a-service-fails-to-start">A service fails to start</a></li>
+<li><a href="#unit-file-changed-but-systemd-does-not-see-it" id="toc-unit-file-changed-but-systemd-does-not-see-it">Unit file changed but systemd does not see it</a></li>
+<li><a href="#a-unit-is-stuck-in-a-failed-state" id="toc-a-unit-is-stuck-in-a-failed-state">A unit is stuck in a failed state</a></li>
+<li><a href="#a-service-keeps-restarting" id="toc-a-service-keeps-restarting">A service keeps restarting</a></li>
+<li><a href="#a-timer-is-not-firing" id="toc-a-timer-is-not-firing">A timer is not firing</a></li>
+<li><a href="#a-service-cannot-access-a-file" id="toc-a-service-cannot-access-a-file">A service cannot access a file</a></li>
+<li><a href="#find-boot-errors" id="toc-find-boot-errors">Find boot errors</a></li>
+</ul>
+</li>
+<li><a href="#16-safe-administration-habits" id="toc-16-safe-administration-habits">16. Safe administration habits</a></li>
+<li><a href="#17-quick-reference" id="toc-17-quick-reference">17. Quick reference</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="systemd-cheat-sheet-for-debian-13">systemd Cheat Sheet for Debian 13</h1>
+
+<p>A practical guide to managing services, units, logs, timers, dependencies, and startup behavior with systemd on Debian 13 and similar Linux systems.</p>
+
+<blockquote>
+  <p><strong>Caution:</strong> Changing or disabling system units can affect boot, networking, login, and other essential services. Inspect a unit before changing it, keep a working administrative session open, and verify changes before rebooting.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#1-what-is-systemd">1. What is systemd?</a></li>
+  <li><a href="#2-check-systemd-and-system-status">2. Check systemd and system status</a></li>
+  <li><a href="#3-understand-units">3. Understand units</a></li>
+  <li><a href="#4-manage-services-with-systemctl">4. Manage services with systemctl</a></li>
+  <li><a href="#5-enable-services-at-boot">5. Enable services at boot</a></li>
+  <li><a href="#6-inspect-unit-files-and-properties">6. Inspect unit files and properties</a></li>
+  <li><a href="#7-read-logs-with-journalctl">7. Read logs with journalctl</a></li>
+  <li><a href="#8-create-a-custom-service">8. Create a custom service</a></li>
+  <li><a href="#9-service-dependencies-and-ordering">9. Service dependencies and ordering</a></li>
+  <li><a href="#10-systemd-timers">10. systemd timers</a></li>
+  <li><a href="#11-mount-and-automount-units">11. Mount and automount units</a></li>
+  <li><a href="#12-targets-and-boot-behavior">12. Targets and boot behavior</a></li>
+  <li><a href="#13-resource-controls-and-restart-policies">13. Resource controls and restart policies</a></li>
+  <li><a href="#14-environment-variables-and-drop-in-overrides">14. Environment variables and drop-in overrides</a></li>
+  <li><a href="#15-troubleshooting-systemd">15. Troubleshooting systemd</a></li>
+  <li><a href="#16-safe-administration-habits">16. Safe administration habits</a></li>
+  <li><a href="#17-quick-reference">17. Quick reference</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-what-is-systemd">1. What is systemd?</h2>
+
+<p><code class="language-plaintext highlighter-rouge">systemd</code> is the system and service manager used by Debian 13 by default. It starts and supervises services, manages dependencies, records logs through the journal, and supports timers, mounts, sockets, and other system resources.</p>
+
+<p>Common related commands:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">systemctl</code>: inspect and control units.</li>
+  <li><code class="language-plaintext highlighter-rouge">journalctl</code>: read logs from the systemd journal.</li>
+  <li><code class="language-plaintext highlighter-rouge">systemd-analyze</code>: inspect boot performance and unit timing.</li>
+  <li><code class="language-plaintext highlighter-rouge">systemd-escape</code>: convert paths or strings into valid systemd unit names.</li>
+  <li><code class="language-plaintext highlighter-rouge">loginctl</code>: inspect login sessions and seats.</li>
+  <li><code class="language-plaintext highlighter-rouge">timedatectl</code>: inspect or configure time settings.</li>
+  <li><code class="language-plaintext highlighter-rouge">hostnamectl</code>: inspect or configure hostname settings.</li>
+</ul>
+
+<p>Check whether PID 1 is systemd:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-p</span> 1 <span class="nt">-o</span> pid,comm,args
+systemctl <span class="nt">--version</span>
+</code></pre></div></div>
+
+<h2 id="2-check-systemd-and-system-status">2. Check systemd and system status</h2>
+
+<h3 id="general-system-status">General system status</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status
+systemctl is-system-running
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">is-system-running</code> may report <code class="language-plaintext highlighter-rouge">running</code>, <code class="language-plaintext highlighter-rouge">degraded</code>, <code class="language-plaintext highlighter-rouge">starting</code>, or another state. <code class="language-plaintext highlighter-rouge">degraded</code> usually means at least one unit has failed; it does not necessarily mean the whole machine is unusable.</p>
+
+<h3 id="list-failed-units">List failed units</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl <span class="nt">--failed</span>
+</code></pre></div></div>
+
+<p>Inspect each failed unit with <code class="language-plaintext highlighter-rouge">systemctl status UNIT</code> and read its logs before deciding what to do.</p>
+
+<h3 id="list-currently-active-units">List currently active units</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl list-units
+systemctl list-units <span class="nt">--type</span><span class="o">=</span>service
+systemctl list-units <span class="nt">--state</span><span class="o">=</span>failed
+</code></pre></div></div>
+
+<p>By default, <code class="language-plaintext highlighter-rouge">list-units</code> focuses on units systemd has loaded. It is not a complete list of every installed unit file.</p>
+
+<h3 id="list-installed-unit-files">List installed unit files</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl list-unit-files
+systemctl list-unit-files <span class="nt">--type</span><span class="o">=</span>service
+</code></pre></div></div>
+
+<p>This shows unit files known to systemd and their enablement states. A unit being <code class="language-plaintext highlighter-rouge">enabled</code> does not mean it is currently running.</p>
+
+<h2 id="3-understand-units">3. Understand units</h2>
+
+<p>A <strong>unit</strong> is a resource or action managed by systemd. Common unit types include:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Purpose</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">.service</code></td>
+      <td>A service or program</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh.service</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">.timer</code></td>
+      <td>Schedule a unit to run</td>
+      <td><code class="language-plaintext highlighter-rouge">logrotate.timer</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">.mount</code></td>
+      <td>Mount a filesystem</td>
+      <td><code class="language-plaintext highlighter-rouge">mnt-data.mount</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">.automount</code></td>
+      <td>Mount on first access</td>
+      <td><code class="language-plaintext highlighter-rouge">mnt-data.automount</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">.socket</code></td>
+      <td>Socket activation</td>
+      <td><code class="language-plaintext highlighter-rouge">cups.socket</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">.target</code></td>
+      <td>Group units into a system state</td>
+      <td><code class="language-plaintext highlighter-rouge">multi-user.target</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">.path</code></td>
+      <td>Activate a unit when a path changes</td>
+      <td><code class="language-plaintext highlighter-rouge">some-path.path</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">.slice</code></td>
+      <td>Group processes for resource management</td>
+      <td><code class="language-plaintext highlighter-rouge">system.slice</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Units often have dependencies and ordering relationships. For example, a service may require networking or a mounted filesystem.</p>
+
+<h3 id="unit-states-are-different-concepts">Unit states are different concepts</h3>
+
+<ul>
+  <li><strong>Active/running:</strong> the service is currently running.</li>
+  <li><strong>Inactive/dead:</strong> the unit is not currently active.</li>
+  <li><strong>Failed:</strong> systemd considers the unit to have failed.</li>
+  <li><strong>Enabled:</strong> configured to start through its install relationships, often at boot.</li>
+  <li><strong>Disabled:</strong> not enabled through those relationships.</li>
+  <li><strong>Static:</strong> cannot normally be enabled directly because it has no install section; another unit may start it.</li>
+  <li><strong>Masked:</strong> starts are blocked by linking the unit to <code class="language-plaintext highlighter-rouge">/dev/null</code>.</li>
+</ul>
+
+<p>A service can be enabled but inactive, or disabled but running. Always check both runtime status and enablement.</p>
+
+<h2 id="4-manage-services-with-systemctl">4. Manage services with systemctl</h2>
+
+<p>Use the unit name, such as <code class="language-plaintext highlighter-rouge">ssh.service</code>. For many commands, the <code class="language-plaintext highlighter-rouge">.service</code> suffix can be omitted.</p>
+
+<h3 id="check-service-status">Check service status</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status ssh
+systemctl is-active ssh
+systemctl is-failed ssh
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">status</code> provides a summary and recent logs. <code class="language-plaintext highlighter-rouge">is-active</code> and <code class="language-plaintext highlighter-rouge">is-failed</code> are useful in scripts because they return an exit status.</p>
+
+<h3 id="start-stop-restart-and-reload">Start, stop, restart, and reload</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl start SERVICE
+<span class="nb">sudo </span>systemctl stop SERVICE
+<span class="nb">sudo </span>systemctl restart SERVICE
+<span class="nb">sudo </span>systemctl reload SERVICE
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">SERVICE</code> with the actual unit name.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">start</code>: start the unit now.</li>
+  <li><code class="language-plaintext highlighter-rouge">stop</code>: stop the unit now.</li>
+  <li><code class="language-plaintext highlighter-rouge">restart</code>: stop and start the unit again.</li>
+  <li><code class="language-plaintext highlighter-rouge">reload</code>: ask the service to reload its configuration without a full restart, if supported.</li>
+</ul>
+
+<p>Not all services support reload. If reload is unsupported, systemd reports an error. Read the service documentation before choosing between reload and restart.</p>
+
+<h3 id="reload-systemds-unit-file-configuration">Reload systemd's unit-file configuration</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
+</code></pre></div></div>
+
+<p>This makes systemd reread unit definitions after unit files or drop-in overrides change. It does <strong>not</strong> reload the application's own configuration and does not automatically restart the service.</p>
+
+<h3 id="reset-a-failed-state">Reset a failed state</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl reset-failed SERVICE
+</code></pre></div></div>
+
+<p>This clears the recorded failed state and may reset start-rate limiting counters. It does not fix the underlying problem. Review logs first.</p>
+
+<h2 id="5-enable-services-at-boot">5. Enable services at boot</h2>
+
+<h3 id="enable-a-service">Enable a service</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable </span>SERVICE
+</code></pre></div></div>
+
+<p>This configures the unit to be started through its install relationships. It does not necessarily start the service immediately.</p>
+
+<h3 id="enable-and-start-now">Enable and start now</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable</span> <span class="nt">--now</span> SERVICE
+</code></pre></div></div>
+
+<p>This enables the service and starts it immediately.</p>
+
+<h3 id="disable-a-service">Disable a service</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl disable SERVICE
+</code></pre></div></div>
+
+<p>This removes enablement links. It does not necessarily stop a service that is currently running.</p>
+
+<h3 id="stop-and-disable">Stop and disable</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl disable <span class="nt">--now</span> SERVICE
+</code></pre></div></div>
+
+<p>This disables the service and stops it now.</p>
+
+<h3 id="mask-and-unmask">Mask and unmask</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl mask SERVICE
+<span class="nb">sudo </span>systemctl unmask SERVICE
+</code></pre></div></div>
+
+<p>Masking is stronger than disabling: it prevents the unit from being started through normal systemd activation while masked. Use it carefully, as other services may depend on the unit. Do not mask essential system services without understanding the consequences.</p>
+
+<h3 id="check-enablement-state">Check enablement state</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl is-enabled SERVICE
+systemctl list-unit-files <span class="nt">--type</span><span class="o">=</span>service
+</code></pre></div></div>
+
+<p>Possible results include <code class="language-plaintext highlighter-rouge">enabled</code>, <code class="language-plaintext highlighter-rouge">disabled</code>, <code class="language-plaintext highlighter-rouge">static</code>, <code class="language-plaintext highlighter-rouge">masked</code>, or <code class="language-plaintext highlighter-rouge">indirect</code>.</p>
+
+<h2 id="6-inspect-unit-files-and-properties">6. Inspect unit files and properties</h2>
+
+<h3 id="show-the-units-definition">Show the unit's definition</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl <span class="nb">cat </span>SERVICE
+</code></pre></div></div>
+
+<p>This prints the main unit file and any drop-in configuration files.</p>
+
+<h3 id="show-the-loaded-unit-file-path">Show the loaded unit file path</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl show <span class="nt">-p</span> FragmentPath SERVICE
+</code></pre></div></div>
+
+<h3 id="inspect-selected-properties">Inspect selected properties</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl show SERVICE
+systemctl show <span class="nt">-p</span> ActiveState,SubState,UnitFileState,MainPID SERVICE
+systemctl show <span class="nt">-p</span> Wants,Requires,After,Before SERVICE
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Requires=</code> and <code class="language-plaintext highlighter-rouge">Wants=</code> describe dependency relationships.</li>
+  <li><code class="language-plaintext highlighter-rouge">After=</code> and <code class="language-plaintext highlighter-rouge">Before=</code> describe ordering.</li>
+  <li>Dependency and ordering are not the same: <code class="language-plaintext highlighter-rouge">After=</code> alone does not necessarily cause another unit to start.</li>
+</ul>
+
+<h3 id="list-dependencies">List dependencies</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl list-dependencies SERVICE
+systemctl list-dependencies <span class="nt">--reverse</span> SERVICE
+</code></pre></div></div>
+
+<p>The reverse view helps show which units depend on the selected unit.</p>
+
+<h3 id="check-when-a-unit-started">Check when a unit started</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl show <span class="nt">-p</span> ActiveEnterTimestamp SERVICE
+</code></pre></div></div>
+
+<h2 id="7-read-logs-with-journalctl">7. Read logs with journalctl</h2>
+
+<p><code class="language-plaintext highlighter-rouge">journalctl</code> queries logs collected by the systemd journal.</p>
+
+<h3 id="view-recent-system-logs">View recent system logs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl
+journalctl <span class="nt">-b</span>
+journalctl <span class="nt">-b</span> <span class="nt">-p</span> warning
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-b</code>: current boot.</li>
+  <li><code class="language-plaintext highlighter-rouge">-p warning</code>: warning priority and more severe messages.</li>
+  <li><code class="language-plaintext highlighter-rouge">-b -1</code>: previous boot, if its logs were retained.</li>
+</ul>
+
+<h3 id="read-logs-for-a-service">Read logs for a service</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">-u</span> ssh
+journalctl <span class="nt">-u</span> ssh <span class="nt">-b</span>
+journalctl <span class="nt">-u</span> ssh <span class="nt">--since</span> <span class="s2">"1 hour ago"</span>
+</code></pre></div></div>
+
+<h3 id="follow-logs-live">Follow logs live</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">-u</span> SERVICE <span class="nt">-f</span>
+</code></pre></div></div>
+
+<p>Press <code class="language-plaintext highlighter-rouge">Ctrl+C</code> to stop following logs. This stops the log viewer, not the service.</p>
+
+<h3 id="limit-output">Limit output</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">-u</span> SERVICE <span class="nt">-n</span> 50
+journalctl <span class="nt">-u</span> SERVICE <span class="nt">--no-pager</span>
+journalctl <span class="nt">-u</span> SERVICE <span class="nt">-o</span> short-iso
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-n 50</code>: show the last 50 entries.</li>
+  <li><code class="language-plaintext highlighter-rouge">--no-pager</code>: print directly without opening a pager.</li>
+  <li><code class="language-plaintext highlighter-rouge">-o short-iso</code>: use a timestamp format suitable for logs.</li>
+</ul>
+
+<h3 id="logs-for-the-current-boot-and-previous-boots">Logs for the current boot and previous boots</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">--list-boots</span>
+journalctl <span class="nt">-b</span> <span class="nt">-1</span>
+</code></pre></div></div>
+
+<p>Previous-boot logs may not be available if persistent journal storage is not configured or logs have been cleaned up.</p>
+
+<h3 id="kernel-logs">Kernel logs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">-k</span>
+journalctl <span class="nt">-k</span> <span class="nt">-p</span> warning
+</code></pre></div></div>
+
+<p>These are useful for investigating hardware, storage, network driver, and kernel issues.</p>
+
+<h3 id="disk-usage-and-cleanup">Disk usage and cleanup</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">--disk-usage</span>
+</code></pre></div></div>
+
+<p>To vacuum old journal data, for example retaining at most 500 MB:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>journalctl <span class="nt">--vacuum-size</span><span class="o">=</span>500M
+</code></pre></div></div>
+
+<p>Vacuuming permanently removes archived journal data. Do not clean logs before collecting the information needed for troubleshooting or an investigation.</p>
+
+<h2 id="8-create-a-custom-service">8. Create a custom service</h2>
+
+<p>A systemd service is a good way to run a script or application reliably without depending on an interactive terminal.</p>
+
+<p>This example runs a local script located at <code class="language-plaintext highlighter-rouge">/usr/local/bin/example-task.sh</code> as a dedicated, unprivileged account named <code class="language-plaintext highlighter-rouge">exampleuser</code>. Create the account and script according to your requirements before enabling the service.</p>
+
+<h3 id="example-service-file">Example service file</h3>
+
+<p>Create the unit:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>vim /etc/systemd/system/example-task.service
+</code></pre></div></div>
+
+<p>Example contents:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">Example background task</span>
+<span class="py">After</span><span class="p">=</span><span class="s">network.target</span>
+<span class="w">
+</span><span class="nn">[Service]</span><span class="w">
+</span><span class="py">Type</span><span class="p">=</span><span class="s">simple</span>
+<span class="py">User</span><span class="p">=</span><span class="s">exampleuser</span>
+<span class="py">Group</span><span class="p">=</span><span class="s">exampleuser</span>
+<span class="py">ExecStart</span><span class="p">=</span><span class="s">/usr/local/bin/example-task.sh</span>
+<span class="py">Restart</span><span class="p">=</span><span class="s">on-failure</span>
+<span class="py">RestartSec</span><span class="p">=</span><span class="s">5s</span>
+<span class="w">
+</span><span class="nn">[Install]</span><span class="w">
+</span><span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+</code></pre></div></div>
+
+<p>Important fields:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Description=</code>: human-readable description.</li>
+  <li><code class="language-plaintext highlighter-rouge">After=</code>: ordering relationship; it does not by itself pull in the named unit.</li>
+  <li><code class="language-plaintext highlighter-rouge">Type=simple</code>: systemd considers the service started when the process is launched.</li>
+  <li><code class="language-plaintext highlighter-rouge">User=</code> and <code class="language-plaintext highlighter-rouge">Group=</code>: run the process without root privileges when possible.</li>
+  <li><code class="language-plaintext highlighter-rouge">ExecStart=</code>: absolute path to the executable or script.</li>
+  <li><code class="language-plaintext highlighter-rouge">Restart=on-failure</code>: restart after certain failures, but not every clean exit.</li>
+  <li><code class="language-plaintext highlighter-rouge">RestartSec=</code>: delay before restart attempts.</li>
+  <li><code class="language-plaintext highlighter-rouge">WantedBy=multi-user.target</code>: allows the service to be enabled for a typical multi-user boot.</li>
+</ul>
+
+<p>The script must be executable and accessible to the service account:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo chmod </span>755 /usr/local/bin/example-task.sh
+</code></pre></div></div>
+
+<p>Use an absolute path in <code class="language-plaintext highlighter-rouge">ExecStart</code>. systemd does not run commands through a shell by default, so shell syntax such as <code class="language-plaintext highlighter-rouge">&gt;</code>, pipes, and <code class="language-plaintext highlighter-rouge">&amp;&amp;</code> will not work there unless you explicitly invoke a shell. Prefer logging to the journal or using an application-specific log configuration.</p>
+
+<h3 id="load-start-and-enable-the-service">Load, start, and enable the service</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nb">sudo </span>systemctl start example-task.service
+systemctl status example-task.service
+journalctl <span class="nt">-u</span> example-task.service <span class="nt">-n</span> 50
+</code></pre></div></div>
+
+<p>If it behaves correctly, enable it at boot:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable </span>example-task.service
+</code></pre></div></div>
+
+<p>Or enable and start it together:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable</span> <span class="nt">--now</span> example-task.service
+</code></pre></div></div>
+
+<h3 id="test-changes">Test changes</h3>
+
+<p>After editing the unit file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nb">sudo </span>systemctl restart example-task.service
+systemctl status example-task.service
+journalctl <span class="nt">-u</span> example-task.service <span class="nt">-b</span> <span class="nt">--no-pager</span>
+</code></pre></div></div>
+
+<p>If the service fails, inspect the error before repeatedly restarting it.</p>
+
+<h3 id="choosing-a-service-type">Choosing a service type</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">simple</code>: common for a foreground process.</li>
+  <li><code class="language-plaintext highlighter-rouge">exec</code>: similar to <code class="language-plaintext highlighter-rouge">simple</code>, but systemd waits until the program has been executed successfully before considering startup successful; supported by modern systemd.</li>
+  <li><code class="language-plaintext highlighter-rouge">oneshot</code>: for a task that runs and exits, such as a maintenance script.</li>
+  <li><code class="language-plaintext highlighter-rouge">notify</code>: for programs that explicitly notify systemd when they are ready.</li>
+  <li><code class="language-plaintext highlighter-rouge">forking</code>: for traditional programs that fork into the background; usually better to configure the program to stay in the foreground if possible.</li>
+</ul>
+
+<p>Avoid <code class="language-plaintext highlighter-rouge">Type=forking</code> unless the application is designed for that behavior and its process tracking is configured appropriately.</p>
+
+<h2 id="9-service-dependencies-and-ordering">9. Service dependencies and ordering</h2>
+
+<p>Systemd uses separate concepts for dependencies and ordering.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Wants=other.service</code>: weak dependency; attempts to start the other unit.</li>
+  <li><code class="language-plaintext highlighter-rouge">Requires=other.service</code>: stronger dependency; generally pulls in the other unit and can affect the dependent unit if the required unit fails or stops.</li>
+  <li><code class="language-plaintext highlighter-rouge">After=other.service</code>: order this unit after the other unit if both are being started.</li>
+  <li><code class="language-plaintext highlighter-rouge">Before=other.service</code>: order this unit before the other unit if both are being started.</li>
+  <li><code class="language-plaintext highlighter-rouge">PartOf=other.service</code>: propagates certain stop/restart operations from another unit.</li>
+  <li><code class="language-plaintext highlighter-rouge">BindsTo=other.service</code>: stronger lifecycle relationship, useful only for specific dependency designs.</li>
+</ul>
+
+<p>Example:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">Application requiring a mounted data directory</span>
+<span class="py">Requires</span><span class="p">=</span><span class="s">mnt-data.mount</span>
+<span class="py">After</span><span class="p">=</span><span class="s">mnt-data.mount</span>
+</code></pre></div></div>
+
+<p>This states that the application requires the mount unit and should start after it. The mount unit name must match the actual mount point. For <code class="language-plaintext highlighter-rouge">/mnt/data</code>, the conventional unit name is <code class="language-plaintext highlighter-rouge">mnt-data.mount</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">network.target</code> does not necessarily mean the network is fully configured and online. Services that truly require configured network connectivity may need <code class="language-plaintext highlighter-rouge">network-online.target</code> and the appropriate wait-online service for the active network manager. Use this only when required; it can delay boot.</p>
+
+<h2 id="10-systemd-timers">10. systemd timers</h2>
+
+<p>Timers schedule units, often service units. They can replace many cron jobs and integrate with systemd logging and dependencies.</p>
+
+<p>A timer normally uses two files with matching base names:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">example-task.service</code>: the command to run.</li>
+  <li><code class="language-plaintext highlighter-rouge">example-task.timer</code>: when to run it.</li>
+</ul>
+
+<h3 id="example-run-a-script-daily">Example: run a script daily</h3>
+
+<p>Create the service:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>vim /etc/systemd/system/daily-example.service
+</code></pre></div></div>
+
+<p>Example contents:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">Run daily example task</span>
+<span class="w">
+</span><span class="nn">[Service]</span><span class="w">
+</span><span class="py">Type</span><span class="p">=</span><span class="s">oneshot</span>
+<span class="py">ExecStart</span><span class="p">=</span><span class="s">/usr/local/bin/daily-example.sh</span>
+</code></pre></div></div>
+
+<p>Create the timer:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>vim /etc/systemd/system/daily-example.timer
+</code></pre></div></div>
+
+<p>Example contents:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">Run example task daily</span>
+<span class="w">
+</span><span class="nn">[Timer]</span><span class="w">
+</span><span class="py">OnCalendar</span><span class="p">=</span><span class="s">*-*-* 03:00:00</span>
+<span class="py">Persistent</span><span class="p">=</span><span class="s">true</span>
+<span class="py">Unit</span><span class="p">=</span><span class="s">daily-example.service</span>
+<span class="w">
+</span><span class="nn">[Install]</span><span class="w">
+</span><span class="py">WantedBy</span><span class="p">=</span><span class="s">timers.target</span>
+</code></pre></div></div>
+
+<p>This schedules the task daily at 03:00 local time. <code class="language-plaintext highlighter-rouge">Persistent=true</code> lets systemd make up a missed calendar run when the timer becomes active again, if the timer was inactive when the scheduled time passed. It does not make a task run every time the system boots.</p>
+
+<p>Ensure the script exists and is executable:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo chmod </span>755 /usr/local/bin/daily-example.sh
+</code></pre></div></div>
+
+<p>Load and enable the timer:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nb">sudo </span>systemctl <span class="nb">enable</span> <span class="nt">--now</span> daily-example.timer
+</code></pre></div></div>
+
+<h3 id="inspect-timers">Inspect timers</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl list-timers
+systemctl list-timers <span class="nt">--all</span>
+systemctl status daily-example.timer
+</code></pre></div></div>
+
+<h3 id="validate-calendar-expressions">Validate calendar expressions</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemd-analyze calendar <span class="s1">'*-*-* 03:00:00'</span>
+systemd-analyze calendar <span class="s1">'Mon..Fri 09:00'</span>
+</code></pre></div></div>
+
+<p>Use quotes around expressions so the shell does not expand wildcard characters.</p>
+
+<h3 id="run-the-service-manually">Run the service manually</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl start daily-example.service
+journalctl <span class="nt">-u</span> daily-example.service <span class="nt">-n</span> 50
+</code></pre></div></div>
+
+<p>Starting the service manually tests the task; it does not change the timer schedule.</p>
+
+<h3 id="important-timer-safety-note">Important timer safety note</h3>
+
+<p>Always confirm the timer's schedule and target service before enabling it. A faulty recurring service can repeatedly modify files, consume resources, or reboot a machine. Test the service manually and inspect logs before enabling recurring execution.</p>
+
+<h2 id="11-mount-and-automount-units">11. Mount and automount units</h2>
+
+<p>systemd can manage filesystems using <code class="language-plaintext highlighter-rouge">.mount</code> and <code class="language-plaintext highlighter-rouge">.automount</code> units. The unit name is derived from the mount path.</p>
+
+<p>For <code class="language-plaintext highlighter-rouge">/mnt/data</code>, generate the correct names with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemd-escape <span class="nt">--path</span> <span class="nt">--suffix</span><span class="o">=</span>mount /mnt/data
+systemd-escape <span class="nt">--path</span> <span class="nt">--suffix</span><span class="o">=</span>automount /mnt/data
+</code></pre></div></div>
+
+<p>A <code class="language-plaintext highlighter-rouge">.mount</code> unit might look like this:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">Data filesystem</span>
+<span class="w">
+</span><span class="nn">[Mount]</span><span class="w">
+</span><span class="py">What</span><span class="p">=</span><span class="s">UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+<span class="py">Where</span><span class="p">=</span><span class="s">/mnt/data</span>
+<span class="py">Type</span><span class="p">=</span><span class="s">ext4</span>
+<span class="py">Options</span><span class="p">=</span><span class="s">defaults</span>
+</code></pre></div></div>
+
+<p>A matching <code class="language-plaintext highlighter-rouge">.automount</code> unit might look like this:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">Automount data filesystem</span>
+<span class="w">
+</span><span class="nn">[Automount]</span><span class="w">
+</span><span class="py">Where</span><span class="p">=</span><span class="s">/mnt/data</span>
+<span class="w">
+</span><span class="nn">[Install]</span><span class="w">
+</span><span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+</code></pre></div></div>
+
+<p>Create <code class="language-plaintext highlighter-rouge">/mnt/data</code>, save the units under the exact names printed by <code class="language-plaintext highlighter-rouge">systemd-escape</code>, then run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nb">sudo </span>systemctl <span class="nb">enable</span> <span class="nt">--now</span> mnt-data.automount
+</code></pre></div></div>
+
+<p>Replace the example UUID with the real one and ensure the unit names correspond to the path. A simple local disk is often easier to manage through <code class="language-plaintext highlighter-rouge">/etc/fstab</code>; avoid defining conflicting configurations for the same mount in both fstab and standalone units.</p>
+
+<h2 id="12-targets-and-boot-behavior">12. Targets and boot behavior</h2>
+
+<p>A target groups units into a system state. Common targets include:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">multi-user.target</code>: typical multi-user system without a graphical desktop requirement.</li>
+  <li><code class="language-plaintext highlighter-rouge">graphical.target</code>: system state that includes a graphical login environment, if installed.</li>
+  <li><code class="language-plaintext highlighter-rouge">rescue.target</code>: rescue mode with a limited environment.</li>
+  <li><code class="language-plaintext highlighter-rouge">emergency.target</code>: minimal emergency shell.</li>
+  <li><code class="language-plaintext highlighter-rouge">network-online.target</code>: indicates that the configured network-online mechanism considers the network online; it may require a wait-online service.</li>
+</ul>
+
+<h3 id="show-the-default-target">Show the default target</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl get-default
+</code></pre></div></div>
+
+<h3 id="set-the-default-target">Set the default target</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl set-default multi-user.target
+</code></pre></div></div>
+
+<p>This changes the default target for future boots. It does not necessarily switch the current session immediately.</p>
+
+<h3 id="switch-target-now">Switch target now</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl isolate multi-user.target
+</code></pre></div></div>
+
+<p><strong>Caution:</strong> <code class="language-plaintext highlighter-rouge">isolate</code> can stop units not required by the selected target, potentially ending graphical sessions or other services. Do not run it remotely or on a production system unless you understand the consequences.</p>
+
+<h3 id="analyze-boot-time">Analyze boot time</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemd-analyze
+systemd-analyze blame
+systemd-analyze critical-chain
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">systemd-analyze</code> shows total boot timing information.</li>
+  <li><code class="language-plaintext highlighter-rouge">blame</code> lists units by time spent in their startup phase, but a slow unit is not necessarily the root cause of a slow boot.</li>
+  <li><code class="language-plaintext highlighter-rouge">critical-chain</code> helps inspect dependencies on the boot critical path.</li>
+</ul>
+
+<h2 id="13-resource-controls-and-restart-policies">13. Resource controls and restart policies</h2>
+
+<p>Service unit files can specify how a service is restarted and how much system resource it may use.</p>
+
+<h3 id="restart-behavior">Restart behavior</h3>
+
+<p>Example:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Service]</span><span class="w">
+</span><span class="py">Restart</span><span class="p">=</span><span class="s">on-failure</span>
+<span class="py">RestartSec</span><span class="p">=</span><span class="s">5s</span>
+</code></pre></div></div>
+
+<p>Common <code class="language-plaintext highlighter-rouge">Restart=</code> values include <code class="language-plaintext highlighter-rouge">no</code>, <code class="language-plaintext highlighter-rouge">on-success</code>, <code class="language-plaintext highlighter-rouge">on-failure</code>, <code class="language-plaintext highlighter-rouge">on-abnormal</code>, and <code class="language-plaintext highlighter-rouge">always</code>. Systemd also applies rate limits to repeated start attempts by default. Avoid restart loops; investigate why the program exits.</p>
+
+<h3 id="resource-controls">Resource controls</h3>
+
+<p>Examples of service settings include:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Service]</span><span class="w">
+</span><span class="py">CPUQuota</span><span class="p">=</span><span class="s">50%</span>
+<span class="py">MemoryMax</span><span class="p">=</span><span class="s">500M</span>
+<span class="py">TasksMax</span><span class="p">=</span><span class="s">100</span>
+</code></pre></div></div>
+
+<p>These are illustrative limits, not universal recommendations. They can cause an application to slow down, fail allocations, or be terminated when it reaches a limit. Test limits on noncritical services first.</p>
+
+<h3 id="view-a-services-cgroup">View a service's cgroup</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status SERVICE
+systemd-cgls
+systemd-cgtop
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">systemd-cgls</code> displays control groups, and <code class="language-plaintext highlighter-rouge">systemd-cgtop</code> provides a live resource view when available.</p>
+
+<h2 id="14-environment-variables-and-drop-in-overrides">14. Environment variables and drop-in overrides</h2>
+
+<h3 id="add-a-drop-in-override">Add a drop-in override</h3>
+
+<p>Avoid editing package-provided unit files under <code class="language-plaintext highlighter-rouge">/lib/systemd/system</code> or <code class="language-plaintext highlighter-rouge">/usr/lib/systemd/system</code> directly. Package updates may overwrite those changes.</p>
+
+<p>Create a drop-in:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl edit SERVICE
+</code></pre></div></div>
+
+<p>This opens an override editor. For example:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Service]</span><span class="w">
+</span><span class="py">Restart</span><span class="p">=</span><span class="s">on-failure</span>
+<span class="py">RestartSec</span><span class="p">=</span><span class="s">5s</span>
+</code></pre></div></div>
+
+<p>Save and exit, then apply the change:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nb">sudo </span>systemctl restart SERVICE
+</code></pre></div></div>
+
+<p>Inspect the result:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl <span class="nb">cat </span>SERVICE
+systemctl show <span class="nt">-p</span> Restart,RestartUSec SERVICE
+</code></pre></div></div>
+
+<p>To remove a drop-in, use <code class="language-plaintext highlighter-rouge">sudo systemctl edit SERVICE</code> to clear the override or remove the appropriate file under <code class="language-plaintext highlighter-rouge">/etc/systemd/system/SERVICE.d/</code>, then reload systemd and verify. Be careful not to delete overrides you did not create.</p>
+
+<h3 id="set-environment-variables">Set environment variables</h3>
+
+<p>A drop-in can add an environment variable:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Service]</span><span class="w">
+</span><span class="py">Environment</span><span class="p">=</span><span class="s">"APP_MODE=production"</span>
+</code></pre></div></div>
+
+<p>For multiple variables, you can use an environment file:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Service]</span><span class="w">
+</span><span class="py">EnvironmentFile</span><span class="p">=</span><span class="s">/etc/default/example-app</span>
+</code></pre></div></div>
+
+<p>Example environment file:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>APP_MODE=production
+LOG_LEVEL=info
+</code></pre></div></div>
+
+<p>The syntax and quoting rules are not identical to a shell script. Do not put shell commands in an environment file. Protect files containing secrets with appropriate ownership and permissions; consider systemd credentials or a dedicated secrets mechanism instead of plain environment variables for sensitive values.</p>
+
+<h2 id="15-troubleshooting-systemd">15. Troubleshooting systemd</h2>
+
+<h3 id="a-service-fails-to-start">A service fails to start</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status SERVICE
+journalctl <span class="nt">-u</span> SERVICE <span class="nt">-b</span> <span class="nt">--no-pager</span>
+systemctl <span class="nb">cat </span>SERVICE
+</code></pre></div></div>
+
+<p>Look for an invalid path, permission problem, missing dependency, configuration error, or application failure.</p>
+
+<h3 id="unit-file-changed-but-systemd-does-not-see-it">Unit file changed but systemd does not see it</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
+systemctl <span class="nb">cat </span>SERVICE
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">daemon-reload</code> rereads unit definitions. You may also need to restart the service to make it use its updated settings.</p>
+
+<h3 id="a-unit-is-stuck-in-a-failed-state">A unit is stuck in a failed state</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status SERVICE
+journalctl <span class="nt">-u</span> SERVICE <span class="nt">-b</span> <span class="nt">-n</span> 100
+<span class="nb">sudo </span>systemctl reset-failed SERVICE
+</code></pre></div></div>
+
+<p>Reset the failed state only after checking the cause. Resetting the state does not fix the application.</p>
+
+<h3 id="a-service-keeps-restarting">A service keeps restarting</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status SERVICE
+journalctl <span class="nt">-u</span> SERVICE <span class="nt">-f</span>
+systemctl show <span class="nt">-p</span> Restart,RestartUSec,NRestarts SERVICE
+</code></pre></div></div>
+
+<p>Check the application error and restart policy. Do not simply increase restart frequency without understanding the failure.</p>
+
+<h3 id="a-timer-is-not-firing">A timer is not firing</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl list-timers <span class="nt">--all</span>
+systemctl status example-task.timer
+systemctl status example-task.service
+journalctl <span class="nt">-u</span> example-task.timer <span class="nt">-b</span>
+journalctl <span class="nt">-u</span> example-task.service <span class="nt">-b</span>
+systemd-analyze calendar <span class="s1">'*-*-* 03:00:00'</span>
+</code></pre></div></div>
+
+<p>Verify that the timer is enabled and active, its target service name matches, the calendar expression is correct, and the service works when started manually.</p>
+
+<h3 id="a-service-cannot-access-a-file">A service cannot access a file</h3>
+
+<p>Check the service's <code class="language-plaintext highlighter-rouge">User=</code>, <code class="language-plaintext highlighter-rouge">Group=</code>, working directory, file permissions, and any sandboxing options. Test file access as the service account where appropriate. A command that works in your interactive shell may fail under systemd because the service has a different user, environment, working directory, or <code class="language-plaintext highlighter-rouge">PATH</code>.</p>
+
+<h3 id="find-boot-errors">Find boot errors</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl <span class="nt">--failed</span>
+journalctl <span class="nt">-b</span> <span class="nt">-p</span> err
+systemd-analyze critical-chain
+</code></pre></div></div>
+
+<p>Do not assume every warning is a critical failure. Prioritize units related to the problem you are observing.</p>
+
+<h2 id="16-safe-administration-habits">16. Safe administration habits</h2>
+
+<ul>
+  <li>Inspect with <code class="language-plaintext highlighter-rouge">systemctl status</code>, <code class="language-plaintext highlighter-rouge">systemctl cat</code>, and <code class="language-plaintext highlighter-rouge">journalctl</code> before changing a unit.</li>
+  <li>Prefer <code class="language-plaintext highlighter-rouge">systemctl stop SERVICE</code> over killing a service's PID directly.</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">systemctl edit SERVICE</code> for local overrides instead of modifying vendor unit files.</li>
+  <li>Run <code class="language-plaintext highlighter-rouge">daemon-reload</code> after creating or editing unit files.</li>
+  <li>Test custom services manually before enabling them at boot.</li>
+  <li>Test timers and review their target service before enabling recurring execution.</li>
+  <li>Be cautious with <code class="language-plaintext highlighter-rouge">mask</code>, <code class="language-plaintext highlighter-rouge">isolate</code>, and changes to the default target.</li>
+  <li>Keep a recovery route when changing networking, login, mounts, or boot-related units.</li>
+  <li>Never put passwords or API keys into a unit file or command line unless you understand the exposure risks.</li>
+  <li>When troubleshooting, keep relevant logs before cleaning the journal.</li>
+</ul>
+
+<h2 id="17-quick-reference">17. Quick reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Check system state</td>
+      <td><code class="language-plaintext highlighter-rouge">systemctl is-system-running</code></td>
+    </tr>
+    <tr>
+      <td>List failed units</td>
+      <td><code class="language-plaintext highlighter-rouge">systemctl --failed</code></td>
+    </tr>
+    <tr>
+      <td>List services</td>
+      <td><code class="language-plaintext highlighter-rouge">systemctl list-units --type=service</code></td>
+    </tr>
+    <tr>
+      <td>Show installed unit files</td>
+      <td><code class="language-plaintext highlighter-rouge">systemctl list-unit-files</code></td>
+    </tr>
+    <tr>
+      <td>Check a service</td>
+      <td><code class="language-plaintext highlighter-rouge">systemctl status SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Start a service</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo systemctl start SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Stop a service</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo systemctl stop SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Restart a service</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo systemctl restart SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Reload service config</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo systemctl reload SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Enable at boot</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo systemctl enable SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Enable and start</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo systemctl enable --now SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Disable and stop</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo systemctl disable --now SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Reload unit definitions</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo systemctl daemon-reload</code></td>
+    </tr>
+    <tr>
+      <td>Show unit contents</td>
+      <td><code class="language-plaintext highlighter-rouge">systemctl cat SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Show dependencies</td>
+      <td><code class="language-plaintext highlighter-rouge">systemctl list-dependencies SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Read service logs</td>
+      <td><code class="language-plaintext highlighter-rouge">journalctl -u SERVICE -b</code></td>
+    </tr>
+    <tr>
+      <td>Follow service logs</td>
+      <td><code class="language-plaintext highlighter-rouge">journalctl -u SERVICE -f</code></td>
+    </tr>
+    <tr>
+      <td>Show previous boots</td>
+      <td><code class="language-plaintext highlighter-rouge">journalctl --list-boots</code></td>
+    </tr>
+    <tr>
+      <td>List timers</td>
+      <td><code class="language-plaintext highlighter-rouge">systemctl list-timers --all</code></td>
+    </tr>
+    <tr>
+      <td>Validate calendar schedule</td>
+      <td><code class="language-plaintext highlighter-rouge">systemd-analyze calendar 'Mon..Fri 09:00'</code></td>
+    </tr>
+    <tr>
+      <td>Analyze boot</td>
+      <td><code class="language-plaintext highlighter-rouge">systemd-analyze critical-chain</code></td>
+    </tr>
+    <tr>
+      <td>Reset failed state</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo systemctl reset-failed SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Escape a mount path</td>
+      <td><code class="language-plaintext highlighter-rouge">systemd-escape --path --suffix=mount /mnt/data</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><strong>Recommended workflow:</strong> inspect the unit, read its logs, make one change at a time, run <code class="language-plaintext highlighter-rouge">daemon-reload</code> when unit files change, then verify status and logs. This is safer than repeatedly restarting or disabling services without understanding the cause.</p>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

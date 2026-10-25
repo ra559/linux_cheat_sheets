@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>VirtualBox Management Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#virtualbox-management-cheat-sheet-for-debian-13" id="toc-virtualbox-management-cheat-sheet-for-debian-13">VirtualBox Management Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-install-and-verify-virtualbox" id="toc-1-install-and-verify-virtualbox">1. Install and verify VirtualBox</a>
+<ul>
+<li><a href="#host-compatibility-notes" id="toc-host-compatibility-notes">Host compatibility notes</a></li>
+</ul>
+</li>
+<li><a href="#2-core-virtualbox-commands" id="toc-2-core-virtualbox-commands">2. Core VirtualBox commands</a></li>
+<li><a href="#3-list-and-inspect-virtual-machines" id="toc-3-list-and-inspect-virtual-machines">3. List and inspect virtual machines</a>
+<ul>
+<li><a href="#list-registered-vms" id="toc-list-registered-vms">List registered VMs</a></li>
+<li><a href="#show-detailed-vm-information" id="toc-show-detailed-vm-information">Show detailed VM information</a></li>
+<li><a href="#list-host-information" id="toc-list-host-information">List host information</a></li>
+<li><a href="#list-virtual-media" id="toc-list-virtual-media">List virtual media</a></li>
+<li><a href="#find-the-vm-configuration-directory" id="toc-find-the-vm-configuration-directory">Find the VM configuration directory</a></li>
+</ul>
+</li>
+<li><a href="#4-create-and-register-virtual-machines" id="toc-4-create-and-register-virtual-machines">4. Create and register virtual machines</a>
+<ul>
+<li><a href="#create-an-empty-vm" id="toc-create-an-empty-vm">Create an empty VM</a></li>
+<li><a href="#configure-basic-resources" id="toc-configure-basic-resources">Configure basic resources</a></li>
+<li><a href="#create-a-virtual-disk" id="toc-create-a-virtual-disk">Create a virtual disk</a></li>
+<li><a href="#add-a-sata-storage-controller" id="toc-add-a-sata-storage-controller">Add a SATA storage controller</a></li>
+<li><a href="#attach-the-virtual-disk" id="toc-attach-the-virtual-disk">Attach the virtual disk</a></li>
+<li><a href="#attach-an-installation-iso" id="toc-attach-an-installation-iso">Attach an installation ISO</a></li>
+<li><a href="#start-the-vm" id="toc-start-the-vm">Start the VM</a></li>
+</ul>
+</li>
+<li><a href="#5-start-stop-pause-and-reset-vms" id="toc-5-start-stop-pause-and-reset-vms">5. Start, stop, pause, and reset VMs</a>
+<ul>
+<li><a href="#start-and-inspect-running-vms" id="toc-start-and-inspect-running-vms">Start and inspect running VMs</a></li>
+<li><a href="#request-a-graceful-guest-shutdown" id="toc-request-a-graceful-guest-shutdown">Request a graceful guest shutdown</a></li>
+<li><a href="#save-the-vm-state" id="toc-save-the-vm-state">Save the VM state</a></li>
+<li><a href="#pause-and-resume" id="toc-pause-and-resume">Pause and resume</a></li>
+<li><a href="#reset-or-power-off" id="toc-reset-or-power-off">Reset or power off</a></li>
+<li><a href="#discard-a-saved-state" id="toc-discard-a-saved-state">Discard a saved state</a></li>
+</ul>
+</li>
+<li><a href="#6-configure-vm-settings" id="toc-6-configure-vm-settings">6. Configure VM settings</a>
+<ul>
+<li><a href="#ram-cpu-and-boot-order" id="toc-ram-cpu-and-boot-order">RAM, CPU, and boot order</a></li>
+<li><a href="#vm-description" id="toc-vm-description">VM description</a></li>
+<li><a href="#shared-clipboard-and-drag-and-drop" id="toc-shared-clipboard-and-drag-and-drop">Shared clipboard and drag-and-drop</a></li>
+<li><a href="#change-the-vms-name" id="toc-change-the-vms-name">Change the VM's name</a></li>
+<li><a href="#view-current-settings" id="toc-view-current-settings">View current settings</a></li>
+</ul>
+</li>
+<li><a href="#7-virtual-networking" id="toc-7-virtual-networking">7. Virtual networking</a>
+<ul>
+<li><a href="#common-modes" id="toc-common-modes">Common modes</a></li>
+<li><a href="#set-adapter-1-to-nat" id="toc-set-adapter-1-to-nat">Set adapter 1 to NAT</a></li>
+<li><a href="#set-adapter-1-to-bridged" id="toc-set-adapter-1-to-bridged">Set adapter 1 to bridged</a></li>
+<li><a href="#set-host-only-networking" id="toc-set-host-only-networking">Set host-only networking</a></li>
+<li><a href="#configure-nat-port-forwarding" id="toc-configure-nat-port-forwarding">Configure NAT port forwarding</a></li>
+</ul>
+</li>
+<li><a href="#8-manage-virtual-disks-and-storage" id="toc-8-manage-virtual-disks-and-storage">8. Manage virtual disks and storage</a>
+<ul>
+<li><a href="#supported-virtual-disk-formats" id="toc-supported-virtual-disk-formats">Supported virtual disk formats</a></li>
+<li><a href="#list-registered-hard-disks" id="toc-list-registered-hard-disks">List registered hard disks</a></li>
+<li><a href="#inspect-a-disk-image" id="toc-inspect-a-disk-image">Inspect a disk image</a></li>
+<li><a href="#create-a-new-disk" id="toc-create-a-new-disk">Create a new disk</a></li>
+<li><a href="#attach-an-existing-disk" id="toc-attach-an-existing-disk">Attach an existing disk</a></li>
+<li><a href="#detach-a-disk" id="toc-detach-a-disk">Detach a disk</a></li>
+</ul>
+</li>
+<li><a href="#9-convert-virtual-disk-formats" id="toc-9-convert-virtual-disk-formats">9. Convert virtual disk formats</a>
+<ul>
+<li><a href="#general-syntax" id="toc-general-syntax">General syntax</a></li>
+<li><a href="#convert-vdi-to-vmdk" id="toc-convert-vdi-to-vmdk">Convert VDI to VMDK</a></li>
+<li><a href="#convert-vmdk-to-vdi" id="toc-convert-vmdk-to-vdi">Convert VMDK to VDI</a></li>
+<li><a href="#convert-vdi-to-vhd" id="toc-convert-vdi-to-vhd">Convert VDI to VHD</a></li>
+<li><a href="#create-a-raw-disk-image" id="toc-create-a-raw-disk-image">Create a raw disk image</a></li>
+<li><a href="#convert-a-raw-image-to-vdi" id="toc-convert-a-raw-image-to-vdi">Convert a raw image to VDI</a></li>
+<li><a href="#dynamic-versus-fixed-allocation" id="toc-dynamic-versus-fixed-allocation">Dynamic versus fixed allocation</a></li>
+<li><a href="#convert-or-clone-a-disk-already-registered-in-virtualbox" id="toc-convert-or-clone-a-disk-already-registered-in-virtualbox">Convert or clone a disk already registered in VirtualBox</a></li>
+<li><a href="#verify-the-converted-disk" id="toc-verify-the-converted-disk">Verify the converted disk</a></li>
+<li><a href="#important-conversion-notes" id="toc-important-conversion-notes">Important conversion notes</a></li>
+</ul>
+</li>
+<li><a href="#10-clone-and-copy-vms" id="toc-10-clone-and-copy-vms">10. Clone and copy VMs</a>
+<ul>
+<li><a href="#clone-a-vm" id="toc-clone-a-vm">Clone a VM</a></li>
+<li><a href="#full-clone-versus-linked-clone" id="toc-full-clone-versus-linked-clone">Full clone versus linked clone</a></li>
+<li><a href="#clone-a-virtual-disk" id="toc-clone-a-virtual-disk">Clone a virtual disk</a></li>
+<li><a href="#register-an-existing-vm-configuration" id="toc-register-an-existing-vm-configuration">Register an existing VM configuration</a></li>
+</ul>
+</li>
+<li><a href="#11-snapshots" id="toc-11-snapshots">11. Snapshots</a>
+<ul>
+<li><a href="#list-snapshots" id="toc-list-snapshots">List snapshots</a></li>
+<li><a href="#take-a-snapshot" id="toc-take-a-snapshot">Take a snapshot</a></li>
+<li><a href="#show-snapshot-details" id="toc-show-snapshot-details">Show snapshot details</a></li>
+<li><a href="#restore-a-snapshot" id="toc-restore-a-snapshot">Restore a snapshot</a></li>
+<li><a href="#delete-a-snapshot" id="toc-delete-a-snapshot">Delete a snapshot</a></li>
+</ul>
+</li>
+<li><a href="#12-export-and-import-appliances" id="toc-12-export-and-import-appliances">12. Export and import appliances</a>
+<ul>
+<li><a href="#export-a-vm" id="toc-export-a-vm">Export a VM</a></li>
+<li><a href="#export-to-ovf" id="toc-export-to-ovf">Export to OVF</a></li>
+<li><a href="#import-an-appliance" id="toc-import-an-appliance">Import an appliance</a></li>
+<li><a href="#inspect-appliance-import-options" id="toc-inspect-appliance-import-options">Inspect appliance import options</a></li>
+<li><a href="#export-versus-disk-conversion" id="toc-export-versus-disk-conversion">Export versus disk conversion</a></li>
+</ul>
+</li>
+<li><a href="#13-shared-folders-and-guest-additions" id="toc-13-shared-folders-and-guest-additions">13. Shared folders and Guest Additions</a>
+<ul>
+<li><a href="#configure-a-shared-folder" id="toc-configure-a-shared-folder">Configure a shared folder</a></li>
+<li><a href="#remove-a-shared-folder" id="toc-remove-a-shared-folder">Remove a shared folder</a></li>
+<li><a href="#guest-additions" id="toc-guest-additions">Guest Additions</a></li>
+</ul>
+</li>
+<li><a href="#14-logs-and-troubleshooting" id="toc-14-logs-and-troubleshooting">14. Logs and troubleshooting</a>
+<ul>
+<li><a href="#show-vm-information" id="toc-show-vm-information">Show VM information</a></li>
+<li><a href="#inspect-vm-logs" id="toc-inspect-vm-logs">Inspect VM logs</a></li>
+<li><a href="#check-host-kernel-modules-on-linux" id="toc-check-host-kernel-modules-on-linux">Check host kernel modules on Linux</a></li>
+<li><a href="#check-free-disk-space" id="toc-check-free-disk-space">Check free disk space</a></li>
+<li><a href="#check-vm-state" id="toc-check-vm-state">Check VM state</a></li>
+</ul>
+</li>
+<li><a href="#15-useful-command-patterns" id="toc-15-useful-command-patterns">15. Useful command patterns</a>
+<ul>
+<li><a href="#find-virtualbox-host-network-interfaces" id="toc-find-virtualbox-host-network-interfaces">Find VirtualBox host network interfaces</a></li>
+<li><a href="#show-configured-nat-networks" id="toc-show-configured-nat-networks">Show configured NAT networks</a></li>
+<li><a href="#show-usb-host-devices" id="toc-show-usb-host-devices">Show USB host devices</a></li>
+<li><a href="#show-vm-metrics" id="toc-show-vm-metrics">Show VM metrics</a></li>
+<li><a href="#list-supported-os-types" id="toc-list-supported-os-types">List supported OS types</a></li>
+<li><a href="#read-command-specific-help" id="toc-read-command-specific-help">Read command-specific help</a></li>
+</ul>
+</li>
+<li><a href="#16-quick-reference" id="toc-16-quick-reference">16. Quick reference</a></li>
+<li><a href="#further-reading" id="toc-further-reading">Further reading</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="virtualbox-management-cheat-sheet-for-debian-13">VirtualBox Management Cheat Sheet for Debian 13</h1>
+
+<p>A practical command-line reference for managing Oracle VirtualBox virtual machines on Debian 13, including VM creation, snapshots, networking, storage, exports, and virtual-disk conversion.</p>
+
+<blockquote>
+  <p><strong>Important:</strong> VirtualBox commands can power off VMs, alter disk images, or overwrite files. Back up important VMs first. Examples use placeholders such as <code class="language-plaintext highlighter-rouge">MyVM</code>, <code class="language-plaintext highlighter-rouge">/path/to/disk.vdi</code>, and <code class="language-plaintext highlighter-rouge">/path/to/output.vmdk</code>; replace them with your actual names and paths.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#1-install-and-verify-virtualbox">1. Install and verify VirtualBox</a></li>
+  <li><a href="#2-core-virtualbox-commands">2. Core VirtualBox commands</a></li>
+  <li><a href="#3-list-and-inspect-virtual-machines">3. List and inspect virtual machines</a></li>
+  <li><a href="#4-create-and-register-virtual-machines">4. Create and register virtual machines</a></li>
+  <li><a href="#5-start-stop-pause-and-reset-vms">5. Start, stop, pause, and reset VMs</a></li>
+  <li><a href="#6-configure-vm-settings">6. Configure VM settings</a></li>
+  <li><a href="#7-virtual-networking">7. Virtual networking</a></li>
+  <li><a href="#8-manage-virtual-disks-and-storage">8. Manage virtual disks and storage</a></li>
+  <li><a href="#9-convert-virtual-disk-formats">9. Convert virtual disk formats</a></li>
+  <li><a href="#10-clone-and-copy-vms">10. Clone and copy VMs</a></li>
+  <li><a href="#11-snapshots">11. Snapshots</a></li>
+  <li><a href="#12-export-and-import-appliances">12. Export and import appliances</a></li>
+  <li><a href="#13-shared-folders-and-guest-additions">13. Shared folders and Guest Additions</a></li>
+  <li><a href="#14-logs-and-troubleshooting">14. Logs and troubleshooting</a></li>
+  <li><a href="#15-useful-command-patterns">15. Useful command patterns</a></li>
+  <li><a href="#16-quick-reference">16. Quick reference</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-install-and-verify-virtualbox">1. Install and verify VirtualBox</h2>
+
+<p>On Debian, VirtualBox installation options depend on the Debian release, configured repositories, and Oracle's package availability. Check current package availability before installing.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+apt search virtualbox
+</code></pre></div></div>
+
+<p>If the package is available from your configured repository, install it with APT. Oracle's official Linux downloads and installation instructions are available at:</p>
+
+<ul>
+  <li>https://www.virtualbox.org/wiki/Linux_Downloads</li>
+  <li>https://www.virtualbox.org/manual/</li>
+</ul>
+
+<p>Check which commands are installed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage <span class="nt">--version</span>
+<span class="nb">command</span> <span class="nt">-v</span> VBoxManage
+<span class="nb">command</span> <span class="nt">-v</span> VirtualBox
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">VBoxManage</code> is the main command-line management tool. The graphical interface is typically launched with <code class="language-plaintext highlighter-rouge">VirtualBox</code>.</p>
+
+<h3 id="host-compatibility-notes">Host compatibility notes</h3>
+
+<ul>
+  <li>The host CPU architecture must be compatible with the VirtualBox build and guest architecture.</li>
+  <li>VirtualBox on Apple Silicon differs from VirtualBox on x86-64 hosts; not every guest OS or CPU architecture is supported in the same way.</li>
+  <li>Kernel modules and host packages must match the running host kernel.</li>
+  <li>Do not assume that commands or guest support are identical across VirtualBox versions.</li>
+</ul>
+
+<h2 id="2-core-virtualbox-commands">2. Core VirtualBox commands</h2>
+
+<p>The main command is:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage
+</code></pre></div></div>
+
+<p>Show top-level help:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage <span class="nt">--help</span>
+VBoxManage list <span class="nt">--help</span>
+VBoxManage showvminfo <span class="nt">--help</span>
+</code></pre></div></div>
+
+<p>Common commands:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Command</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage list vms</code></td>
+      <td>List registered VMs</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage showvminfo "MyVM"</code></td>
+      <td>Show VM configuration</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage startvm "MyVM"</code></td>
+      <td>Start a VM</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage controlvm "MyVM" acpipowerbutton</code></td>
+      <td>Request guest shutdown</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage snapshot "MyVM" ...</code></td>
+      <td>Manage snapshots</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage clonemedium</code></td>
+      <td>Clone or convert virtual media</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage modifymedium</code></td>
+      <td>Modify virtual-medium properties</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage storagectl</code></td>
+      <td>Configure storage controllers</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage storageattach</code></td>
+      <td>Attach a virtual disk or optical medium</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage export</code></td>
+      <td>Export an appliance</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage import</code></td>
+      <td>Import an appliance</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Use quotes around VM names that contain spaces.</p>
+
+<h2 id="3-list-and-inspect-virtual-machines">3. List and inspect virtual machines</h2>
+
+<h3 id="list-registered-vms">List registered VMs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list vms
+VBoxManage list runningvms
+</code></pre></div></div>
+
+<h3 id="show-detailed-vm-information">Show detailed VM information</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage showvminfo <span class="s2">"MyVM"</span>
+VBoxManage showvminfo <span class="s2">"MyVM"</span> <span class="nt">--machinereadable</span>
+</code></pre></div></div>
+
+<p>The machine-readable form is useful for scripts. Output can contain paths and configuration details, so review it before sharing.</p>
+
+<h3 id="list-host-information">List host information</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list hostinfo
+VBoxManage list hostcpuids
+VBoxManage list ostypes
+</code></pre></div></div>
+
+<h3 id="list-virtual-media">List virtual media</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list hdds
+VBoxManage list dvds
+VBoxManage list floppies
+</code></pre></div></div>
+
+<h3 id="find-the-vm-configuration-directory">Find the VM configuration directory</h3>
+
+<p>The default VM directory depends on the host user's VirtualBox preferences. Inspect the VM details and the <code class="language-plaintext highlighter-rouge">Default Machine Folder</code> in VirtualBox preferences rather than assuming a fixed path.</p>
+
+<h2 id="4-create-and-register-virtual-machines">4. Create and register virtual machines</h2>
+
+<h3 id="create-an-empty-vm">Create an empty VM</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage createvm <span class="nt">--name</span> <span class="s2">"DebianLab"</span> <span class="nt">--ostype</span> Debian_64 <span class="nt">--register</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">--ostype</code> uses an identifier supported by the installed VirtualBox version. List identifiers with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list ostypes
+</code></pre></div></div>
+
+<h3 id="configure-basic-resources">Configure basic resources</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="s2">"DebianLab"</span> <span class="nt">--memory</span> 4096 <span class="nt">--cpus</span> 2
+</code></pre></div></div>
+
+<p>This sets 4096 MiB of RAM and two virtual CPUs. Choose values that leave enough resources for the host OS and other VMs.</p>
+
+<h3 id="create-a-virtual-disk">Create a virtual disk</h3>
+
+<p>Create a dynamically allocated VDI disk with a maximum capacity of 40 GiB:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage createmedium disk <span class="nt">--filename</span> <span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/VirtualBox VMs/DebianLab/DebianLab.vdi"</span> <span class="nt">--size</span> 40960 <span class="nt">--format</span> VDI
+</code></pre></div></div>
+
+<p>The parent directory must exist. <code class="language-plaintext highlighter-rouge">--size</code> is expressed in megabytes in this command; 40960 MiB is approximately 40 GiB. A dynamically allocated disk file grows as data is written, up to its configured capacity.</p>
+
+<h3 id="add-a-sata-storage-controller">Add a SATA storage controller</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage storagectl <span class="s2">"DebianLab"</span> <span class="nt">--name</span> <span class="s2">"SATA"</span> <span class="nt">--add</span> sata <span class="nt">--controller</span> IntelAhci
+</code></pre></div></div>
+
+<h3 id="attach-the-virtual-disk">Attach the virtual disk</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage storageattach <span class="s2">"DebianLab"</span> <span class="nt">--storagectl</span> <span class="s2">"SATA"</span> <span class="nt">--port</span> 0 <span class="nt">--device</span> 0 <span class="nt">--type</span> hdd <span class="nt">--medium</span> <span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/VirtualBox VMs/DebianLab/DebianLab.vdi"</span>
+</code></pre></div></div>
+
+<h3 id="attach-an-installation-iso">Attach an installation ISO</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage storageattach <span class="s2">"DebianLab"</span> <span class="nt">--storagectl</span> <span class="s2">"SATA"</span> <span class="nt">--port</span> 1 <span class="nt">--device</span> 0 <span class="nt">--type</span> dvddrive <span class="nt">--medium</span> <span class="s2">"/path/to/debian.iso"</span>
+</code></pre></div></div>
+
+<p>If no optical drive exists at that port, create or configure a suitable controller/drive first. Controller and port settings depend on the VM's current configuration.</p>
+
+<h3 id="start-the-vm">Start the VM</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage startvm <span class="s2">"DebianLab"</span>
+</code></pre></div></div>
+
+<p>Start in headless mode (without opening the GUI):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage startvm <span class="s2">"DebianLab"</span> <span class="nt">--type</span> headless
+</code></pre></div></div>
+
+<p>A GUI start can be requested with <code class="language-plaintext highlighter-rouge">--type gui</code>. Check <code class="language-plaintext highlighter-rouge">VBoxManage startvm --help</code> for options supported by your version.</p>
+
+<h2 id="5-start-stop-pause-and-reset-vms">5. Start, stop, pause, and reset VMs</h2>
+
+<h3 id="start-and-inspect-running-vms">Start and inspect running VMs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage startvm <span class="s2">"MyVM"</span>
+VBoxManage list runningvms
+</code></pre></div></div>
+
+<h3 id="request-a-graceful-guest-shutdown">Request a graceful guest shutdown</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage controlvm <span class="s2">"MyVM"</span> acpipowerbutton
+</code></pre></div></div>
+
+<p>This sends a virtual ACPI power-button event. The guest OS must support and respond to it.</p>
+
+<h3 id="save-the-vm-state">Save the VM state</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage controlvm <span class="s2">"MyVM"</span> savestate
+</code></pre></div></div>
+
+<p>This saves the VM's current execution state to disk, similar to hibernation. It is not the same as a clean guest shutdown.</p>
+
+<h3 id="pause-and-resume">Pause and resume</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage controlvm <span class="s2">"MyVM"</span> pause
+VBoxManage controlvm <span class="s2">"MyVM"</span> resume
+</code></pre></div></div>
+
+<h3 id="reset-or-power-off">Reset or power off</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage controlvm <span class="s2">"MyVM"</span> reset
+VBoxManage controlvm <span class="s2">"MyVM"</span> poweroff
+</code></pre></div></div>
+
+<p>These are abrupt operations, comparable to pressing a physical reset button or cutting power. Unsaved guest data can be lost. Prefer an in-guest shutdown or <code class="language-plaintext highlighter-rouge">acpipowerbutton</code> whenever possible.</p>
+
+<h3 id="discard-a-saved-state">Discard a saved state</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage discardstate <span class="s2">"MyVM"</span>
+</code></pre></div></div>
+
+<p>This discards a saved execution state; it does not delete the VM's virtual disk. The guest will next boot rather than resume from that state. Use only if you no longer need the saved state.</p>
+
+<h2 id="6-configure-vm-settings">6. Configure VM settings</h2>
+
+<h3 id="ram-cpu-and-boot-order">RAM, CPU, and boot order</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--memory</span> 4096 <span class="nt">--cpus</span> 2
+VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--boot1</span> disk <span class="nt">--boot2</span> dvd <span class="nt">--boot3</span> none <span class="nt">--boot4</span> none
+</code></pre></div></div>
+
+<p>Supported options may differ by version. Use <code class="language-plaintext highlighter-rouge">VBoxManage modifyvm --help</code> for exact syntax.</p>
+
+<h3 id="vm-description">VM description</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--description</span> <span class="s2">"Debian 13 web server lab"</span>
+</code></pre></div></div>
+
+<h3 id="shared-clipboard-and-drag-and-drop">Shared clipboard and drag-and-drop</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--clipboard</span> bidirectional
+VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--draganddrop</span> bidirectional
+</code></pre></div></div>
+
+<p>These features depend on Guest Additions and guest/host compatibility. Enable them only if you need them, especially on isolated or untrusted guests.</p>
+
+<h3 id="change-the-vms-name">Change the VM's name</h3>
+
+<p>Changing the display name is not the same as renaming its folder or disk files. To change the registered name, consult <code class="language-plaintext highlighter-rouge">VBoxManage modifyvm --name</code> support for your version and ensure scripts, snapshots, and paths are not relying on the old name.</p>
+
+<h3 id="view-current-settings">View current settings</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage showvminfo <span class="s2">"MyVM"</span>
+</code></pre></div></div>
+
+<h2 id="7-virtual-networking">7. Virtual networking</h2>
+
+<p>VirtualBox offers several network modes. The adapter mode is configured per VM network adapter.</p>
+
+<h3 id="common-modes">Common modes</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Typical use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NAT</td>
+      <td>Guest can usually reach external networks through the host; inbound access usually needs port forwarding</td>
+    </tr>
+    <tr>
+      <td>NAT Network</td>
+      <td>Multiple guests can share a VirtualBox-managed NAT network</td>
+    </tr>
+    <tr>
+      <td>Bridged Adapter</td>
+      <td>Guest appears on the physical LAN as a separate device</td>
+    </tr>
+    <tr>
+      <td>Host-only Adapter</td>
+      <td>Guest and host can communicate on a private host-only network</td>
+    </tr>
+    <tr>
+      <td>Internal Network</td>
+      <td>Guests on the same named internal network can communicate with each other, isolated from the host unless routing is configured</td>
+    </tr>
+    <tr>
+      <td>Not attached</td>
+      <td>Virtual adapter is present but disconnected</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="set-adapter-1-to-nat">Set adapter 1 to NAT</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--nic1</span> nat
+</code></pre></div></div>
+
+<h3 id="set-adapter-1-to-bridged">Set adapter 1 to bridged</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--nic1</span> bridged <span class="nt">--bridgeadapter1</span> <span class="s2">"enp3s0"</span>
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">enp3s0</code> with the actual host interface name. Find interfaces with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nt">-brief</span> <span class="nb">link</span>
+</code></pre></div></div>
+
+<p>Bridged networking can expose the guest directly to the LAN. Use it only when that is intended and permitted by the network.</p>
+
+<h3 id="set-host-only-networking">Set host-only networking</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--nic1</span> hostonly <span class="nt">--hostonlyadapter1</span> <span class="s2">"vboxnet0"</span>
+</code></pre></div></div>
+
+<p>The host-only interface must exist and the adapter name must match the host configuration.</p>
+
+<h3 id="configure-nat-port-forwarding">Configure NAT port forwarding</h3>
+
+<p>Example: forward host TCP port 2222 to guest TCP port 22:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--natpf1</span> <span class="s2">"ssh,tcp,127.0.0.1,2222,,22"</span>
+</code></pre></div></div>
+
+<p>This example binds the host-side forwarding rule to loopback (<code class="language-plaintext highlighter-rouge">127.0.0.1</code>), so it is reachable from the host itself, not from other LAN devices. Remove the rule with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="s2">"MyVM"</span> <span class="nt">--natpf1</span> delete <span class="s2">"ssh"</span>
+</code></pre></div></div>
+
+<p>Port-forwarding syntax can vary slightly across versions; consult <code class="language-plaintext highlighter-rouge">VBoxManage modifyvm --help</code>.</p>
+
+<h2 id="8-manage-virtual-disks-and-storage">8. Manage virtual disks and storage</h2>
+
+<h3 id="supported-virtual-disk-formats">Supported virtual disk formats</h3>
+
+<p>Common formats include:</p>
+
+<ul>
+  <li><strong>VDI</strong>: VirtualBox's native disk image format.</li>
+  <li><strong>VMDK</strong>: VMware's virtual disk format, with multiple variants.</li>
+  <li><strong>VHD</strong>: Microsoft Virtual Hard Disk format.</li>
+  <li><strong>VHDX</strong>: newer Hyper-V format; direct support depends on VirtualBox version and workflow.</li>
+  <li><strong>RAW</strong>: raw disk data without a virtual-disk container's metadata.</li>
+</ul>
+
+<p>Support for reading, writing, and converting formats is version-dependent. Check the installed VirtualBox manual before relying on a format for a migration.</p>
+
+<h3 id="list-registered-hard-disks">List registered hard disks</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list hdds
+</code></pre></div></div>
+
+<h3 id="inspect-a-disk-image">Inspect a disk image</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage showmediuminfo disk <span class="s2">"/path/to/disk.vdi"</span>
+</code></pre></div></div>
+
+<p>This shows format, capacity, UUID, and attachment information where available.</p>
+
+<h3 id="create-a-new-disk">Create a new disk</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage createmedium disk <span class="nt">--filename</span> <span class="s2">"/path/to/new-disk.vdi"</span> <span class="nt">--size</span> 20480 <span class="nt">--format</span> VDI
+</code></pre></div></div>
+
+<p>This creates a 20 GiB maximum-capacity VDI image.</p>
+
+<h3 id="attach-an-existing-disk">Attach an existing disk</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage storageattach <span class="s2">"MyVM"</span> <span class="nt">--storagectl</span> <span class="s2">"SATA"</span> <span class="nt">--port</span> 0 <span class="nt">--device</span> 0 <span class="nt">--type</span> hdd <span class="nt">--medium</span> <span class="s2">"/path/to/disk.vdi"</span>
+</code></pre></div></div>
+
+<p>The storage controller name and port must match the VM configuration. Do not attach the same writable virtual disk to multiple running VMs unless you have a supported shared-disk configuration and understand the filesystem implications.</p>
+
+<h3 id="detach-a-disk">Detach a disk</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage storageattach <span class="s2">"MyVM"</span> <span class="nt">--storagectl</span> <span class="s2">"SATA"</span> <span class="nt">--port</span> 0 <span class="nt">--device</span> 0 <span class="nt">--medium</span> none
+</code></pre></div></div>
+
+<p>Detaching does not delete the disk file. Make sure the guest is shut down or the disk can be safely detached according to the guest and controller configuration.</p>
+
+<h2 id="9-convert-virtual-disk-formats">9. Convert virtual disk formats</h2>
+
+<p>VirtualBox's <code class="language-plaintext highlighter-rouge">VBoxManage clonemedium</code> can clone a virtual disk and convert it between supported formats. The source disk should not be actively written by a running VM during conversion. Shut down the VM cleanly first and ensure you have enough free disk space.</p>
+
+<h3 id="general-syntax">General syntax</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonemedium disk SOURCE DESTINATION <span class="nt">--format</span> FORMAT
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">SOURCE</code>, <code class="language-plaintext highlighter-rouge">DESTINATION</code>, and <code class="language-plaintext highlighter-rouge">FORMAT</code> with actual values.</p>
+
+<h3 id="convert-vdi-to-vmdk">Convert VDI to VMDK</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonemedium disk <span class="s2">"/path/to/source.vdi"</span> <span class="s2">"/path/to/output.vmdk"</span> <span class="nt">--format</span> VMDK
+</code></pre></div></div>
+
+<p>Useful when moving a disk to a VMware-based environment, but confirm the destination platform supports the resulting VMDK variant.</p>
+
+<h3 id="convert-vmdk-to-vdi">Convert VMDK to VDI</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonemedium disk <span class="s2">"/path/to/source.vmdk"</span> <span class="s2">"/path/to/output.vdi"</span> <span class="nt">--format</span> VDI
+</code></pre></div></div>
+
+<p>Useful for bringing a compatible VMware disk into a VirtualBox workflow.</p>
+
+<h3 id="convert-vdi-to-vhd">Convert VDI to VHD</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonemedium disk <span class="s2">"/path/to/source.vdi"</span> <span class="s2">"/path/to/output.vhd"</span> <span class="nt">--format</span> VHD
+</code></pre></div></div>
+
+<p>VHD is commonly associated with older Microsoft virtualization workflows. Confirm compatibility with the intended target platform.</p>
+
+<h3 id="create-a-raw-disk-image">Create a raw disk image</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonemedium disk <span class="s2">"/path/to/source.vdi"</span> <span class="s2">"/path/to/output.raw"</span> <span class="nt">--format</span> RAW
+</code></pre></div></div>
+
+<p>Raw images contain disk data without the virtual-disk container format. They can be large and may not retain all format-specific metadata. Treat the output as disk data, not as a self-describing virtual disk.</p>
+
+<h3 id="convert-a-raw-image-to-vdi">Convert a raw image to VDI</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonemedium disk <span class="s2">"/path/to/source.raw"</span> <span class="s2">"/path/to/output.vdi"</span> <span class="nt">--format</span> VDI
+</code></pre></div></div>
+
+<p>The raw input must represent a valid disk layout or partition/filesystem image appropriate to your intended use.</p>
+
+<h3 id="dynamic-versus-fixed-allocation">Dynamic versus fixed allocation</h3>
+
+<p>For supported formats, VirtualBox can create disks with different allocation behavior. The exact options vary by format and VirtualBox version. Check:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonemedium <span class="nt">--help</span>
+VBoxManage createmedium disk <span class="nt">--help</span>
+</code></pre></div></div>
+
+<p>A dynamically allocated image grows as data is written, while a fixed-size image reserves its configured capacity more fully at creation time. Conversion can require substantial free space, sometimes close to the full virtual capacity, so check destination storage first:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">df</span> <span class="nt">-h</span> /path/to/destination
+</code></pre></div></div>
+
+<h3 id="convert-or-clone-a-disk-already-registered-in-virtualbox">Convert or clone a disk already registered in VirtualBox</h3>
+
+<p>You can use the disk's registered UUID or path as the source. Inspect it first:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list hdds
+VBoxManage showmediuminfo disk <span class="s2">"/path/to/source.vdi"</span>
+</code></pre></div></div>
+
+<p>If the source has snapshots, it may be part of a differencing-disk chain. Do not copy only one snapshot/differencing file and assume it contains the complete current disk. Use VirtualBox-aware cloning and verify the resulting disk.</p>
+
+<h3 id="verify-the-converted-disk">Verify the converted disk</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage showmediuminfo disk <span class="s2">"/path/to/output.vmdk"</span>
+</code></pre></div></div>
+
+<p>Attach it to a test VM or clone of the original and verify that the guest boots and its data is intact before retiring the source disk.</p>
+
+<h3 id="important-conversion-notes">Important conversion notes</h3>
+
+<ul>
+  <li>Conversion is not the same as converting a guest OS from one hypervisor to another. Hardware drivers, boot mode, virtual controllers, network interfaces, and Guest Additions/tools may also need changes.</li>
+  <li>A format's name does not guarantee every variant is supported.</li>
+  <li>Converting a disk may not preserve VirtualBox snapshots as a usable snapshot chain in the destination format.</li>
+  <li>Do not overwrite the source file with the output path.</li>
+  <li>Keep a backup until the converted disk has been tested.</li>
+</ul>
+
+<h2 id="10-clone-and-copy-vms">10. Clone and copy VMs</h2>
+
+<h3 id="clone-a-vm">Clone a VM</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonevm <span class="s2">"MyVM"</span> <span class="nt">--name</span> <span class="s2">"MyVM-Clone"</span> <span class="nt">--register</span>
+</code></pre></div></div>
+
+<p>This creates a new VM based on the source. The clone operation may take time and use substantial disk space.</p>
+
+<h3 id="full-clone-versus-linked-clone">Full clone versus linked clone</h3>
+
+<p>A full clone is independent of the source disk files. A linked clone depends on parent disk images and can save space, but the parent must remain available and the dependency chain must be preserved. Exact clone options depend on the VirtualBox version; check:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonevm <span class="nt">--help</span>
+</code></pre></div></div>
+
+<h3 id="clone-a-virtual-disk">Clone a virtual disk</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage clonemedium disk <span class="s2">"/path/to/source.vdi"</span> <span class="s2">"/path/to/clone.vdi"</span> <span class="nt">--format</span> VDI
+</code></pre></div></div>
+
+<p>This creates a separate disk image. Make sure the destination does not already contain data you need.</p>
+
+<h3 id="register-an-existing-vm-configuration">Register an existing VM configuration</h3>
+
+<p>If you have a valid <code class="language-plaintext highlighter-rouge">.vbox</code> VM configuration file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage registervm <span class="s2">"/path/to/MyVM/MyVM.vbox"</span>
+</code></pre></div></div>
+
+<p>Registration does not automatically copy all associated disk files. Keep the VM configuration and referenced storage paths together.</p>
+
+<h2 id="11-snapshots">11. Snapshots</h2>
+
+<p>Snapshots capture a VM's state at a point in time. They are useful before upgrades or experiments, but they are not a replacement for independent backups.</p>
+
+<h3 id="list-snapshots">List snapshots</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage snapshot <span class="s2">"MyVM"</span> list
+</code></pre></div></div>
+
+<h3 id="take-a-snapshot">Take a snapshot</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage snapshot <span class="s2">"MyVM"</span> take <span class="s2">"BeforeUpgrade"</span> <span class="nt">--description</span> <span class="s2">"Before system upgrade"</span>
+</code></pre></div></div>
+
+<h3 id="show-snapshot-details">Show snapshot details</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage snapshot <span class="s2">"MyVM"</span> showvminfo <span class="s2">"BeforeUpgrade"</span>
+</code></pre></div></div>
+
+<h3 id="restore-a-snapshot">Restore a snapshot</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage snapshot <span class="s2">"MyVM"</span> restore <span class="s2">"BeforeUpgrade"</span>
+</code></pre></div></div>
+
+<p>Restoring a snapshot changes the VM back to that saved state, so data created after the snapshot may no longer be present in the current state. Confirm the target snapshot carefully.</p>
+
+<h3 id="delete-a-snapshot">Delete a snapshot</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage snapshot <span class="s2">"MyVM"</span> delete <span class="s2">"BeforeUpgrade"</span>
+</code></pre></div></div>
+
+<p>Deleting a snapshot may trigger disk-image consolidation and can take time. Do not manually delete snapshot/differencing files from the VM directory.</p>
+
+<h2 id="12-export-and-import-appliances">12. Export and import appliances</h2>
+
+<p>OVF/OVA appliances can package a VM for transfer between systems or compatible hypervisors.</p>
+
+<h3 id="export-a-vm">Export a VM</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage <span class="nb">export</span> <span class="s2">"MyVM"</span> <span class="nt">--output</span> <span class="s2">"/path/to/MyVM.ova"</span>
+</code></pre></div></div>
+
+<p>An OVA is a single-file appliance package. Export may take time and use substantial disk space.</p>
+
+<h3 id="export-to-ovf">Export to OVF</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage <span class="nb">export</span> <span class="s2">"MyVM"</span> <span class="nt">--output</span> <span class="s2">"/path/to/appliance.ovf"</span>
+</code></pre></div></div>
+
+<p>Depending on the version and export options, an OVF export can produce a descriptor plus separate disk files.</p>
+
+<h3 id="import-an-appliance">Import an appliance</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage import <span class="s2">"/path/to/appliance.ova"</span>
+</code></pre></div></div>
+
+<p>Review the import options and appliance settings before confirming. Imported hardware settings may not match your host's available resources.</p>
+
+<h3 id="inspect-appliance-import-options">Inspect appliance import options</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage import <span class="s2">"/path/to/appliance.ova"</span> <span class="nt">--dry-run</span>
+</code></pre></div></div>
+
+<p>Use the installed version's help if <code class="language-plaintext highlighter-rouge">--dry-run</code> is not supported:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage import <span class="nt">--help</span>
+</code></pre></div></div>
+
+<h3 id="export-versus-disk-conversion">Export versus disk conversion</h3>
+
+<ul>
+  <li><strong>Disk conversion</strong> changes the virtual disk container format or produces a raw disk image.</li>
+  <li><strong>Appliance export</strong> packages VM configuration and attached storage into an exchange format.</li>
+  <li>Neither guarantees that another hypervisor will run the guest without hardware or configuration changes.</li>
+</ul>
+
+<h2 id="13-shared-folders-and-guest-additions">13. Shared folders and Guest Additions</h2>
+
+<p>Shared folders let a guest access a host directory, usually when Guest Additions are installed in the guest.</p>
+
+<h3 id="configure-a-shared-folder">Configure a shared folder</h3>
+
+<p>Example for a running or stopped VM:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage sharedfolder add <span class="s2">"MyVM"</span> <span class="nt">--name</span> <span class="s2">"hostshare"</span> <span class="nt">--hostpath</span> <span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/vm-share"</span> <span class="nt">--automount</span>
+</code></pre></div></div>
+
+<p>Create the host directory first:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> <span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/vm-share"</span>
+</code></pre></div></div>
+
+<p>Some options and behavior depend on guest OS and VirtualBox version. Avoid sharing sensitive host directories with untrusted guests.</p>
+
+<h3 id="remove-a-shared-folder">Remove a shared folder</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage sharedfolder remove <span class="s2">"MyVM"</span> <span class="nt">--name</span> <span class="s2">"hostshare"</span>
+</code></pre></div></div>
+
+<h3 id="guest-additions">Guest Additions</h3>
+
+<p>Guest Additions provide features such as improved graphics, shared folders, clipboard integration, and guest/host time integration, depending on the guest OS. Install a compatible version inside the guest and follow the guest OS-specific instructions. Do not assume every feature works on every guest.</p>
+
+<h2 id="14-logs-and-troubleshooting">14. Logs and troubleshooting</h2>
+
+<h3 id="show-vm-information">Show VM information</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage showvminfo <span class="s2">"MyVM"</span>
+</code></pre></div></div>
+
+<h3 id="inspect-vm-logs">Inspect VM logs</h3>
+
+<p>VM logs are commonly stored in the VM's <code class="language-plaintext highlighter-rouge">Logs</code> directory, often including <code class="language-plaintext highlighter-rouge">VBox.log</code>. Use the actual VM folder path reported by VirtualBox.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>less <span class="s2">"/path/to/MyVM/Logs/VBox.log"</span>
+</code></pre></div></div>
+
+<p>Search for common errors:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="nt">-i</span> <span class="nt">-E</span> <span class="s1">'error|failed|VERR_|NS_ERROR'</span> <span class="s2">"/path/to/MyVM/Logs/VBox.log"</span>
+</code></pre></div></div>
+
+<h3 id="check-host-kernel-modules-on-linux">Check host kernel modules on Linux</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsmod | <span class="nb">grep</span> <span class="nt">-E</span> <span class="s1">'vboxdrv|vboxnet'</span>
+</code></pre></div></div>
+
+<p>If VirtualBox fails to start VMs, verify that its kernel modules are built and loaded for the running kernel. The exact repair steps depend on whether VirtualBox was installed from Debian packages or Oracle's repository.</p>
+
+<h3 id="check-free-disk-space">Check free disk space</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">df</span> <span class="nt">-h</span>
+</code></pre></div></div>
+
+<p>A VM may fail to start or run out of space if the host filesystem is full, especially when using dynamically allocated disks or snapshots.</p>
+
+<h3 id="check-vm-state">Check VM state</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list runningvms
+VBoxManage showvminfo <span class="s2">"MyVM"</span> | <span class="nb">grep</span> <span class="nt">-i</span> <span class="nt">-E</span> <span class="s1">'State|Storage|NIC'</span>
+</code></pre></div></div>
+
+<p>If the VM is stuck, inspect the logs before attempting reset or poweroff. Abrupt actions can lose guest data.</p>
+
+<h2 id="15-useful-command-patterns">15. Useful command patterns</h2>
+
+<h3 id="find-virtualbox-host-network-interfaces">Find VirtualBox host network interfaces</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list hostonlyifs
+VBoxManage list bridgedifs
+</code></pre></div></div>
+
+<h3 id="show-configured-nat-networks">Show configured NAT networks</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list natnetworks
+</code></pre></div></div>
+
+<h3 id="show-usb-host-devices">Show USB host devices</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list usbhost
+</code></pre></div></div>
+
+<p>USB passthrough requires appropriate host support and permissions. A device attached to a VM may become unavailable to the host.</p>
+
+<h3 id="show-vm-metrics">Show VM metrics</h3>
+
+<p>VirtualBox supports metrics collection, but exact metrics commands and available counters depend on the version. Inspect the built-in help:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage metrics <span class="nt">--help</span>
+</code></pre></div></div>
+
+<h3 id="list-supported-os-types">List supported OS types</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage list ostypes
+</code></pre></div></div>
+
+<h3 id="read-command-specific-help">Read command-specific help</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VBoxManage modifyvm <span class="nt">--help</span>
+VBoxManage storageattach <span class="nt">--help</span>
+VBoxManage clonemedium <span class="nt">--help</span>
+VBoxManage snapshot <span class="nt">--help</span>
+</code></pre></div></div>
+
+<h2 id="16-quick-reference">16. Quick reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>List VMs</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage list vms</code></td>
+    </tr>
+    <tr>
+      <td>List running VMs</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage list runningvms</code></td>
+    </tr>
+    <tr>
+      <td>Inspect a VM</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage showvminfo "MyVM"</code></td>
+    </tr>
+    <tr>
+      <td>Start a VM headless</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage startvm "MyVM" --type headless</code></td>
+    </tr>
+    <tr>
+      <td>Request guest shutdown</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage controlvm "MyVM" acpipowerbutton</code></td>
+    </tr>
+    <tr>
+      <td>Save VM state</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage controlvm "MyVM" savestate</code></td>
+    </tr>
+    <tr>
+      <td>Pause / resume</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage controlvm "MyVM" pause</code> / <code class="language-plaintext highlighter-rouge">resume</code></td>
+    </tr>
+    <tr>
+      <td>List disks</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage list hdds</code></td>
+    </tr>
+    <tr>
+      <td>Inspect disk image</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage showmediuminfo disk disk.vdi</code></td>
+    </tr>
+    <tr>
+      <td>Create a VDI</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage createmedium disk --filename disk.vdi --size 20480 --format VDI</code></td>
+    </tr>
+    <tr>
+      <td>Convert VDI to VMDK</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage clonemedium disk source.vdi output.vmdk --format VMDK</code></td>
+    </tr>
+    <tr>
+      <td>Convert VDI to VHD</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage clonemedium disk source.vdi output.vhd --format VHD</code></td>
+    </tr>
+    <tr>
+      <td>Create raw image</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage clonemedium disk source.vdi output.raw --format RAW</code></td>
+    </tr>
+    <tr>
+      <td>Clone a VM</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage clonevm "MyVM" --name "MyVM-Clone" --register</code></td>
+    </tr>
+    <tr>
+      <td>List snapshots</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage snapshot "MyVM" list</code></td>
+    </tr>
+    <tr>
+      <td>Take snapshot</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage snapshot "MyVM" take "BeforeUpgrade"</code></td>
+    </tr>
+    <tr>
+      <td>Export appliance</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage export "MyVM" --output MyVM.ova</code></td>
+    </tr>
+    <tr>
+      <td>Import appliance</td>
+      <td><code class="language-plaintext highlighter-rouge">VBoxManage import MyVM.ova</code></td>
+    </tr>
+    <tr>
+      <td>Show VM logs</td>
+      <td><code class="language-plaintext highlighter-rouge">less "/path/to/MyVM/Logs/VBox.log"</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="further-reading">Further reading</h2>
+
+<ul>
+  <li><a href="https://www.virtualbox.org/manual/">Official VirtualBox documentation</a></li>
+  <li><a href="https://www.virtualbox.org/manual/ch08.html">VirtualBox User Manual: VBoxManage</a></li>
+  <li><a href="https://www.virtualbox.org/wiki/Linux_Downloads">VirtualBox Linux downloads</a></li>
+</ul>
+
+<hr />
+
+<p><strong>Recommended workflow:</strong> inspect the VM and disk first, shut down the guest cleanly before disk conversion, convert to a new output file, verify the converted medium, and test it in a separate VM before deleting or replacing the original.</p>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

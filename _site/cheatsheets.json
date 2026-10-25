@@ -1,0 +1,20 @@
+[
+  {"title": "Bash Scripting Cheat Sheet", "url": "/html/bash.html"},
+  {"title": "C Programming Language Cheat Sheet", "url": "/html/c.html"},
+  {"title": "Debian Package Management Cheat Sheet", "url": "/html/package_management.html"},
+  {"title": "Docker Cheat Sheet for Debian 13", "url": "/html/docker.html"},
+  {"title": "Docker Compose Cheat Sheet for Debian 13", "url": "/html/docker_compose.html"},
+  {"title": "GNU sed Cheat Sheet for Debian 13", "url": "/html/sed.html"},
+  {"title": "Git and GitHub CLI Cheat Sheet for Debian 13", "url": "/html/git.html"},
+  {"title": "Linux Disk, Partition, Filesystem, and Mounting Cheat Sheet", "url": "/html/disk_partitioning.html"},
+  {"title": "Linux Networking Cheat Sheet for Debian 13", "url": "/html/networking.html"},
+  {"title": "Linux Process Management Cheat Sheet", "url": "/html/process_management.html"},
+  {"title": "Nmap Cheat Sheet for Debian 13", "url": "/html/nmap.html"},
+  {"title": "Ruby Programming Language Cheat Sheet", "url": "/html/ruby.html"},
+  {"title": "SSH and SCP Cheat Sheet for Debian 13", "url": "/html/ssh.html"},
+  {"title": "Text-File Manipulation Reference for Debian 13", "url": "/html/text_manipulation.html"},
+  {"title": "VirtualBox Management Cheat Sheet for Debian 13", "url": "/html/virtualbox.html"},
+  {"title": "Windows Administration Cheat Sheet", "url": "/html/windows.html"},
+  {"title": "curl and wget Cheat Sheet for Debian 13", "url": "/html/curl_wget.html"},
+  {"title": "systemd Cheat Sheet for Debian 13", "url": "/html/systemd.html"}
+]

@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Docker Compose Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#docker-compose-cheat-sheet-for-debian-13" id="toc-docker-compose-cheat-sheet-for-debian-13">Docker Compose Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of Contents</a></li>
+<li><a href="#1-what-is-docker-compose" id="toc-1-what-is-docker-compose">1. What Is Docker Compose?</a></li>
+<li><a href="#2-install-and-verify-compose" id="toc-2-install-and-verify-compose">2. Install and Verify Compose</a></li>
+<li><a href="#3-compose-file-basics" id="toc-3-compose-file-basics">3. Compose File Basics</a>
+<ul>
+<li><a href="#important-yaml-rules" id="toc-important-yaml-rules">Important YAML rules</a></li>
+</ul>
+</li>
+<li><a href="#4-start-and-stop-applications" id="toc-4-start-and-stop-applications">4. Start and Stop Applications</a></li>
+<li><a href="#5-services-and-container-management" id="toc-5-services-and-container-management">5. Services and Container Management</a></li>
+<li><a href="#6-images-and-builds" id="toc-6-images-and-builds">6. Images and Builds</a>
+<ul>
+<li><a href="#use-an-existing-image" id="toc-use-an-existing-image">Use an existing image</a></li>
+<li><a href="#build-from-a-dockerfile" id="toc-build-from-a-dockerfile">Build from a Dockerfile</a></li>
+</ul>
+</li>
+<li><a href="#7-ports-and-networking" id="toc-7-ports-and-networking">7. Ports and Networking</a>
+<ul>
+<li><a href="#service-to-service-communication" id="toc-service-to-service-communication">Service-to-service communication</a></li>
+<li><a href="#define-a-network-explicitly" id="toc-define-a-network-explicitly">Define a network explicitly</a></li>
+</ul>
+</li>
+<li><a href="#8-environment-variables-and-secrets" id="toc-8-environment-variables-and-secrets">8. Environment Variables and Secrets</a>
+<ul>
+<li><a href="#set-an-environment-variable-in-the-compose-file" id="toc-set-an-environment-variable-in-the-compose-file">Set an environment variable in the Compose file</a></li>
+<li><a href="#use-a-env-file-for-compose-variable-substitution" id="toc-use-a-env-file-for-compose-variable-substitution">Use a <code class="language-plaintext highlighter-rouge">.env</code> file for Compose variable substitution</a></li>
+<li><a href="#load-an-environment-file-into-a-container" id="toc-load-an-environment-file-into-a-container">Load an environment file into a container</a></li>
+<li><a href="#avoid-committing-secrets" id="toc-avoid-committing-secrets">Avoid committing secrets</a></li>
+</ul>
+</li>
+<li><a href="#9-volumes-and-persistent-data" id="toc-9-volumes-and-persistent-data">9. Volumes and Persistent Data</a>
+<ul>
+<li><a href="#bind-mount-a-host-directory" id="toc-bind-mount-a-host-directory">Bind mount a host directory</a></li>
+</ul>
+</li>
+<li><a href="#10-health-checks-and-startup-order" id="toc-10-health-checks-and-startup-order">10. Health Checks and Startup Order</a>
+<ul>
+<li><a href="#wait-for-a-healthy-dependency" id="toc-wait-for-a-healthy-dependency">Wait for a healthy dependency</a></li>
+</ul>
+</li>
+<li><a href="#11-logs-and-troubleshooting" id="toc-11-logs-and-troubleshooting">11. Logs and Troubleshooting</a></li>
+<li><a href="#12-profiles-and-multiple-compose-files" id="toc-12-profiles-and-multiple-compose-files">12. Profiles and Multiple Compose Files</a>
+<ul>
+<li><a href="#use-profiles-for-optional-services" id="toc-use-profiles-for-optional-services">Use profiles for optional services</a></li>
+<li><a href="#use-an-override-file" id="toc-use-an-override-file">Use an override file</a></li>
+<li><a href="#choose-a-project-name" id="toc-choose-a-project-name">Choose a project name</a></li>
+</ul>
+</li>
+<li><a href="#13-resource-limits-and-restart-policies" id="toc-13-resource-limits-and-restart-policies">13. Resource Limits and Restart Policies</a></li>
+<li><a href="#14-updating-and-rebuilding-services" id="toc-14-updating-and-rebuilding-services">14. Updating and Rebuilding Services</a></li>
+<li><a href="#15-cleanup" id="toc-15-cleanup">15. Cleanup</a></li>
+<li><a href="#16-example-web-app-and-database" id="toc-16-example-web-app-and-database">16. Example: Web App and Database</a></li>
+<li><a href="#17-common-commands-at-a-glance" id="toc-17-common-commands-at-a-glance">17. Common Commands at a Glance</a></li>
+<li><a href="#18-security-notes" id="toc-18-security-notes">18. Security Notes</a></li>
+<li><a href="#19-help-and-documentation" id="toc-19-help-and-documentation">19. Help and Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="docker-compose-cheat-sheet-for-debian-13">Docker Compose Cheat Sheet for Debian 13</h1>
+
+<p>A practical reference for defining, running, updating, and troubleshooting multi-container applications with Docker Compose.</p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+  <li><a href="#1-what-is-docker-compose">1. What Is Docker Compose?</a></li>
+  <li><a href="#2-install-and-verify-compose">2. Install and Verify Compose</a></li>
+  <li><a href="#3-compose-file-basics">3. Compose File Basics</a></li>
+  <li><a href="#4-start-and-stop-applications">4. Start and Stop Applications</a></li>
+  <li><a href="#5-services-and-container-management">5. Services and Container Management</a></li>
+  <li><a href="#6-images-and-builds">6. Images and Builds</a></li>
+  <li><a href="#7-ports-and-networking">7. Ports and Networking</a></li>
+  <li><a href="#8-environment-variables-and-secrets">8. Environment Variables and Secrets</a></li>
+  <li><a href="#9-volumes-and-persistent-data">9. Volumes and Persistent Data</a></li>
+  <li><a href="#10-health-checks-and-startup-order">10. Health Checks and Startup Order</a></li>
+  <li><a href="#11-logs-and-troubleshooting">11. Logs and Troubleshooting</a></li>
+  <li><a href="#12-profiles-and-multiple-compose-files">12. Profiles and Multiple Compose Files</a></li>
+  <li><a href="#13-resource-limits-and-restart-policies">13. Resource Limits and Restart Policies</a></li>
+  <li><a href="#14-updating-and-rebuilding-services">14. Updating and Rebuilding Services</a></li>
+  <li><a href="#15-cleanup">15. Cleanup</a></li>
+  <li><a href="#16-example-web-app-and-database">16. Example: Web App and Database</a></li>
+  <li><a href="#17-common-commands-at-a-glance">17. Common Commands at a Glance</a></li>
+  <li><a href="#18-security-notes">18. Security Notes</a></li>
+  <li><a href="#19-help-and-documentation">19. Help and Documentation</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-what-is-docker-compose">1. What Is Docker Compose?</h2>
+
+<p>Docker Compose lets you describe an application with multiple services in a YAML file, usually named <code class="language-plaintext highlighter-rouge">compose.yaml</code>.</p>
+
+<p>A Compose project can define:</p>
+
+<ul>
+  <li><strong>Services:</strong> Containers that make up the application.</li>
+  <li><strong>Networks:</strong> How services communicate.</li>
+  <li><strong>Volumes:</strong> Data that should persist beyond a container's lifetime.</li>
+  <li><strong>Environment variables:</strong> Configuration passed into services.</li>
+  <li><strong>Health checks:</strong> Tests that indicate whether a service is healthy.</li>
+</ul>
+
+<p>Run Compose commands from the directory containing <code class="language-plaintext highlighter-rouge">compose.yaml</code>, unless you specify a file with <code class="language-plaintext highlighter-rouge">-f</code>.</p>
+
+<p>On Debian, the modern command is <code class="language-plaintext highlighter-rouge">docker compose</code> with a space, not the older standalone <code class="language-plaintext highlighter-rouge">docker-compose</code> command.</p>
+
+<h2 id="2-install-and-verify-compose">2. Install and Verify Compose</h2>
+
+<p>If you installed Docker Engine from Docker's official APT repository, install the Compose plugin:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>docker-compose-plugin
+</code></pre></div></div>
+
+<p>Check the installed version:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose version
+</code></pre></div></div>
+
+<p>Display command help:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose <span class="nt">--help</span>
+</code></pre></div></div>
+
+<p>If Docker requires <code class="language-plaintext highlighter-rouge">sudo</code> on your system, prefix Compose commands with <code class="language-plaintext highlighter-rouge">sudo</code> as well.</p>
+
+<h2 id="3-compose-file-basics">3. Compose File Basics</h2>
+
+<p>Create a file named <code class="language-plaintext highlighter-rouge">compose.yaml</code>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:stable</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">8080:80"</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>
+</code></pre></div></div>
+
+<p>Start the service:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p>Open <code class="language-plaintext highlighter-rouge">http://localhost:8080</code> on the Docker host.</p>
+
+<h3 id="important-yaml-rules">Important YAML rules</h3>
+
+<ul>
+  <li>Use spaces for indentation, not tabs.</li>
+  <li>Indentation defines which settings belong to a service.</li>
+  <li>Quote port mappings such as <code class="language-plaintext highlighter-rouge">"8080:80"</code> to avoid YAML interpretation surprises.</li>
+  <li>The top-level <code class="language-plaintext highlighter-rouge">services</code> key contains the application's services.</li>
+  <li>Compose creates a project network by default for services to communicate.</li>
+</ul>
+
+<p>Validate and render the effective configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose config
+</code></pre></div></div>
+
+<p>Check the parsed service names:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose config <span class="nt">--services</span>
+</code></pre></div></div>
+
+<p>List the images referenced by the configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose config <span class="nt">--images</span>
+</code></pre></div></div>
+
+<h2 id="4-start-and-stop-applications">4. Start and Stop Applications</h2>
+
+<p>Start services in the foreground:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up
+</code></pre></div></div>
+
+<p>Start in the background:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p>Stop services without removing containers:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose stop
+</code></pre></div></div>
+
+<p>Start previously stopped services:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose start
+</code></pre></div></div>
+
+<p>Restart services:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose restart
+</code></pre></div></div>
+
+<p>Stop and remove the project's containers and networks:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose down
+</code></pre></div></div>
+
+<p>Stop and remove containers, networks, and project-declared named volumes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose down <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p><strong>Warning:</strong> <code class="language-plaintext highlighter-rouge">down -v</code> can permanently delete application data stored in those volumes. Use it only when you intend to remove that data.</p>
+
+<h2 id="5-services-and-container-management">5. Services and Container Management</h2>
+
+<p>List services and their status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose ps
+</code></pre></div></div>
+
+<p>List all containers, including stopped ones:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose ps <span class="nt">-a</span>
+</code></pre></div></div>
+
+<p>Run a command in a running service container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose <span class="nb">exec </span>web sh
+</code></pre></div></div>
+
+<p>If Bash is installed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose <span class="nb">exec </span>web bash
+</code></pre></div></div>
+
+<p>Run a one-off command in a new container for a service:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose run <span class="nt">--rm</span> web nginx <span class="nt">-t</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">run</code> command creates a one-off container. It does not publish the service's configured ports by default; use <code class="language-plaintext highlighter-rouge">--service-ports</code> if you need those ports.</p>
+
+<p>Restart a single service:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose restart web
+</code></pre></div></div>
+
+<p>Stop one service:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose stop web
+</code></pre></div></div>
+
+<p>Start one service:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose start web
+</code></pre></div></div>
+
+<p>View the containers created by the current project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose ps <span class="nt">--all</span>
+</code></pre></div></div>
+
+<h2 id="6-images-and-builds">6. Images and Builds</h2>
+
+<h3 id="use-an-existing-image">Use an existing image</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:stable</span>
+</code></pre></div></div>
+
+<p>Pull images defined in the Compose file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose pull
+</code></pre></div></div>
+
+<h3 id="build-from-a-dockerfile">Build from a Dockerfile</h3>
+
+<p>Project structure:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>my-project/
+├── compose.yaml
+├── Dockerfile
+└── app/
+</code></pre></div></div>
+
+<p>Compose file:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">build</span><span class="pi">:</span>
+      <span class="na">context</span><span class="pi">:</span> <span class="s">.</span>
+      <span class="na">dockerfile</span><span class="pi">:</span> <span class="s">Dockerfile</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">my-app:local</span>
+</code></pre></div></div>
+
+<p>Build the images:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose build
+</code></pre></div></div>
+
+<p>Build without using the build cache:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose build <span class="nt">--no-cache</span>
+</code></pre></div></div>
+
+<p>Build and start services:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span> <span class="nt">--build</span>
+</code></pre></div></div>
+
+<p>Force a service to be recreated after configuration changes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span> <span class="nt">--force-recreate</span> web
+</code></pre></div></div>
+
+<h2 id="7-ports-and-networking">7. Ports and Networking</h2>
+
+<p>Publish a container port on the host:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:stable</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">8080:80"</span>
+</code></pre></div></div>
+
+<p>The mapping means host port <code class="language-plaintext highlighter-rouge">8080</code> forwards to container port <code class="language-plaintext highlighter-rouge">80</code>.</p>
+
+<p>Bind the published port only to the host's loopback interface:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:stable</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">127.0.0.1:8080:80"</span>
+</code></pre></div></div>
+
+<p>This is useful when a service should only be reachable locally on the Docker host.</p>
+
+<h3 id="service-to-service-communication">Service-to-service communication</h3>
+
+<p>Services in the same Compose project can normally reach each other by service name. For example, an application service can connect to a database at hostname <code class="language-plaintext highlighter-rouge">db</code> and the database's container port.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">example/app:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">DB_HOST</span><span class="pi">:</span> <span class="s">db</span>
+      <span class="na">DB_PORT</span><span class="pi">:</span> <span class="s2">"</span><span class="s">5432"</span>
+
+  <span class="na">db</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">postgres:17</span>
+</code></pre></div></div>
+
+<p>Inside the Compose network, use <code class="language-plaintext highlighter-rouge">db:5432</code>, not <code class="language-plaintext highlighter-rouge">localhost:5432</code>. Inside a container, <code class="language-plaintext highlighter-rouge">localhost</code> refers to that same container.</p>
+
+<h3 id="define-a-network-explicitly">Define a network explicitly</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:stable</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">frontend</span>
+
+<span class="na">networks</span><span class="pi">:</span>
+  <span class="na">frontend</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
+</code></pre></div></div>
+
+<p>Inspect project networks:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker network <span class="nb">ls
+</span>docker network inspect PROJECT_default
+</code></pre></div></div>
+
+<p>Actual project and network names may vary based on the Compose project name.</p>
+
+<h2 id="8-environment-variables-and-secrets">8. Environment Variables and Secrets</h2>
+
+<h3 id="set-an-environment-variable-in-the-compose-file">Set an environment variable in the Compose file</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">example/app:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">APP_ENV</span><span class="pi">:</span> <span class="s">production</span>
+      <span class="na">LOG_LEVEL</span><span class="pi">:</span> <span class="s">info</span>
+</code></pre></div></div>
+
+<h3 id="use-a-env-file-for-compose-variable-substitution">Use a <code class="language-plaintext highlighter-rouge">.env</code> file for Compose variable substitution</h3>
+
+<p>Example <code class="language-plaintext highlighter-rouge">.env</code> file beside <code class="language-plaintext highlighter-rouge">compose.yaml</code>:</p>
+
+<pre><code class="language-dotenv">APP_TAG=1.2.0
+WEB_PORT=8080
+</code></pre>
+
+<p>Reference those variables in the Compose file:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:${APP_TAG}</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">${WEB_PORT}:80"</span>
+</code></pre></div></div>
+
+<p>Start the project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p>Compose reads <code class="language-plaintext highlighter-rouge">.env</code> for interpolation. That does not automatically mean every variable in <code class="language-plaintext highlighter-rouge">.env</code> is passed into every container; declare container environment variables explicitly with <code class="language-plaintext highlighter-rouge">environment</code> or <code class="language-plaintext highlighter-rouge">env_file</code>.</p>
+
+<h3 id="load-an-environment-file-into-a-container">Load an environment file into a container</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">example/app:latest</span>
+    <span class="na">env_file</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">app.env</span>
+</code></pre></div></div>
+
+<h3 id="avoid-committing-secrets">Avoid committing secrets</h3>
+
+<p>Add local secret/configuration files to <code class="language-plaintext highlighter-rouge">.gitignore</code>:</p>
+
+<pre><code class="language-gitignore">.env
+app.env
+secrets/
+</code></pre>
+
+<p>Use the application's supported secret-management approach for credentials. Compose secrets can mount secret files into services, but the application must read those files, and the security guarantees depend on the deployment environment.</p>
+
+<p>Example:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">example/app:latest</span>
+    <span class="na">secrets</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">db_password</span>
+
+<span class="na">secrets</span><span class="pi">:</span>
+  <span class="na">db_password</span><span class="pi">:</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">./secrets/db_password.txt</span>
+</code></pre></div></div>
+
+<p>Do not commit the secret file to source control.</p>
+
+<h2 id="9-volumes-and-persistent-data">9. Volumes and Persistent Data</h2>
+
+<p>Named volumes persist beyond container replacement.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">db</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">postgres:17</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">db-data:/var/lib/postgresql/data</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">db-data</span><span class="pi">:</span>
+</code></pre></div></div>
+
+<p>Create/start the project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p>List volumes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker volume <span class="nb">ls</span>
+</code></pre></div></div>
+
+<p>Inspect a volume:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker volume inspect PROJECT_db-data
+</code></pre></div></div>
+
+<p>A volume's actual name is affected by the project name and any explicit <code class="language-plaintext highlighter-rouge">name</code> setting.</p>
+
+<h3 id="bind-mount-a-host-directory">Bind mount a host directory</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:stable</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./html:/usr/share/nginx/html:ro</span>
+</code></pre></div></div>
+
+<p>This maps the local <code class="language-plaintext highlighter-rouge">html</code> directory into the container as read-only. The path is relative to the Compose file's project directory.</p>
+
+<p><strong>Important:</strong> removing a container normally does not remove named volumes, but <code class="language-plaintext highlighter-rouge">docker compose down -v</code> does remove project-declared named volumes. Back up important data before cleanup.</p>
+
+<h2 id="10-health-checks-and-startup-order">10. Health Checks and Startup Order</h2>
+
+<p>A health check can report whether a service is ready. The test command must exist inside the container.</p>
+
+<p>Example for an image that includes <code class="language-plaintext highlighter-rouge">curl</code>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">my-web-image:latest</span>
+    <span class="na">healthcheck</span><span class="pi">:</span>
+      <span class="na">test</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">CMD"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">curl"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">-f"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">http://localhost/health"</span><span class="pi">]</span>
+      <span class="na">interval</span><span class="pi">:</span> <span class="s">30s</span>
+      <span class="na">timeout</span><span class="pi">:</span> <span class="s">5s</span>
+      <span class="na">retries</span><span class="pi">:</span> <span class="m">3</span>
+      <span class="na">start_period</span><span class="pi">:</span> <span class="s">10s</span>
+</code></pre></div></div>
+
+<p>Do not copy this health check to an image that does not contain curl or an appropriate health endpoint.</p>
+
+<h3 id="wait-for-a-healthy-dependency">Wait for a healthy dependency</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">example/app:latest</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="na">db</span><span class="pi">:</span>
+        <span class="na">condition</span><span class="pi">:</span> <span class="s">service_healthy</span>
+
+  <span class="na">db</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">postgres:17</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">POSTGRES_USER</span><span class="pi">:</span> <span class="s">app</span>
+      <span class="na">POSTGRES_PASSWORD</span><span class="pi">:</span> <span class="s">change-this-example-password</span>
+      <span class="na">POSTGRES_DB</span><span class="pi">:</span> <span class="s">appdb</span>
+    <span class="na">healthcheck</span><span class="pi">:</span>
+      <span class="na">test</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">CMD-SHELL"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">pg_isready</span><span class="nv"> </span><span class="s">-U</span><span class="nv"> </span><span class="se">\"</span><span class="s">$${POSTGRES_USER}</span><span class="se">\"</span><span class="nv"> </span><span class="s">-d</span><span class="nv"> </span><span class="se">\"</span><span class="s">$${POSTGRES_DB}</span><span class="se">\"</span><span class="s">"</span><span class="pi">]</span>
+      <span class="na">interval</span><span class="pi">:</span> <span class="s">5s</span>
+      <span class="na">timeout</span><span class="pi">:</span> <span class="s">3s</span>
+      <span class="na">retries</span><span class="pi">:</span> <span class="m">10</span>
+</code></pre></div></div>
+
+<p>The doubled dollar sign (<code class="language-plaintext highlighter-rouge">$$</code>) prevents Compose from interpolating the variables before the command runs in the container.</p>
+
+<p><code class="language-plaintext highlighter-rouge">depends_on</code> with <code class="language-plaintext highlighter-rouge">service_healthy</code> can wait for a declared health check, but applications should still handle database restarts and transient connection failures gracefully.</p>
+
+<h2 id="11-logs-and-troubleshooting">11. Logs and Troubleshooting</h2>
+
+<p>Show logs from all services:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose logs
+</code></pre></div></div>
+
+<p>Follow logs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose logs <span class="nt">-f</span>
+</code></pre></div></div>
+
+<p>Show the last 100 lines:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose logs <span class="nt">--tail</span> 100
+</code></pre></div></div>
+
+<p>Show logs for one service:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose logs <span class="nt">-f</span> web
+</code></pre></div></div>
+
+<p>Show service status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose ps
+</code></pre></div></div>
+
+<p>Validate Compose configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose config
+</code></pre></div></div>
+
+<p>Show the effective configuration with environment interpolation:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose config
+</code></pre></div></div>
+
+<p>Be careful when sharing this output: interpolated values may reveal credentials or other sensitive configuration.</p>
+
+<p>Inspect the underlying container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker inspect <span class="s2">"</span><span class="si">$(</span>docker compose ps <span class="nt">-q</span> web<span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>View Docker daemon logs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>journalctl <span class="nt">-u</span> docker <span class="nt">-b</span>
+</code></pre></div></div>
+
+<p>Common debugging sequence:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose config
+docker compose ps <span class="nt">-a</span>
+docker compose logs <span class="nt">--tail</span> 100
+docker compose images
+docker system <span class="nb">df</span>
+</code></pre></div></div>
+
+<p>If a container exits, inspect its logs and exit status. A service's main process must stay running for its container to remain running.</p>
+
+<h2 id="12-profiles-and-multiple-compose-files">12. Profiles and Multiple Compose Files</h2>
+
+<h3 id="use-profiles-for-optional-services">Use profiles for optional services</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:stable</span>
+
+  <span class="na">debug</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">alpine:3</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">sleep"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">infinity"</span><span class="pi">]</span>
+    <span class="na">profiles</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">debug"</span><span class="pi">]</span>
+</code></pre></div></div>
+
+<p>Start the default services:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p>Enable the optional profile:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose <span class="nt">--profile</span> debug up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<h3 id="use-an-override-file">Use an override file</h3>
+
+<p>A project may have <code class="language-plaintext highlighter-rouge">compose.yaml</code> and <code class="language-plaintext highlighter-rouge">compose.override.yaml</code>. Compose automatically merges the conventional override file when present.</p>
+
+<p>Specify files explicitly:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose <span class="nt">-f</span> compose.yaml <span class="nt">-f</span> compose.prod.yaml config
+docker compose <span class="nt">-f</span> compose.yaml <span class="nt">-f</span> compose.prod.yaml up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p>Later files can override or extend settings from earlier files. Validate the merged configuration with <code class="language-plaintext highlighter-rouge">docker compose config</code>.</p>
+
+<h3 id="choose-a-project-name">Choose a project name</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose <span class="nt">-p</span> demo up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p>A project name helps keep resources for separate copies of an application distinct.</p>
+
+<h2 id="13-resource-limits-and-restart-policies">13. Resource Limits and Restart Policies</h2>
+
+<p>Set a restart policy:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:stable</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>
+</code></pre></div></div>
+
+<p>Common values include <code class="language-plaintext highlighter-rouge">no</code>, <code class="language-plaintext highlighter-rouge">on-failure</code>, <code class="language-plaintext highlighter-rouge">always</code>, and <code class="language-plaintext highlighter-rouge">unless-stopped</code>.</p>
+
+<p>Resource options can vary by Compose implementation and deployment mode. For local Docker Engine containers, an example is:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">example/app:latest</span>
+    <span class="na">mem_limit</span><span class="pi">:</span> <span class="s">512m</span>
+    <span class="na">cpus</span><span class="pi">:</span> <span class="m">1.0</span>
+</code></pre></div></div>
+
+<p>Confirm support with your installed Compose version and validate the effective configuration. Limits also depend on host kernel and cgroup support.</p>
+
+<h2 id="14-updating-and-rebuilding-services">14. Updating and Rebuilding Services</h2>
+
+<p>Pull updated images:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose pull
+</code></pre></div></div>
+
+<p>Recreate services with updated images:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<p>Build and start local images:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span> <span class="nt">--build</span>
+</code></pre></div></div>
+
+<p>Recreate one service:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span> <span class="nt">--force-recreate</span> web
+</code></pre></div></div>
+
+<p>View images associated with the project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose images
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">docker compose restart</code> restarts existing containers but does not by itself apply changed image contents or all Compose configuration changes. Use <code class="language-plaintext highlighter-rouge">docker compose up -d</code> after image or configuration changes when you want Compose to reconcile the project.</p>
+
+<h2 id="15-cleanup">15. Cleanup</h2>
+
+<p>Stop services but keep containers:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose stop
+</code></pre></div></div>
+
+<p>Remove project containers and networks:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose down
+</code></pre></div></div>
+
+<p>Remove project containers, networks, and declared named volumes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose down <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p>Remove unused Docker objects across the host:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker system prune
+</code></pre></div></div>
+
+<p>Inspect disk usage:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker system <span class="nb">df</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">docker system prune</code> affects Docker resources beyond just the current Compose project. Inspect the prompt before confirming. Avoid deleting volumes unless their data is no longer needed or backed up.</p>
+
+<h2 id="16-example-web-app-and-database">16. Example: Web App and Database</h2>
+
+<p>This example illustrates how an application service and a PostgreSQL service can be configured together. The application image and its database environment-variable names are illustrative; substitute an application image that actually supports them.</p>
+
+<p>Create <code class="language-plaintext highlighter-rouge">compose.yaml</code>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">example/app:latest</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">127.0.0.1:8080:3000"</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">DB_HOST</span><span class="pi">:</span> <span class="s">db</span>
+      <span class="na">DB_PORT</span><span class="pi">:</span> <span class="s2">"</span><span class="s">5432"</span>
+      <span class="na">DB_NAME</span><span class="pi">:</span> <span class="s">appdb</span>
+      <span class="na">DB_USER</span><span class="pi">:</span> <span class="s">app</span>
+      <span class="na">DB_PASSWORD</span><span class="pi">:</span> <span class="s">${DB_PASSWORD:?Set DB_PASSWORD in your environment}</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="na">db</span><span class="pi">:</span>
+        <span class="na">condition</span><span class="pi">:</span> <span class="s">service_healthy</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>
+
+  <span class="na">db</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">postgres:17</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">POSTGRES_DB</span><span class="pi">:</span> <span class="s">appdb</span>
+      <span class="na">POSTGRES_USER</span><span class="pi">:</span> <span class="s">app</span>
+      <span class="na">POSTGRES_PASSWORD</span><span class="pi">:</span> <span class="s">${DB_PASSWORD:?Set DB_PASSWORD in your environment}</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">db-data:/var/lib/postgresql/data</span>
+    <span class="na">healthcheck</span><span class="pi">:</span>
+      <span class="na">test</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">CMD-SHELL"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">pg_isready</span><span class="nv"> </span><span class="s">-U</span><span class="nv"> </span><span class="se">\"</span><span class="s">$${POSTGRES_USER}</span><span class="se">\"</span><span class="nv"> </span><span class="s">-d</span><span class="nv"> </span><span class="se">\"</span><span class="s">$${POSTGRES_DB}</span><span class="se">\"</span><span class="s">"</span><span class="pi">]</span>
+      <span class="na">interval</span><span class="pi">:</span> <span class="s">5s</span>
+      <span class="na">timeout</span><span class="pi">:</span> <span class="s">3s</span>
+      <span class="na">retries</span><span class="pi">:</span> <span class="m">10</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">db-data</span><span class="pi">:</span>
+</code></pre></div></div>
+
+<p>Set the variable in your current shell without putting it directly into the YAML file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">read</span> <span class="nt">-rsp</span> <span class="s1">'Database password: '</span> DB_PASSWORD
+<span class="nb">echo
+export </span>DB_PASSWORD
+docker compose up <span class="nt">-d</span>
+<span class="nb">unset </span>DB_PASSWORD
+</code></pre></div></div>
+
+<p>This example keeps PostgreSQL off the host's published ports. Services communicate over the private Compose network using hostname <code class="language-plaintext highlighter-rouge">db</code>.</p>
+
+<p>Commands for the example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose ps
+docker compose logs <span class="nt">-f</span> app
+docker compose logs <span class="nt">-f</span> db
+docker compose <span class="nb">exec </span>db psql <span class="nt">-U</span> app <span class="nt">-d</span> appdb
+docker compose down
+</code></pre></div></div>
+
+<p>The final command keeps the named database volume. Do not use <code class="language-plaintext highlighter-rouge">docker compose down -v</code> unless you intend to delete the database data.</p>
+
+<h2 id="17-common-commands-at-a-glance">17. Common Commands at a Glance</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Start project</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose up</code></td>
+    </tr>
+    <tr>
+      <td>Start in background</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose up -d</code></td>
+    </tr>
+    <tr>
+      <td>Start and build</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose up -d --build</code></td>
+    </tr>
+    <tr>
+      <td>Stop services</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose stop</code></td>
+    </tr>
+    <tr>
+      <td>Start stopped services</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose start</code></td>
+    </tr>
+    <tr>
+      <td>Restart services</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose restart</code></td>
+    </tr>
+    <tr>
+      <td>Remove containers and networks</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose down</code></td>
+    </tr>
+    <tr>
+      <td>List project containers</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose ps</code></td>
+    </tr>
+    <tr>
+      <td>Show service logs</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose logs</code></td>
+    </tr>
+    <tr>
+      <td>Follow logs</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose logs -f</code></td>
+    </tr>
+    <tr>
+      <td>Open service shell</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose exec SERVICE sh</code></td>
+    </tr>
+    <tr>
+      <td>Run one-off command</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose run --rm SERVICE COMMAND</code></td>
+    </tr>
+    <tr>
+      <td>Pull images</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose pull</code></td>
+    </tr>
+    <tr>
+      <td>Build images</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose build</code></td>
+    </tr>
+    <tr>
+      <td>Validate configuration</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose config</code></td>
+    </tr>
+    <tr>
+      <td>List services</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose config --services</code></td>
+    </tr>
+    <tr>
+      <td>List project images</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose images</code></td>
+    </tr>
+    <tr>
+      <td>Remove named volumes too</td>
+      <td><code class="language-plaintext highlighter-rouge">docker compose down -v</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="18-security-notes">18. Security Notes</h2>
+
+<ul>
+  <li>Do not commit <code class="language-plaintext highlighter-rouge">.env</code> files, passwords, tokens, or private keys to version control.</li>
+  <li>Avoid exposing database ports to the host unless you need external access.</li>
+  <li>Bind development-only services to <code class="language-plaintext highlighter-rouge">127.0.0.1</code> when possible.</li>
+  <li>Use maintained images and pin versions when reproducibility matters.</li>
+  <li>Avoid privileged containers and unnecessary host bind mounts.</li>
+  <li>Review <code class="language-plaintext highlighter-rouge">docker compose config</code> output before sharing it; secrets may be interpolated into the rendered configuration.</li>
+  <li>Remember that Docker daemon access is highly privileged on the host.</li>
+  <li>Back up persistent volumes before upgrades or destructive cleanup.</li>
+</ul>
+
+<h2 id="19-help-and-documentation">19. Help and Documentation</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose <span class="nt">--help</span>
+docker compose up <span class="nt">--help</span>
+docker compose config <span class="nt">--help</span>
+docker compose version
+</code></pre></div></div>
+
+<p>Official documentation:</p>
+
+<ul>
+  <li>Docker Compose overview: https://docs.docker.com/compose/</li>
+  <li>Compose file reference: https://docs.docker.com/reference/compose-file/</li>
+  <li>Compose CLI reference: https://docs.docker.com/reference/cli/docker/compose/</li>
+</ul>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

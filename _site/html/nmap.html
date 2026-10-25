@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Nmap Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#nmap-cheat-sheet-for-debian-13" id="toc-nmap-cheat-sheet-for-debian-13">Nmap Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-install-nmap" id="toc-1-install-nmap">1. Install Nmap</a></li>
+<li><a href="#2-basic-syntax-and-targets" id="toc-2-basic-syntax-and-targets">2. Basic syntax and targets</a>
+<ul>
+<li><a href="#find-your-local-network" id="toc-find-your-local-network">Find your local network</a></li>
+</ul>
+</li>
+<li><a href="#3-find-hosts-on-a-network" id="toc-3-find-hosts-on-a-network">3. Find hosts on a network</a>
+<ul>
+<li><a href="#discover-active-hosts-without-port-scanning" id="toc-discover-active-hosts-without-port-scanning">Discover active hosts without port scanning</a></li>
+<li><a href="#try-ping-based-discovery" id="toc-try-ping-based-discovery">Try ping-based discovery</a></li>
+<li><a href="#scan-a-host-even-if-discovery-probes-fail" id="toc-scan-a-host-even-if-discovery-probes-fail">Scan a host even if discovery probes fail</a></li>
+<li><a href="#reverse-dns-lookups" id="toc-reverse-dns-lookups">Reverse DNS lookups</a></li>
+</ul>
+</li>
+<li><a href="#4-basic-port-scans" id="toc-4-basic-port-scans">4. Basic port scans</a>
+<ul>
+<li><a href="#default-scan" id="toc-default-scan">Default scan</a></li>
+<li><a href="#tcp-syn-scan" id="toc-tcp-syn-scan">TCP SYN scan</a></li>
+<li><a href="#tcp-connect-scan" id="toc-tcp-connect-scan">TCP connect scan</a></li>
+<li><a href="#udp-scan" id="toc-udp-scan">UDP scan</a></li>
+<li><a href="#scan-tcp-and-udp" id="toc-scan-tcp-and-udp">Scan TCP and UDP</a></li>
+</ul>
+</li>
+<li><a href="#5-choose-ports" id="toc-5-choose-ports">5. Choose ports</a>
+<ul>
+<li><a href="#scan-only-open-ports-in-the-displayed-output" id="toc-scan-only-open-ports-in-the-displayed-output">Scan only open ports in the displayed output</a></li>
+</ul>
+</li>
+<li><a href="#6-detect-services-and-versions" id="toc-6-detect-services-and-versions">6. Detect services and versions</a>
+<ul>
+<li><a href="#common-service-ports" id="toc-common-service-ports">Common service ports</a></li>
+</ul>
+</li>
+<li><a href="#7-operating-system-detection" id="toc-7-operating-system-detection">7. Operating-system detection</a>
+<ul>
+<li><a href="#combined-detection" id="toc-combined-detection">Combined detection</a></li>
+</ul>
+</li>
+<li><a href="#8-timing-and-scan-behavior" id="toc-8-timing-and-scan-behavior">8. Timing and scan behavior</a></li>
+<li><a href="#9-nmap-scripting-engine-nse" id="toc-9-nmap-scripting-engine-nse">9. Nmap Scripting Engine (NSE)</a>
+<ul>
+<li><a href="#run-the-default-script-set" id="toc-run-the-default-script-set">Run the default script set</a></li>
+<li><a href="#run-a-named-script" id="toc-run-a-named-script">Run a named script</a></li>
+<li><a href="#use-a-script-category-cautiously" id="toc-use-a-script-category-cautiously">Use a script category cautiously</a></li>
+<li><a href="#vulnerability-checks" id="toc-vulnerability-checks">Vulnerability checks</a></li>
+<li><a href="#get-information-about-a-script" id="toc-get-information-about-a-script">Get information about a script</a></li>
+</ul>
+</li>
+<li><a href="#10-save-and-read-scan-results" id="toc-10-save-and-read-scan-results">10. Save and read scan results</a>
+<ul>
+<li><a href="#normal-human-readable-output" id="toc-normal-human-readable-output">Normal human-readable output</a></li>
+<li><a href="#xml-output" id="toc-xml-output">XML output</a></li>
+<li><a href="#write-all-main-output-formats" id="toc-write-all-main-output-formats">Write all main output formats</a></li>
+<li><a href="#increase-detail-and-show-reasons" id="toc-increase-detail-and-show-reasons">Increase detail and show reasons</a></li>
+<li><a href="#scan-a-list-and-save-results" id="toc-scan-a-list-and-save-results">Scan a list and save results</a></li>
+</ul>
+</li>
+<li><a href="#11-useful-options" id="toc-11-useful-options">11. Useful options</a></li>
+<li><a href="#12-practical-homelab-examples" id="toc-12-practical-homelab-examples">12. Practical homelab examples</a>
+<ul>
+<li><a href="#a-find-active-devices-on-your-lan" id="toc-a-find-active-devices-on-your-lan">A. Find active devices on your LAN</a></li>
+<li><a href="#b-check-whether-ssh-and-web-ports-are-reachable-on-your-own-server" id="toc-b-check-whether-ssh-and-web-ports-are-reachable-on-your-own-server">B. Check whether SSH and web ports are reachable on your own server</a></li>
+<li><a href="#c-identify-services-on-a-debian-server" id="toc-c-identify-services-on-a-debian-server">C. Identify services on a Debian server</a></li>
+<li><a href="#d-inventory-all-tcp-ports-on-a-lab-vm" id="toc-d-inventory-all-tcp-ports-on-a-lab-vm">D. Inventory all TCP ports on a lab VM</a></li>
+<li><a href="#e-check-common-udp-services-on-your-own-lab-host" id="toc-e-check-common-udp-services-on-your-own-lab-host">E. Check common UDP services on your own lab host</a></li>
+<li><a href="#f-save-an-inventory-for-later-comparison" id="toc-f-save-an-inventory-for-later-comparison">F. Save an inventory for later comparison</a></li>
+<li><a href="#g-check-a-host-that-does-not-answer-discovery-probes" id="toc-g-check-a-host-that-does-not-answer-discovery-probes">G. Check a host that does not answer discovery probes</a></li>
+<li><a href="#h-inspect-your-own-routers-exposed-ports" id="toc-h-inspect-your-own-routers-exposed-ports">H. Inspect your own router's exposed ports</a></li>
+</ul>
+</li>
+<li><a href="#13-troubleshooting" id="toc-13-troubleshooting">13. Troubleshooting</a>
+<ul>
+<li><a href="#you-requested-a-scan-type-which-requires-root-privileges" id="toc-you-requested-a-scan-type-which-requires-root-privileges">“You requested a scan type which requires root privileges”</a></li>
+<li><a href="#nmap-says-the-host-is-down" id="toc-nmap-says-the-host-is-down">Nmap says the host is down</a></li>
+<li><a href="#ports-show-as-filtered" id="toc-ports-show-as-filtered">Ports show as <code class="language-plaintext highlighter-rouge">filtered</code></a></li>
+<li><a href="#udp-results-show-openfiltered" id="toc-udp-results-show-openfiltered">UDP results show <code class="language-plaintext highlighter-rouge">open|filtered</code></a></li>
+<li><a href="#scan-is-slow" id="toc-scan-is-slow">Scan is slow</a></li>
+<li><a href="#permission-or-output-file-errors" id="toc-permission-or-output-file-errors">Permission or output-file errors</a></li>
+</ul>
+</li>
+<li><a href="#14-quick-reference" id="toc-14-quick-reference">14. Quick reference</a></li>
+<li><a href="#15-further-reading" id="toc-15-further-reading">15. Further reading</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="nmap-cheat-sheet-for-debian-13">Nmap Cheat Sheet for Debian 13</h1>
+
+<p>A practical reference for using Nmap to discover hosts, scan ports, identify services, and save results on Debian 13.</p>
+
+<blockquote>
+  <p><strong>Authorization:</strong> Only scan systems and networks you own or have explicit permission to test. Scans can trigger alerts or disrupt fragile devices. Start with a small, known target and use conservative options when unsure.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#1-install-nmap">1. Install Nmap</a></li>
+  <li><a href="#2-basic-syntax-and-targets">2. Basic syntax and targets</a></li>
+  <li><a href="#3-find-hosts-on-a-network">3. Find hosts on a network</a></li>
+  <li><a href="#4-basic-port-scans">4. Basic port scans</a></li>
+  <li><a href="#5-choose-ports">5. Choose ports</a></li>
+  <li><a href="#6-detect-services-and-versions">6. Detect services and versions</a></li>
+  <li><a href="#7-operating-system-detection">7. Operating-system detection</a></li>
+  <li><a href="#8-timing-and-scan-behavior">8. Timing and scan behavior</a></li>
+  <li><a href="#9-nmap-scripting-engine-nse">9. Nmap Scripting Engine (NSE)</a></li>
+  <li><a href="#10-save-and-read-scan-results">10. Save and read scan results</a></li>
+  <li><a href="#11-useful-options">11. Useful options</a></li>
+  <li><a href="#12-practical-homelab-examples">12. Practical homelab examples</a></li>
+  <li><a href="#13-troubleshooting">13. Troubleshooting</a></li>
+  <li><a href="#14-quick-reference">14. Quick reference</a></li>
+  <li><a href="#15-further-reading">15. Further reading</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-install-nmap">1. Install Nmap</h2>
+
+<p>Update APT and install Nmap from Debian's repositories:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>nmap
+</code></pre></div></div>
+
+<p>Check the installed version and display basic help:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">--version</span>
+nmap <span class="nt">--help</span>
+man nmap
+</code></pre></div></div>
+
+<p>To search the manual for a topic, open <code class="language-plaintext highlighter-rouge">man nmap</code> and type <code class="language-plaintext highlighter-rouge">/</code> followed by a search term, then press Enter. Press <code class="language-plaintext highlighter-rouge">n</code> for the next match and <code class="language-plaintext highlighter-rouge">q</code> to quit.</p>
+
+<h2 id="2-basic-syntax-and-targets">2. Basic syntax and targets</h2>
+
+<p>General syntax:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="o">[</span>options] &lt;target&gt;
+</code></pre></div></div>
+
+<p>Examples of target formats:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap 192.168.1.1                 <span class="c"># One IPv4 address</span>
+nmap router.local                <span class="c"># Hostname</span>
+nmap 192.168.1.10 192.168.1.20   <span class="c"># Multiple targets</span>
+nmap 192.168.1.0/24              <span class="c"># Every address in a subnet</span>
+nmap 192.168.1.1-50              <span class="c"># Address range</span>
+nmap <span class="nt">-iL</span> targets.txt             <span class="c"># Read targets from a file</span>
+</code></pre></div></div>
+
+<p>Create a target list with one host or IP address per line:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>192.168.1.1
+192.168.1.20
+server.example.test
+</code></pre></div></div>
+
+<p>Then scan it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-iL</span> targets.txt
+</code></pre></div></div>
+
+<p>Nmap accepts IPv4 and IPv6 targets. For IPv6, use <code class="language-plaintext highlighter-rouge">-6</code>, for example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-6</span> 2001:db8::10
+</code></pre></div></div>
+
+<p>The IPv6 address above is an example address, not a real public target.</p>
+
+<h3 id="find-your-local-network">Find your local network</h3>
+
+<p>Use these commands to inspect your interfaces and routes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nt">-brief</span> address
+ip route
+</code></pre></div></div>
+
+<p>Look for your LAN interface and connected subnet. Do not assume every network uses <code class="language-plaintext highlighter-rouge">192.168.1.0/24</code>; use the subnet shown by your system.</p>
+
+<h2 id="3-find-hosts-on-a-network">3. Find hosts on a network</h2>
+
+<h3 id="discover-active-hosts-without-port-scanning">Discover active hosts without port scanning</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sn</span> 192.168.1.0/24
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-sn</code> performs host discovery and skips the normal port scan. On a local Ethernet network, Nmap may use ARP discovery, which can find hosts that do not respond to ping.</p>
+
+<h3 id="try-ping-based-discovery">Try ping-based discovery</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sn</span> <span class="nt">-PE</span> 192.168.1.0/24
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-PE</code> requests ICMP echo discovery. Firewalls may block it, so no response does not prove that a host is offline.</p>
+
+<h3 id="scan-a-host-even-if-discovery-probes-fail">Scan a host even if discovery probes fail</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-Pn</span> 192.168.1.25
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-Pn</code> tells Nmap to skip host discovery and treat the target as up. This can be useful when a host filters discovery probes, but it may make a scan of a large range much slower.</p>
+
+<h3 id="reverse-dns-lookups">Reverse DNS lookups</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-R</span> 192.168.1.0/24
+nmap <span class="nt">-n</span> 192.168.1.0/24
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-R</code> always performs DNS resolution.</li>
+  <li><code class="language-plaintext highlighter-rouge">-n</code> skips DNS resolution, which can speed up scans when hostnames are not needed.</li>
+</ul>
+
+<h2 id="4-basic-port-scans">4. Basic port scans</h2>
+
+<h3 id="default-scan">Default scan</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap 192.168.1.25
+</code></pre></div></div>
+
+<p>By default, Nmap scans the 1,000 most common TCP ports. When run with sufficient privileges, it normally uses a TCP SYN scan; without them, it generally uses a TCP connect scan.</p>
+
+<h3 id="tcp-syn-scan">TCP SYN scan</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-sS</span> 192.168.1.25
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-sS</code> sends SYN probes and is often called a half-open scan. It generally requires root or equivalent network privileges.</p>
+
+<h3 id="tcp-connect-scan">TCP connect scan</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sT</span> 192.168.1.25
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-sT</code> uses the operating system's <code class="language-plaintext highlighter-rouge">connect()</code> call. It works without raw-packet privileges but completes TCP connections to open ports.</p>
+
+<h3 id="udp-scan">UDP scan</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-sU</span> 192.168.1.25
+</code></pre></div></div>
+
+<p>UDP scans can be slow and results may be ambiguous because many UDP services do not respond to empty probes. Consider selecting a limited set of ports first:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-sU</span> <span class="nt">-p</span> 53,67,123,161 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="scan-tcp-and-udp">Scan TCP and UDP</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-sS</span> <span class="nt">-sU</span> <span class="nt">-p</span> T:22,80,443,U:53,123 192.168.1.25
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">T:</code> and <code class="language-plaintext highlighter-rouge">U:</code> prefixes specify TCP and UDP ports respectively.</p>
+
+<h2 id="5-choose-ports">5. Choose ports</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-p</span> 22 192.168.1.25            <span class="c"># One port</span>
+nmap <span class="nt">-p</span> 22,80,443 192.168.1.25     <span class="c"># Selected ports</span>
+nmap <span class="nt">-p</span> 1-1024 192.168.1.25        <span class="c"># Port range</span>
+nmap <span class="nt">-p-</span> 192.168.1.25               <span class="c"># All TCP ports, 1–65535</span>
+nmap <span class="nt">--top-ports</span> 100 192.168.1.25   <span class="c"># 100 most common ports</span>
+nmap <span class="nt">-F</span> 192.168.1.25                <span class="c"># Fast scan of fewer common ports</span>
+</code></pre></div></div>
+
+<p>A full TCP port scan can take longer than a default scan. Add service detection when you need to identify what's listening:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sV</span> <span class="nt">-p</span> 1-1024 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="scan-only-open-ports-in-the-displayed-output">Scan only open ports in the displayed output</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">--open</span> 192.168.1.25
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">--open</code> filters the displayed results to ports that are open or possibly open. It does not make the underlying scan skip closed ports.</p>
+
+<h2 id="6-detect-services-and-versions">6. Detect services and versions</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sV</span> 192.168.1.25
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-sV</code> probes detected open ports to identify the service and, where possible, its version.</p>
+
+<p>Adjust version-detection intensity from 0 to 9:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sV</span> <span class="nt">--version-light</span> 192.168.1.25
+nmap <span class="nt">-sV</span> <span class="nt">--version-intensity</span> 5 192.168.1.25
+nmap <span class="nt">-sV</span> <span class="nt">--version-all</span> 192.168.1.25
+</code></pre></div></div>
+
+<p>Higher intensity can make more probes and take longer. Start with the default or <code class="language-plaintext highlighter-rouge">--version-light</code> for a routine inventory.</p>
+
+<h3 id="common-service-ports">Common service ports</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Port</th>
+      <th>Common service</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">22/tcp</td>
+      <td>SSH</td>
+      <td>Secure remote shell</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">25/tcp</td>
+      <td>SMTP</td>
+      <td>Mail transfer</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">53/tcp,udp</td>
+      <td>DNS</td>
+      <td>Domain name service</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">80/tcp</td>
+      <td>HTTP</td>
+      <td>Unencrypted web</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">123/udp</td>
+      <td>NTP</td>
+      <td>Time synchronization</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">443/tcp</td>
+      <td>HTTPS</td>
+      <td>Web over TLS</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">445/tcp</td>
+      <td>SMB</td>
+      <td>Windows file sharing</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">631/tcp</td>
+      <td>IPP</td>
+      <td>Network printing</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3306/tcp</td>
+      <td>MySQL/MariaDB</td>
+      <td>Database</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">5432/tcp</td>
+      <td>PostgreSQL</td>
+      <td>Database</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">8080/tcp</td>
+      <td>Alternate HTTP</td>
+      <td>Often a web app or proxy</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A port number is only a clue. Services can run on nonstandard ports, and a detected service name is not proof of the software's identity or security state.</p>
+
+<h2 id="7-operating-system-detection">7. Operating-system detection</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-O</span> 192.168.1.25
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-O</code> attempts to infer the operating system from network responses. It works best when Nmap can observe at least one open and one closed TCP port, and results may be uncertain if the target is filtered or behind a middlebox.</p>
+
+<p>Ask Nmap to show more OS-detection details:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-O</span> <span class="nt">--osscan-guess</span> 192.168.1.25
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">--osscan-guess</code> makes Nmap present less certain matches more aggressively. Treat these as estimates, not confirmed facts.</p>
+
+<h3 id="combined-detection">Combined detection</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-sV</span> <span class="nt">-O</span> 192.168.1.25
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">-A</code> option enables OS detection, version detection, default NSE scripts, and traceroute:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-A</span> 192.168.1.25
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-A</code> is more intrusive than a basic scan. Use it only when that broader probing is appropriate and authorized.</p>
+
+<h2 id="8-timing-and-scan-behavior">8. Timing and scan behavior</h2>
+
+<p>Nmap provides timing templates from <code class="language-plaintext highlighter-rouge">-T0</code> through <code class="language-plaintext highlighter-rouge">-T5</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-T3</span> 192.168.1.25
+nmap <span class="nt">-T4</span> 192.168.1.25
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-T3</code>: default, balanced timing.</li>
+  <li><code class="language-plaintext highlighter-rouge">-T4</code>: often reasonable on a reliable LAN.</li>
+  <li><code class="language-plaintext highlighter-rouge">-T0</code> to <code class="language-plaintext highlighter-rouge">-T2</code>: slower templates that may be useful on fragile or constrained links, though they are not a substitute for permission or careful testing.</li>
+  <li><code class="language-plaintext highlighter-rouge">-T5</code>: very aggressive and more likely to reduce accuracy or overload a target; generally avoid it for routine work.</li>
+</ul>
+
+<p>Set a maximum time for the overall scan:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">--host-timeout</span> 5m 192.168.1.25
+</code></pre></div></div>
+
+<p>Limit retries:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">--max-retries</span> 2 192.168.1.25
+</code></pre></div></div>
+
+<p>These settings can cause Nmap to miss results when the network is slow or packet loss is high. Use them only when you understand the trade-off.</p>
+
+<h2 id="9-nmap-scripting-engine-nse">9. Nmap Scripting Engine (NSE)</h2>
+
+<p>NSE scripts extend Nmap with tasks such as gathering additional service information. Review a script's documentation and expected impact before running it.</p>
+
+<h3 id="run-the-default-script-set">Run the default script set</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sC</span> 192.168.1.25
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-sC</code> is shorthand for <code class="language-plaintext highlighter-rouge">--script=default</code>. Default scripts can still send additional probes, so use them only against authorized targets.</p>
+
+<h3 id="run-a-named-script">Run a named script</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">--script</span><span class="o">=</span>http-title <span class="nt">-p</span> 80,443 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="use-a-script-category-cautiously">Use a script category cautiously</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">--script</span><span class="o">=</span>safe 192.168.1.25
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">safe</code> category is intended for scripts not expected to crash services or consume excessive resources, but no category is a guarantee of zero impact. Check the individual scripts when scanning important systems.</p>
+
+<h3 id="vulnerability-checks">Vulnerability checks</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">--script</span><span class="o">=</span>vuln 192.168.1.25
+</code></pre></div></div>
+
+<p>Use vulnerability-related scripts only with explicit authorization and after reviewing what they test. Results may include false positives or false negatives; validate findings independently.</p>
+
+<h3 id="get-information-about-a-script">Get information about a script</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">--script-help</span> http-title
+nmap <span class="nt">--script-help</span> <span class="s1">'safe'</span>
+</code></pre></div></div>
+
+<p>For installed script files and documentation, consult <code class="language-plaintext highlighter-rouge">man nmap</code> and the official Nmap documentation.</p>
+
+<h2 id="10-save-and-read-scan-results">10. Save and read scan results</h2>
+
+<h3 id="normal-human-readable-output">Normal human-readable output</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-oN</span> scan-results.txt 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="xml-output">XML output</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-oX</span> scan-results.xml 192.168.1.25
+</code></pre></div></div>
+
+<p>XML is useful for tools that process scan results.</p>
+
+<h3 id="write-all-main-output-formats">Write all main output formats</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-oA</span> homelab-scan 192.168.1.25
+</code></pre></div></div>
+
+<p>This creates files with the base name <code class="language-plaintext highlighter-rouge">homelab-scan</code> in normal (<code class="language-plaintext highlighter-rouge">.nmap</code>), XML (<code class="language-plaintext highlighter-rouge">.xml</code>), and grepable (<code class="language-plaintext highlighter-rouge">.gnmap</code>) formats. Grepable output is retained for compatibility but is deprecated; prefer XML for structured processing.</p>
+
+<h3 id="increase-detail-and-show-reasons">Increase detail and show reasons</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-v</span> <span class="nt">--reason</span> 192.168.1.25
+nmap <span class="nt">-vv</span> 192.168.1.25
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-v</code> / <code class="language-plaintext highlighter-rouge">-vv</code>: more verbose output.</li>
+  <li><code class="language-plaintext highlighter-rouge">--reason</code>: show why Nmap assigned a port or host state.</li>
+</ul>
+
+<h3 id="scan-a-list-and-save-results">Scan a list and save results</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-iL</span> targets.txt <span class="nt">-oA</span> inventory-<span class="si">$(</span><span class="nb">date</span> +%F<span class="si">)</span>
+</code></pre></div></div>
+
+<p>This creates date-stamped output files in the current directory. Make sure the directory is writable.</p>
+
+<h2 id="11-useful-options">11. Useful options</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-6</code></td>
+      <td>Scan IPv6 targets</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-n</code></td>
+      <td>Skip DNS lookups</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-R</code></td>
+      <td>Always resolve DNS</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-sn</code></td>
+      <td>Host discovery only, no port scan</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-Pn</code></td>
+      <td>Skip host discovery</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-sS</code></td>
+      <td>TCP SYN scan; typically needs privileges</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-sT</code></td>
+      <td>TCP connect scan</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-sU</code></td>
+      <td>UDP scan</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-p PORTS</code></td>
+      <td>Select ports or ranges</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-p-</code></td>
+      <td>All TCP ports</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-sV</code></td>
+      <td>Service/version detection</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-O</code></td>
+      <td>OS detection</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-sC</code></td>
+      <td>Default NSE scripts</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-A</code></td>
+      <td>OS detection, version detection, default scripts, traceroute</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-T3</code> / <code class="language-plaintext highlighter-rouge">-T4</code></td>
+      <td>Timing template</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--open</code></td>
+      <td>Show open or possibly open ports</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--reason</code></td>
+      <td>Explain detected states</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-oN FILE</code></td>
+      <td>Normal output file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-oX FILE</code></td>
+      <td>XML output file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-oA BASE</code></td>
+      <td>Save normal, XML, and grepable output</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-iL FILE</code></td>
+      <td>Read targets from a file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--exclude HOSTS</code></td>
+      <td>Exclude targets from a scan</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Example excluding a printer or other fragile device from an authorized subnet scan:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sn</span> 192.168.1.0/24 <span class="nt">--exclude</span> 192.168.1.45
+</code></pre></div></div>
+
+<h2 id="12-practical-homelab-examples">12. Practical homelab examples</h2>
+
+<p>Replace the example addresses and subnet with values from your own network.</p>
+
+<h3 id="a-find-active-devices-on-your-lan">A. Find active devices on your LAN</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sn</span> 192.168.1.0/24
+</code></pre></div></div>
+
+<h3 id="b-check-whether-ssh-and-web-ports-are-reachable-on-your-own-server">B. Check whether SSH and web ports are reachable on your own server</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-p</span> 22,80,443 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="c-identify-services-on-a-debian-server">C. Identify services on a Debian server</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-sV</span> <span class="nt">-p</span> 22,80,443 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="d-inventory-all-tcp-ports-on-a-lab-vm">D. Inventory all TCP ports on a lab VM</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-p-</span> <span class="nt">-T3</span> <span class="nt">--open</span> 192.168.1.25
+</code></pre></div></div>
+
+<p>If you find an open port you want to identify, scan that port with <code class="language-plaintext highlighter-rouge">-sV</code>.</p>
+
+<h3 id="e-check-common-udp-services-on-your-own-lab-host">E. Check common UDP services on your own lab host</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-sU</span> <span class="nt">-p</span> 53,123,161 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="f-save-an-inventory-for-later-comparison">F. Save an inventory for later comparison</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sV</span> <span class="nt">-oA</span> server-inventory 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="g-check-a-host-that-does-not-answer-discovery-probes">G. Check a host that does not answer discovery probes</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-Pn</span> <span class="nt">-p</span> 22,80,443 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="h-inspect-your-own-routers-exposed-ports">H. Inspect your own router's exposed ports</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sV</span> <span class="nt">-T3</span> 192.168.1.1
+</code></pre></div></div>
+
+<p>Only use the address if it is your router and your network's rules permit scanning it.</p>
+
+<h2 id="13-troubleshooting">13. Troubleshooting</h2>
+
+<h3 id="you-requested-a-scan-type-which-requires-root-privileges">“You requested a scan type which requires root privileges”</h3>
+
+<p>Run the command with <code class="language-plaintext highlighter-rouge">sudo</code> if you are authorized to perform that scan:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap <span class="nt">-sS</span> 192.168.1.25
+</code></pre></div></div>
+
+<p>Or use a TCP connect scan without elevated privileges:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-sT</span> 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="nmap-says-the-host-is-down">Nmap says the host is down</h3>
+
+<p>The target may be offline, unreachable, or filtering discovery probes. Verify the address and network route first. If appropriate, try skipping host discovery:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-Pn</span> 192.168.1.25
+</code></pre></div></div>
+
+<p>This does not make an unreachable host reachable; it only changes Nmap's assumption about whether the host is up.</p>
+
+<h3 id="ports-show-as-filtered">Ports show as <code class="language-plaintext highlighter-rouge">filtered</code></h3>
+
+<p>Nmap did not determine whether the port is open or closed because packets were blocked, dropped, or otherwise inconclusive. Check routing and firewall rules on systems you administer.</p>
+
+<h3 id="udp-results-show-openfiltered">UDP results show <code class="language-plaintext highlighter-rouge">open|filtered</code></h3>
+
+<p>Nmap did not receive a response that distinguishes an open UDP service from filtering. This is common with UDP. Try a service-specific probe, inspect the host configuration, or check the service locally.</p>
+
+<h3 id="scan-is-slow">Scan is slow</h3>
+
+<p>Try narrowing the port range or use a small common-port set:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">--top-ports</span> 100 192.168.1.25
+</code></pre></div></div>
+
+<p>UDP scans, filtered ports, DNS lookups, and packet loss can all increase scan time. Avoid aggressive timing on fragile devices.</p>
+
+<h3 id="permission-or-output-file-errors">Permission or output-file errors</h3>
+
+<p>Check the current directory and available space:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">pwd
+ls</span> <span class="nt">-ld</span> <span class="nb">.</span>
+<span class="nb">df</span> <span class="nt">-h</span> <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>Choose a writable output location if needed, such as a directory under your home folder.</p>
+
+<h2 id="14-quick-reference">14. Quick reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Goal</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Basic scan</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Discover LAN hosts</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap -sn 192.168.1.0/24</code></td>
+    </tr>
+    <tr>
+      <td>Skip discovery probes</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap -Pn 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Scan selected ports</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap -p 22,80,443 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Scan all TCP ports</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap -p- 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>TCP connect scan</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap -sT 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>TCP SYN scan</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo nmap -sS 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>UDP scan</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo nmap -sU -p 53,123 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Detect versions</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap -sV 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Guess operating system</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo nmap -O 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Run default scripts</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap -sC 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Show open ports</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap --open 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Explain port states</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap --reason 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Save all main formats</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap -oA scan 192.168.1.25</code></td>
+    </tr>
+    <tr>
+      <td>Scan targets from file</td>
+      <td><code class="language-plaintext highlighter-rouge">nmap -iL targets.txt</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="15-further-reading">15. Further reading</h2>
+
+<ul>
+  <li><a href="https://nmap.org/book/man.html">Official Nmap Reference Guide</a></li>
+  <li><a href="https://nmap.org/book/man-port-scanning-techniques.html">Nmap Reference Guide: Port Scanning Techniques</a></li>
+  <li><a href="https://nmap.org/book/man-host-discovery.html">Nmap Reference Guide: Host Discovery</a></li>
+  <li><a href="https://nmap.org/book/nse.html">Nmap Scripting Engine documentation</a></li>
+  <li><a href="https://packages.debian.org/nmap">Debian package information for Nmap</a></li>
+</ul>
+
+<hr />
+
+<p><strong>Suggested workflow for a homelab:</strong> discover active hosts with <code class="language-plaintext highlighter-rouge">-sn</code>, scan a known host's common ports, identify services with <code class="language-plaintext highlighter-rouge">-sV</code>, and save an inventory with <code class="language-plaintext highlighter-rouge">-oA</code>. Expand the scan only when you have a clear reason and permission.</p>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

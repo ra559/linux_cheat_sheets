@@ -1,0 +1,2582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Bash Scripting Cheat Sheet</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#bash-scripting-cheat-sheet" id="toc-bash-scripting-cheat-sheet">Bash Scripting Cheat Sheet</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of Contents</a></li>
+<li><a href="#1-beginner-learning-path" id="toc-1-beginner-learning-path">1. Beginner Learning Path</a></li>
+<li><a href="#2-quick-introduction" id="toc-2-quick-introduction">2. Quick Introduction</a>
+<ul>
+<li><a href="#a-minimal-script" id="toc-a-minimal-script">A minimal script</a></li>
+<li><a href="#basic-rules" id="toc-basic-rules">Basic rules</a></li>
+<li><a href="#run-a-script-with-debugging" id="toc-run-a-script-with-debugging">Run a script with debugging</a></li>
+</ul>
+</li>
+<li><a href="#3-variables-and-user-input" id="toc-3-variables-and-user-input">3. Variables and User Input</a>
+<ul>
+<li><a href="#assign-and-use-variables" id="toc-assign-and-use-variables">Assign and use variables</a></li>
+<li><a href="#environment-variables" id="toc-environment-variables">Environment variables</a></li>
+<li><a href="#read-user-input" id="toc-read-user-input">Read user input</a></li>
+<li><a href="#read-multiple-values" id="toc-read-multiple-values">Read multiple values</a></li>
+<li><a href="#command-substitution" id="toc-command-substitution">Command substitution</a></li>
+</ul>
+</li>
+<li><a href="#4-comments-and-documentation" id="toc-4-comments-and-documentation">4. Comments and Documentation</a></li>
+<li><a href="#5-conditionals" id="toc-5-conditionals">5. Conditionals</a>
+<ul>
+<li><a href="#if-elif-and-else" id="toc-if-elif-and-else"><code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">elif</code>, and <code class="language-plaintext highlighter-rouge">else</code></a></li>
+<li><a href="#case-switch-like-branching" id="toc-case-switch-like-branching"><code class="language-plaintext highlighter-rouge">case</code>: switch-like branching</a></li>
+<li><a href="#combine-conditions" id="toc-combine-conditions">Combine conditions</a></li>
+</ul>
+</li>
+<li><a href="#6-comparisons-and-tests" id="toc-6-comparisons-and-tests">6. Comparisons and Tests</a>
+<ul>
+<li><a href="#file-tests" id="toc-file-tests">File tests</a></li>
+<li><a href="#string-comparisons" id="toc-string-comparisons">String comparisons</a></li>
+<li><a href="#numeric-comparisons" id="toc-numeric-comparisons">Numeric comparisons</a></li>
+<li><a href="#exit-status" id="toc-exit-status">Exit status</a></li>
+</ul>
+</li>
+<li><a href="#7-loops" id="toc-7-loops">7. Loops</a>
+<ul>
+<li><a href="#for-over-a-list" id="toc-for-over-a-list"><code class="language-plaintext highlighter-rouge">for</code> over a list</a></li>
+<li><a href="#loop-over-files-safely" id="toc-loop-over-files-safely">Loop over files safely</a></li>
+<li><a href="#c-style-loop" id="toc-c-style-loop">C-style loop</a></li>
+<li><a href="#while-loop" id="toc-while-loop"><code class="language-plaintext highlighter-rouge">while</code> loop</a></li>
+<li><a href="#until-loop" id="toc-until-loop"><code class="language-plaintext highlighter-rouge">until</code> loop</a></li>
+<li><a href="#read-a-file-line-by-line" id="toc-read-a-file-line-by-line">Read a file line by line</a></li>
+<li><a href="#break-and-continue" id="toc-break-and-continue"><code class="language-plaintext highlighter-rouge">break</code> and <code class="language-plaintext highlighter-rouge">continue</code></a></li>
+<li><a href="#beware-of-loops-in-pipelines" id="toc-beware-of-loops-in-pipelines">Beware of loops in pipelines</a></li>
+</ul>
+</li>
+<li><a href="#8-strict-mode-and-defensive-scripting" id="toc-8-strict-mode-and-defensive-scripting">8. Strict Mode and Defensive Scripting</a>
+<ul>
+<li><a href="#check-required-commands" id="toc-check-required-commands">Check required commands</a></li>
+<li><a href="#check-arguments" id="toc-check-arguments">Check arguments</a></li>
+</ul>
+</li>
+<li><a href="#9-functions" id="toc-9-functions">9. Functions</a>
+<ul>
+<li><a href="#pass-all-arguments-safely" id="toc-pass-all-arguments-safely">Pass all arguments safely</a></li>
+<li><a href="#return-status-not-general-data" id="toc-return-status-not-general-data">Return status, not general data</a></li>
+</ul>
+</li>
+<li><a href="#10-arrays-and-dictionaries" id="toc-10-arrays-and-dictionaries">10. Arrays and Dictionaries</a>
+<ul>
+<li><a href="#indexed-arrays" id="toc-indexed-arrays">Indexed arrays</a></li>
+<li><a href="#build-an-array-from-arguments" id="toc-build-an-array-from-arguments">Build an array from arguments</a></li>
+<li><a href="#associative-arrays-dictionaries" id="toc-associative-arrays-dictionaries">Associative arrays (dictionaries)</a></li>
+</ul>
+</li>
+<li><a href="#11-brace-expansion" id="toc-11-brace-expansion">11. Brace Expansion</a></li>
+<li><a href="#12-parameter-expansion-and-special-variables" id="toc-12-parameter-expansion-and-special-variables">12. Parameter Expansion and Special Variables</a>
+<ul>
+<li><a href="#useful-parameter-expansions" id="toc-useful-parameter-expansions">Useful parameter expansions</a></li>
+<li><a href="#special-variables" id="toc-special-variables">Special variables</a></li>
+<li><a href="#prefer-for-forwarding-arguments" id="toc-prefer-for-forwarding-arguments">Prefer <code class="language-plaintext highlighter-rouge">"$@"</code> for forwarding arguments</a></li>
+<li><a href="#arrays-and-indirect-data" id="toc-arrays-and-indirect-data">Arrays and indirect data</a></li>
+</ul>
+</li>
+<li><a href="#13-shell-options-set-and-shopt" id="toc-13-shell-options-set-and-shopt">13. Shell Options: <code class="language-plaintext highlighter-rouge">set</code> and <code class="language-plaintext highlighter-rouge">shopt</code></a>
+<ul>
+<li><a href="#common-set-options" id="toc-common-set-options">Common <code class="language-plaintext highlighter-rouge">set</code> options</a></li>
+<li><a href="#useful-shopt-options" id="toc-useful-shopt-options">Useful <code class="language-plaintext highlighter-rouge">shopt</code> options</a></li>
+</ul>
+</li>
+<li><a href="#14-command-history-and-interactive-shortcuts" id="toc-14-command-history-and-interactive-shortcuts">14. Command History and Interactive Shortcuts</a></li>
+<li><a href="#15-arithmetic-operations" id="toc-15-arithmetic-operations">15. Arithmetic Operations</a>
+<ul>
+<li><a href="#arithmetic-operators" id="toc-arithmetic-operators">Arithmetic operators</a></li>
+</ul>
+</li>
+<li><a href="#16-redirection-and-file-descriptors" id="toc-16-redirection-and-file-descriptors">16. Redirection and File Descriptors</a>
+<ul>
+<li><a href="#common-redirections" id="toc-common-redirections">Common redirections</a></li>
+<li><a href="#pipes" id="toc-pipes">Pipes</a></li>
+<li><a href="#save-output-while-displaying-it" id="toc-save-output-while-displaying-it">Save output while displaying it</a></li>
+<li><a href="#use-a-separate-file-descriptor-for-logs" id="toc-use-a-separate-file-descriptor-for-logs">Use a separate file descriptor for logs</a></li>
+</ul>
+</li>
+<li><a href="#17-here-documents-and-here-strings" id="toc-17-here-documents-and-here-strings">17. Here Documents and Here Strings</a>
+<ul>
+<li><a href="#here-document" id="toc-here-document">Here document (<code class="language-plaintext highlighter-rouge">&lt;&lt;</code>)</a></li>
+<li><a href="#indented-here-documents--" id="toc-indented-here-documents--">Indented here documents (<code class="language-plaintext highlighter-rouge">&lt;&lt;-</code>)</a></li>
+<li><a href="#here-strings" id="toc-here-strings">Here strings (<code class="language-plaintext highlighter-rouge">&lt;&lt;&lt;</code>)</a></li>
+</ul>
+</li>
+<li><a href="#18-error-handling-and-trap" id="toc-18-error-handling-and-trap">18. Error Handling and <code class="language-plaintext highlighter-rouge">trap</code></a>
+<ul>
+<li><a href="#handle-errors-explicitly" id="toc-handle-errors-explicitly">Handle errors explicitly</a></li>
+<li><a href="#capture-an-exit-status" id="toc-capture-an-exit-status">Capture an exit status</a></li>
+<li><a href="#use-trap-for-cleanup" id="toc-use-trap-for-cleanup">Use <code class="language-plaintext highlighter-rouge">trap</code> for cleanup</a></li>
+<li><a href="#handle-interruption-signals" id="toc-handle-interruption-signals">Handle interruption signals</a></li>
+<li><a href="#an-err-trap" id="toc-an-err-trap">An <code class="language-plaintext highlighter-rouge">ERR</code> trap</a></li>
+</ul>
+</li>
+<li><a href="#19-process-substitution" id="toc-19-process-substitution">19. Process Substitution</a>
+<ul>
+<li><a href="#compare-two-streams-with-a-loop" id="toc-compare-two-streams-with-a-loop">Compare two streams with a loop</a></li>
+</ul>
+</li>
+<li><a href="#20-reading-and-processing-files" id="toc-20-reading-and-processing-files">20. Reading and Processing Files</a>
+<ul>
+<li><a href="#read-a-file-line-by-line-1" id="toc-read-a-file-line-by-line-1">Read a file line by line</a></li>
+<li><a href="#read-a-file-into-a-variable" id="toc-read-a-file-into-a-variable">Read a file into a variable</a></li>
+<li><a href="#read-an-entire-file-into-an-array-of-lines" id="toc-read-an-entire-file-into-an-array-of-lines">Read an entire file into an array of lines</a></li>
+<li><a href="#useful-text-processing-commands" id="toc-useful-text-processing-commands">Useful text-processing commands</a></li>
+<li><a href="#process-filenames-safely" id="toc-process-filenames-safely">Process filenames safely</a></li>
+<li><a href="#read-a-simple-configuration-file" id="toc-read-a-simple-configuration-file">Read a simple configuration file</a></li>
+</ul>
+</li>
+<li><a href="#21-structured-data-csv-and-json" id="toc-21-structured-data-csv-and-json">21. Structured Data: CSV and JSON</a>
+<ul>
+<li><a href="#csv-simple-delimited-text" id="toc-csv-simple-delimited-text">CSV: simple delimited text</a></li>
+<li><a href="#csv-use-a-real-parser-for-real-csv" id="toc-csv-use-a-real-parser-for-real-csv">CSV: use a real parser for real CSV</a></li>
+<li><a href="#useful-csv-tasks" id="toc-useful-csv-tasks">Useful CSV tasks</a></li>
+<li><a href="#json-use-jq" id="toc-json-use-jq">JSON: use <code class="language-plaintext highlighter-rouge">jq</code></a></li>
+<li><a href="#validate-json" id="toc-validate-json">Validate JSON</a></li>
+<li><a href="#safely-use-extracted-json-values" id="toc-safely-use-extracted-json-values">Safely use extracted JSON values</a></li>
+<li><a href="#csv-and-json-safety-rules" id="toc-csv-and-json-safety-rules">CSV and JSON safety rules</a></li>
+</ul>
+</li>
+<li><a href="#22-reading-data-from-network-requests" id="toc-22-reading-data-from-network-requests">22. Reading Data from Network Requests</a>
+<ul>
+<li><a href="#make-an-http-request-with-curl" id="toc-make-an-http-request-with-curl">Make an HTTP request with <code class="language-plaintext highlighter-rouge">curl</code></a></li>
+<li><a href="#check-the-result-explicitly" id="toc-check-the-result-explicitly">Check the result explicitly</a></li>
+<li><a href="#retrieve-json-from-an-api" id="toc-retrieve-json-from-an-api">Retrieve JSON from an API</a></li>
+<li><a href="#send-a-request-with-a-header" id="toc-send-a-request-with-a-header">Send a request with a header</a></li>
+<li><a href="#send-json-data" id="toc-send-json-data">Send JSON data</a></li>
+<li><a href="#download-a-file" id="toc-download-a-file">Download a file</a></li>
+<li><a href="#retries" id="toc-retries">Retries</a></li>
+</ul>
+</li>
+<li><a href="#23-reading-data-over-ssh" id="toc-23-reading-data-over-ssh">23. Reading Data over SSH</a>
+<ul>
+<li><a href="#run-a-remote-command" id="toc-run-a-remote-command">Run a remote command</a></li>
+<li><a href="#capture-remote-output" id="toc-capture-remote-output">Capture remote output</a></li>
+<li><a href="#read-a-remote-file" id="toc-read-a-remote-file">Read a remote file</a></li>
+<li><a href="#transfer-files" id="toc-transfer-files">Transfer files</a></li>
+<li><a href="#use-ssh-keys-for-automation" id="toc-use-ssh-keys-for-automation">Use SSH keys for automation</a></li>
+<li><a href="#local-versus-remote-variable-expansion" id="toc-local-versus-remote-variable-expansion">Local versus remote variable expansion</a></li>
+<li><a href="#pass-data-safely" id="toc-pass-data-safely">Pass data safely</a></li>
+<li><a href="#check-several-hosts" id="toc-check-several-hosts">Check several hosts</a></li>
+</ul>
+</li>
+<li><a href="#24-quick-reference" id="toc-24-quick-reference">24. Quick Reference</a>
+<ul>
+<li><a href="#script-skeleton" id="toc-script-skeleton">Script skeleton</a></li>
+<li><a href="#common-syntax" id="toc-common-syntax">Common syntax</a></li>
+<li><a href="#useful-exit-statuses" id="toc-useful-exit-statuses">Useful exit statuses</a></li>
+<li><a href="#essential-commands" id="toc-essential-commands">Essential commands</a></li>
+</ul>
+</li>
+<li><a href="#25-bash-tricks-for-administration" id="toc-25-bash-tricks-for-administration">25. Bash Tricks for Administration</a>
+<ul>
+<li><a href="#check-whether-a-command-exists" id="toc-check-whether-a-command-exists">Check whether a command exists</a></li>
+<li><a href="#check-whether-the-script-runs-as-root" id="toc-check-whether-the-script-runs-as-root">Check whether the script runs as root</a></li>
+<li><a href="#check-a-systemd-service" id="toc-check-a-systemd-service">Check a systemd service</a></li>
+<li><a href="#check-disk-space" id="toc-check-disk-space">Check disk space</a></li>
+<li><a href="#check-memory" id="toc-check-memory">Check memory</a></li>
+<li><a href="#find-large-files" id="toc-find-large-files">Find large files</a></li>
+<li><a href="#find-recently-modified-files" id="toc-find-recently-modified-files">Find recently modified files</a></li>
+<li><a href="#create-a-timestamped-backup" id="toc-create-a-timestamped-backup">Create a timestamped backup</a></li>
+<li><a href="#create-a-temporary-directory-and-clean-it-up" id="toc-create-a-temporary-directory-and-clean-it-up">Create a temporary directory and clean it up</a></li>
+<li><a href="#process-a-list-of-packages" id="toc-process-a-list-of-packages">Process a list of packages</a></li>
+<li><a href="#check-the-exit-status-of-a-service-restart" id="toc-check-the-exit-status-of-a-service-restart">Check the exit status of a service restart</a></li>
+<li><a href="#print-a-progress-message" id="toc-print-a-progress-message">Print a progress message</a></li>
+<li><a href="#log-messages-consistently" id="toc-log-messages-consistently">Log messages consistently</a></li>
+</ul>
+</li>
+<li><a href="#26-secure-script-writing-practices" id="toc-26-secure-script-writing-practices">26. Secure Script-Writing Practices</a>
+<ul>
+<li><a href="#final-checklist" id="toc-final-checklist">Final checklist</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="bash-scripting-cheat-sheet">Bash Scripting Cheat Sheet</h1>
+
+<p><strong>Target:</strong> Bash on Debian 13 (Trixie)<br />
+<strong>Audience:</strong> Beginner to intermediate Linux users<br />
+<strong>Purpose:</strong> A practical reference for writing readable, reliable, and safer Bash scripts.</p>
+
+<blockquote>
+  <p>Bash is a command interpreter and scripting language. It is especially useful for automating command-line tasks and coordinating existing Linux tools. Use a dedicated parser for structured formats such as JSON and complex CSV files.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#1-beginner-learning-path">Beginner Learning Path</a></li>
+  <li><a href="#2-quick-introduction">Quick Introduction</a></li>
+  <li><a href="#3-variables-and-user-input">Variables and User Input</a></li>
+  <li><a href="#4-comments-and-documentation">Comments and Documentation</a></li>
+  <li><a href="#5-conditionals">Conditionals</a></li>
+  <li><a href="#6-comparisons-and-tests">Comparisons and Tests</a></li>
+  <li><a href="#7-loops">Loops</a></li>
+  <li><a href="#8-strict-mode-and-defensive-scripting">Strict Mode and Defensive Scripting</a></li>
+  <li><a href="#9-functions">Functions</a></li>
+  <li><a href="#10-arrays-and-dictionaries">Arrays and Dictionaries</a></li>
+  <li><a href="#11-brace-expansion">Brace Expansion</a></li>
+  <li><a href="#12-parameter-expansion-and-special-variables">Parameter Expansion and Special Variables</a></li>
+  <li><a href="#13-shell-options-set-and-shopt">Shell Options: <code class="language-plaintext highlighter-rouge">set</code> and <code class="language-plaintext highlighter-rouge">shopt</code></a></li>
+  <li><a href="#14-command-history-and-interactive-shortcuts">Command History and Interactive Shortcuts</a></li>
+  <li><a href="#15-arithmetic-operations">Arithmetic Operations</a></li>
+  <li><a href="#16-redirection-and-file-descriptors">Redirection and File Descriptors</a></li>
+  <li><a href="#17-here-documents-and-here-strings">Here Documents and Here Strings</a></li>
+  <li><a href="#18-error-handling-and-trap">Error Handling and <code class="language-plaintext highlighter-rouge">trap</code></a></li>
+  <li><a href="#19-process-substitution">Process Substitution</a></li>
+  <li><a href="#20-reading-and-processing-files">Reading and Processing Files</a></li>
+  <li><a href="#21-structured-data-csv-and-json">Structured Data: CSV and JSON</a></li>
+  <li><a href="#22-reading-data-from-network-requests">Reading Data from Network Requests</a></li>
+  <li><a href="#23-reading-data-over-ssh">Reading Data over SSH</a></li>
+  <li><a href="#24-quick-reference">Quick Reference</a></li>
+  <li><a href="#25-bash-tricks-for-administration">Bash Tricks for Administration</a></li>
+  <li><a href="#26-secure-script-writing-practices">Secure Script-Writing Practices</a></li>
+</ol>
+
+<hr />
+
+<h2 id="1-beginner-learning-path">1. Beginner Learning Path</h2>
+
+<p>Learn these topics in order. Practice each one with a small script before moving on.</p>
+
+<ol>
+  <li><strong>Run commands in a script.</strong> Create a file, add a shebang, make it executable, and run it.</li>
+  <li><strong>Use variables.</strong> Store a name, path, or command result. Learn why <code class="language-plaintext highlighter-rouge">"$variable"</code> is usually safer than <code class="language-plaintext highlighter-rouge">$variable</code>.</li>
+  <li><strong>Get input.</strong> Use <code class="language-plaintext highlighter-rouge">read</code> to ask the user a question.</li>
+  <li><strong>Make decisions.</strong> Use <code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">else</code>, and test operators.</li>
+  <li><strong>Repeat work.</strong> Practice <code class="language-plaintext highlighter-rouge">for</code> and <code class="language-plaintext highlighter-rouge">while</code> loops.</li>
+  <li><strong>Organize code.</strong> Move repeated work into functions.</li>
+  <li><strong>Work with files.</strong> Check that a file exists, read it line by line, and write output.</li>
+  <li><strong>Handle failures.</strong> Check exit statuses, use meaningful error messages, and learn the limitations of <code class="language-plaintext highlighter-rouge">set -e</code>.</li>
+  <li><strong>Use arrays.</strong> Store lists of filenames or arguments without accidentally splitting them.</li>
+  <li><strong>Automate a real task.</strong> For example, check disk space, summarize log files, or back up a directory.</li>
+  <li><strong>Process structured data.</strong> Use <code class="language-plaintext highlighter-rouge">jq</code> for JSON and a proper CSV parser for CSV files with quoted fields.</li>
+  <li><strong>Add remote data.</strong> Learn <code class="language-plaintext highlighter-rouge">curl</code> for HTTP requests and <code class="language-plaintext highlighter-rouge">ssh</code> for remote commands.</li>
+</ol>
+
+<p>Suggested beginner projects:</p>
+
+<ul>
+  <li>Print system information.</li>
+  <li>Ask for a directory and list its files.</li>
+  <li>Check whether a service is active.</li>
+  <li>Report files larger than a chosen size.</li>
+  <li>Read a list of hosts and check connectivity.</li>
+  <li>Fetch an API response and extract selected JSON fields.</li>
+  <li>Back up a directory with a timestamped filename.</li>
+</ul>
+
+<hr />
+
+<h2 id="2-quick-introduction">2. Quick Introduction</h2>
+
+<h3 id="a-minimal-script">A minimal script</h3>
+
+<p>Create <code class="language-plaintext highlighter-rouge">hello.sh</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+
+<span class="nb">printf</span> <span class="s1">'Hello, world!\n'</span>
+</code></pre></div></div>
+
+<p>Run it with Bash:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash hello.sh
+</code></pre></div></div>
+
+<p>Or make it executable:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x hello.sh
+./hello.sh
+</code></pre></div></div>
+
+<p>The first line is the <strong>shebang</strong>. It asks the system to run the script using Bash found through <code class="language-plaintext highlighter-rouge">env</code>.</p>
+
+<h3 id="basic-rules">Basic rules</h3>
+
+<ul>
+  <li>Use <code class="language-plaintext highlighter-rouge">#!/usr/bin/env bash</code> for scripts that specifically require Bash.</li>
+  <li>Commands usually run in order, from top to bottom.</li>
+  <li>Separate commands with newlines. A semicolon (<code class="language-plaintext highlighter-rouge">;</code>) can put multiple commands on one line.</li>
+  <li>Spaces matter in shell syntax. For example, <code class="language-plaintext highlighter-rouge">name="Ada"</code> is valid, but <code class="language-plaintext highlighter-rouge">name = "Ada"</code> is treated as a command named <code class="language-plaintext highlighter-rouge">name</code>.</li>
+  <li>Quote variable expansions unless you deliberately want word splitting or pathname expansion.</li>
+  <li>Prefer <code class="language-plaintext highlighter-rouge">printf</code> over <code class="language-plaintext highlighter-rouge">echo</code> for predictable output.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+
+<span class="nv">name</span><span class="o">=</span><span class="s2">"Ada"</span>
+<span class="nb">printf</span> <span class="s1">'Welcome, %s!\n'</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="run-a-script-with-debugging">Run a script with debugging</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash <span class="nt">-x</span> script.sh
+</code></pre></div></div>
+
+<p>Bash prints commands as it executes them. Be careful: tracing may expose secrets or tokens in logs.</p>
+
+<hr />
+
+<h2 id="3-variables-and-user-input">3. Variables and User Input</h2>
+
+<h3 id="assign-and-use-variables">Assign and use variables</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">username</span><span class="o">=</span><span class="s2">"ada"</span>
+<span class="nv">home_dir</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">"</span>
+
+<span class="nb">printf</span> <span class="s1">'User: %s\n'</span> <span class="s2">"</span><span class="nv">$username</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s1">'Home: %s\n'</span> <span class="s2">"</span><span class="nv">$home_dir</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Do not put spaces around the assignment <code class="language-plaintext highlighter-rouge">=</code>. Use <code class="language-plaintext highlighter-rouge">$name</code> or, preferably, <code class="language-plaintext highlighter-rouge">"${name}"</code> to expand a variable.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">project</span><span class="o">=</span><span class="s2">"cinder"</span>
+<span class="nb">printf</span> <span class="s1">'Project: %s\n'</span> <span class="s2">"</span><span class="k">${</span><span class="nv">project</span><span class="k">}</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="environment-variables">Environment variables</h3>
+
+<p>Environment variables are inherited by child processes when exported.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">APP_ENV</span><span class="o">=</span><span class="s2">"development"</span>
+<span class="nb">export </span>APP_ENV
+
+<span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="nv">$APP_ENV</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Set a variable for only one command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">APP_ENV</span><span class="o">=</span>production ./run-app.sh
+</code></pre></div></div>
+
+<p>Common environment variables:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">HOME</code></td>
+      <td>User's home directory</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">USER</code></td>
+      <td>Current username in many environments</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PATH</code></td>
+      <td>Directories searched for commands</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PWD</code></td>
+      <td>Current working directory</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SHELL</code></td>
+      <td>User's configured login shell; not necessarily the shell running this script</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">LANG</code></td>
+      <td>Default locale</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">TMPDIR</code></td>
+      <td>Preferred temporary directory, if set</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="read-user-input">Read user input</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">read</span> <span class="nt">-r</span> <span class="nt">-p</span> <span class="s1">'What is your name? '</span> name
+<span class="nb">printf</span> <span class="s1">'Hello, %s!\n'</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-r</code> prevents backslashes from being interpreted specially.</li>
+  <li><code class="language-plaintext highlighter-rouge">-p</code> displays a prompt.</li>
+  <li>Always quote the variable when using it.</li>
+</ul>
+
+<p>Read a password without displaying it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">read</span> <span class="nt">-r</span> <span class="nt">-s</span> <span class="nt">-p</span> <span class="s1">'Password: '</span> password
+<span class="nb">printf</span> <span class="s1">'\n'</span>
+</code></pre></div></div>
+
+<p>Avoid printing or logging passwords. Clear sensitive variables when practical:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">unset </span>password
+</code></pre></div></div>
+
+<p>Read input with a default:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">read</span> <span class="nt">-r</span> <span class="nt">-p</span> <span class="s1">'Enter a directory [/tmp]: '</span> directory
+<span class="nv">directory</span><span class="o">=</span><span class="k">${</span><span class="nv">directory</span><span class="k">:-</span><span class="p">/tmp</span><span class="k">}</span>
+<span class="nb">printf</span> <span class="s1">'Selected: %s\n'</span> <span class="s2">"</span><span class="nv">$directory</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="read-multiple-values">Read multiple values</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">read</span> <span class="nt">-r</span> <span class="nt">-p</span> <span class="s1">'Enter first and last name: '</span> first_name last_name
+<span class="nb">printf</span> <span class="s1">'First: %s\nLast: %s\n'</span> <span class="s2">"</span><span class="nv">$first_name</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$last_name</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>For arbitrary input, one variable is generally easier to reason about than multiple fields.</p>
+
+<h3 id="command-substitution">Command substitution</h3>
+
+<p>Capture a command's output using <code class="language-plaintext highlighter-rouge">$(...)</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">today</span><span class="o">=</span><span class="si">$(</span><span class="nb">date</span> +%F<span class="si">)</span>
+<span class="nv">kernel</span><span class="o">=</span><span class="si">$(</span><span class="nb">uname</span> <span class="nt">-r</span><span class="si">)</span>
+
+<span class="nb">printf</span> <span class="s1">'Date: %s\nKernel: %s\n'</span> <span class="s2">"</span><span class="nv">$today</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$kernel</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Avoid old-style backticks when writing new scripts:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Prefer this:</span>
+<span class="nv">files</span><span class="o">=</span><span class="si">$(</span>find <span class="nb">.</span> <span class="nt">-type</span> f<span class="si">)</span>
+</code></pre></div></div>
+
+<p>Command substitution removes trailing newline characters. It is not suitable for capturing arbitrary binary data or preserving all trailing newlines.</p>
+
+<hr />
+
+<h2 id="4-comments-and-documentation">4. Comments and Documentation</h2>
+
+<p>Use <code class="language-plaintext highlighter-rouge">#</code> for comments:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Update package indexes before installing packages.</span>
+<span class="nb">sudo </span>apt update
+</code></pre></div></div>
+
+<p>A useful script header describes its purpose and any important assumptions:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="c"># Purpose: Report the current disk usage.</span>
+<span class="c"># Usage: ./disk-report.sh [directory]</span>
+</code></pre></div></div>
+
+<p>For longer scripts, document:</p>
+
+<ul>
+  <li>What the script does.</li>
+  <li>Required commands or packages.</li>
+  <li>Expected arguments.</li>
+  <li>Files it reads or changes.</li>
+  <li>Whether it needs elevated privileges.</li>
+  <li>Important failure conditions.</li>
+</ul>
+
+<p>Do not comment every obvious line. Explain intent, assumptions, and non-obvious decisions.</p>
+
+<hr />
+
+<h2 id="5-conditionals">5. Conditionals</h2>
+
+<h3 id="if-elif-and-else"><code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">elif</code>, and <code class="language-plaintext highlighter-rouge">else</code></h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[[</span> <span class="nt">-f</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'File exists.\n'</span>
+<span class="k">elif</span> <span class="o">[[</span> <span class="nt">-d</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Path is a directory.\n'</span>
+<span class="k">else
+    </span><span class="nb">printf</span> <span class="s1">'Path does not exist or is not a regular file/directory.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">[[ ... ]]</code> syntax is a Bash conditional expression. It is generally preferable to the older <code class="language-plaintext highlighter-rouge">[ ... ]</code> form in Bash scripts.</p>
+
+<h3 id="case-switch-like-branching"><code class="language-plaintext highlighter-rouge">case</code>: switch-like branching</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">read</span> <span class="nt">-r</span> <span class="nt">-p</span> <span class="s1">'Choose start, stop, or status: '</span> action
+
+<span class="k">case</span> <span class="s2">"</span><span class="nv">$action</span><span class="s2">"</span> <span class="k">in
+    </span>start<span class="p">)</span>
+        <span class="nb">printf</span> <span class="s1">'Starting...\n'</span>
+        <span class="p">;;</span>
+    stop<span class="p">)</span>
+        <span class="nb">printf</span> <span class="s1">'Stopping...\n'</span>
+        <span class="p">;;</span>
+    status|check<span class="p">)</span>
+        <span class="nb">printf</span> <span class="s1">'Checking status...\n'</span>
+        <span class="p">;;</span>
+    <span class="k">*</span><span class="p">)</span>
+        <span class="nb">printf</span> <span class="s1">'Unknown action: %s\n'</span> <span class="s2">"</span><span class="nv">$action</span><span class="s2">"</span> <span class="o">&gt;</span>&amp;2
+        <span class="nb">exit </span>2
+        <span class="p">;;</span>
+<span class="k">esac</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Use <code class="language-plaintext highlighter-rouge">|</code> to match several alternatives.</li>
+  <li><code class="language-plaintext highlighter-rouge">*</code> is the fallback pattern.</li>
+  <li><code class="language-plaintext highlighter-rouge">;;</code> ends a case branch.</li>
+  <li>Quote the variable in <code class="language-plaintext highlighter-rouge">case "$action" in</code>.</li>
+</ul>
+
+<h3 id="combine-conditions">Combine conditions</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[[</span> <span class="nt">-f</span> <span class="s2">"</span><span class="nv">$config</span><span class="s2">"</span> <span class="o">&amp;&amp;</span> <span class="nt">-r</span> <span class="s2">"</span><span class="nv">$config</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Configuration file exists and is readable.\n'</span>
+<span class="k">fi
+
+if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$answer</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"y"</span> <span class="o">||</span> <span class="s2">"</span><span class="nv">$answer</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"yes"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Continuing.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">&amp;&amp;</code> for AND and <code class="language-plaintext highlighter-rouge">||</code> for OR inside <code class="language-plaintext highlighter-rouge">[[ ... ]]</code>.</p>
+
+<hr />
+
+<h2 id="6-comparisons-and-tests">6. Comparisons and Tests</h2>
+
+<h3 id="file-tests">File tests</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Test</th>
+      <th>True when</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-e "$path"</code></td>
+      <td>Path exists</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-f "$path"</code></td>
+      <td>Path is a regular file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-d "$path"</code></td>
+      <td>Path is a directory</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-r "$path"</code></td>
+      <td>Path is readable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-w "$path"</code></td>
+      <td>Path is writable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-x "$path"</code></td>
+      <td>Path is executable or searchable, as applicable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-s "$path"</code></td>
+      <td>File exists and has a size greater than zero</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-L "$path"</code></td>
+      <td>Path is a symbolic link</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">file1 -nt file2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">file1</code> is newer than <code class="language-plaintext highlighter-rouge">file2</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">file1 -ot file2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">file1</code> is older than <code class="language-plaintext highlighter-rouge">file2</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[[</span> <span class="o">!</span> <span class="nt">-e</span> <span class="s2">"</span><span class="nv">$backup_file</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'No backup found.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<h3 id="string-comparisons">String comparisons</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[[</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"Ada"</span> <span class="o">]]</span>       <span class="c"># Equal</span>
+<span class="o">[[</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="o">!=</span> <span class="s2">"Ada"</span> <span class="o">]]</span>       <span class="c"># Not equal</span>
+<span class="o">[[</span> <span class="nt">-z</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="o">]]</span>             <span class="c"># Empty string</span>
+<span class="o">[[</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="o">]]</span>             <span class="c"># Non-empty string</span>
+<span class="o">[[</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="o">==</span> <span class="k">*</span>.log <span class="o">]]</span>       <span class="c"># Pattern match</span>
+<span class="o">[[</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="o">=</span>~ ^[0-9]+<span class="nv">$ </span><span class="o">]]</span>    <span class="c"># Regular-expression match</span>
+</code></pre></div></div>
+
+<p>The right side of <code class="language-plaintext highlighter-rouge">=~</code> is a regular expression, not a glob. Usually do not quote the whole regular expression:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$value</span><span class="s2">"</span> <span class="o">=</span>~ ^[0-9]+<span class="nv">$ </span><span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Digits only.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<h3 id="numeric-comparisons">Numeric comparisons</h3>
+
+<p>Within <code class="language-plaintext highlighter-rouge">[[ ... ]]</code>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Operator</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-eq</code></td>
+      <td>Equal</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-ne</code></td>
+      <td>Not equal</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-lt</code></td>
+      <td>Less than</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-le</code></td>
+      <td>Less than or equal</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-gt</code></td>
+      <td>Greater than</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-ge</code></td>
+      <td>Greater than or equal</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$count</span><span class="s2">"</span> <span class="nt">-gt</span> 10 <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'More than ten.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>For integer arithmetic conditions, <code class="language-plaintext highlighter-rouge">(( ... ))</code> is often clearer:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">((</span> count <span class="o">&gt;</span> 10 <span class="o">))</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'More than ten.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Validate user-provided numbers before using them in arithmetic.</p>
+
+<h3 id="exit-status">Exit status</h3>
+
+<p>Every command returns an exit status: <code class="language-plaintext highlighter-rouge">0</code> conventionally means success, and a nonzero value indicates failure or another condition.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if </span><span class="nb">grep</span> <span class="nt">-q</span> <span class="s1">'error'</span> application.log<span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'An error was found.\n'</span>
+<span class="k">else
+    </span><span class="nb">printf</span> <span class="s1">'No matching error was found.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>For <code class="language-plaintext highlighter-rouge">grep</code>, status <code class="language-plaintext highlighter-rouge">1</code> means no match, while larger values can indicate an error. Do not assume every nonzero status has the same meaning.</p>
+
+<hr />
+
+<h2 id="7-loops">7. Loops</h2>
+
+<h3 id="for-over-a-list"><code class="language-plaintext highlighter-rouge">for</code> over a list</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span>name <span class="k">in </span>Ada Grace Linus<span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'Hello, %s!\n'</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h3 id="loop-over-files-safely">Loop over files safely</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span>file <span class="k">in</span> ./<span class="k">*</span>.log<span class="p">;</span> <span class="k">do</span>
+    <span class="o">[[</span> <span class="nt">-e</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">||</span> <span class="k">continue
+    </span><span class="nb">printf</span> <span class="s1">'Processing: %s\n'</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">./*.log</code> pattern can remain unmatched if there are no matching files. The existence check handles that common case.</p>
+
+<p>For more complex filename discovery, consider <code class="language-plaintext highlighter-rouge">find</code> with <code class="language-plaintext highlighter-rouge">-print0</code> and a NUL-delimited reader.</p>
+
+<h3 id="c-style-loop">C-style loop</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="o">((</span>i <span class="o">=</span> 0<span class="p">;</span> i &lt; 5<span class="p">;</span> i++<span class="o">))</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'Index: %d\n'</span> <span class="s2">"</span><span class="nv">$i</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h3 id="while-loop"><code class="language-plaintext highlighter-rouge">while</code> loop</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">count</span><span class="o">=</span>1
+
+<span class="k">while</span> <span class="o">((</span> count &lt;<span class="o">=</span> 5 <span class="o">))</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'%d\n'</span> <span class="s2">"</span><span class="nv">$count</span><span class="s2">"</span>
+    <span class="o">((</span>count +<span class="o">=</span> 1<span class="o">))</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h3 id="until-loop"><code class="language-plaintext highlighter-rouge">until</code> loop</h3>
+
+<p>Runs until its condition becomes true:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">count</span><span class="o">=</span>1
+
+<span class="k">until</span> <span class="o">((</span> count <span class="o">&gt;</span> 5 <span class="o">))</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'%d\n'</span> <span class="s2">"</span><span class="nv">$count</span><span class="s2">"</span>
+    <span class="o">((</span>count +<span class="o">=</span> 1<span class="o">))</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h3 id="read-a-file-line-by-line">Read a file line by line</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while </span><span class="nv">IFS</span><span class="o">=</span> <span class="nb">read</span> <span class="nt">-r</span> line <span class="o">||</span> <span class="o">[[</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$line</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'Line: %s\n'</span> <span class="s2">"</span><span class="nv">$line</span><span class="s2">"</span>
+<span class="k">done</span> &lt; <span class="s2">"</span><span class="nv">$input_file</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>This preserves leading/trailing whitespace and backslashes and also processes a final line that lacks a newline.</p>
+
+<h3 id="break-and-continue"><code class="language-plaintext highlighter-rouge">break</code> and <code class="language-plaintext highlighter-rouge">continue</code></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">break</code> exits the current loop.</li>
+  <li><code class="language-plaintext highlighter-rouge">continue</code> skips to the next iteration.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span>number <span class="k">in</span> <span class="o">{</span>1..10<span class="o">}</span><span class="p">;</span> <span class="k">do</span>
+    <span class="o">((</span> number <span class="o">==</span> 3 <span class="o">))</span> <span class="o">&amp;&amp;</span> <span class="k">continue</span>
+    <span class="o">((</span> number <span class="o">==</span> 8 <span class="o">))</span> <span class="o">&amp;&amp;</span> <span class="nb">break
+    printf</span> <span class="s1">'%d\n'</span> <span class="s2">"</span><span class="nv">$number</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h3 id="beware-of-loops-in-pipelines">Beware of loops in pipelines</h3>
+
+<p>This may run the loop in a subshell, so changes to <code class="language-plaintext highlighter-rouge">total</code> may not survive after the loop:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">total</span><span class="o">=</span>0
+<span class="nb">printf</span> <span class="s1">'%s\n'</span> 1 2 3 | <span class="k">while </span><span class="nb">read</span> <span class="nt">-r</span> number<span class="p">;</span> <span class="k">do</span>
+    <span class="o">((</span>total +<span class="o">=</span> number<span class="o">))</span>
+<span class="k">done
+</span><span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="nv">$total</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Prefer input redirection when reading a file and keeping variables in the current shell:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">total</span><span class="o">=</span>0
+<span class="k">while </span><span class="nb">read</span> <span class="nt">-r</span> number<span class="p">;</span> <span class="k">do</span>
+    <span class="o">((</span>total +<span class="o">=</span> number<span class="o">))</span>
+<span class="k">done</span> &lt; numbers.txt
+
+<span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="nv">$total</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="8-strict-mode-and-defensive-scripting">8. Strict Mode and Defensive Scripting</h2>
+
+<p>A common starting point is:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set</span> <span class="nt">-Eeuo</span> pipefail
+</code></pre></div></div>
+
+<p>These options are useful, but they are not a complete error-handling system and do not make every script safe automatically.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-e</code> (<code class="language-plaintext highlighter-rouge">errexit</code>): often exits when a simple command fails, but has important exceptions, including many commands used in conditionals, <code class="language-plaintext highlighter-rouge">&amp;&amp;</code>/<code class="language-plaintext highlighter-rouge">||</code> lists, and pipelines.</li>
+  <li><code class="language-plaintext highlighter-rouge">-u</code> (<code class="language-plaintext highlighter-rouge">nounset</code>): reports expansions of unset variables, with some exceptions such as supported default-value expansions.</li>
+  <li><code class="language-plaintext highlighter-rouge">-o pipefail</code>: makes a pipeline fail if a command in it fails, rather than reporting only the last command's status.</li>
+  <li><code class="language-plaintext highlighter-rouge">-E</code> (<code class="language-plaintext highlighter-rouge">errtrace</code>): lets an <code class="language-plaintext highlighter-rouge">ERR</code> trap be inherited by shell functions, command substitutions, and subshell environments in applicable cases.</li>
+</ul>
+
+<p>Use explicit checks for important operations:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">!</span> <span class="nb">cp</span> <span class="nt">--</span> <span class="s2">"</span><span class="nv">$source_file</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$destination_file</span><span class="s2">"</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Error: could not copy file.\n'</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>1
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">${variable:-default}</code> to provide a default if a variable is unset or empty:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>: <span class="s2">"</span><span class="k">${</span><span class="nv">BACKUP_DIR</span>:<span class="p">=/var/backups/myapp</span><span class="k">}</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>This assignment sets <code class="language-plaintext highlighter-rouge">BACKUP_DIR</code> to the default if it is unset or empty. Use <code class="language-plaintext highlighter-rouge">${BACKUP_DIR:-/var/backups/myapp}</code> if you want a default value without assigning it.</p>
+
+<h3 id="check-required-commands">Check required commands</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span><span class="nb">command </span><span class="k">in </span>curl jq<span class="p">;</span> <span class="k">do
+    if</span> <span class="o">!</span> <span class="nb">command</span> <span class="nt">-v</span> <span class="s2">"</span><span class="nv">$command</span><span class="s2">"</span> <span class="o">&gt;</span>/dev/null 2&gt;&amp;1<span class="p">;</span> <span class="k">then
+        </span><span class="nb">printf</span> <span class="s1">'Error: required command not found: %s\n'</span> <span class="s2">"</span><span class="nv">$command</span><span class="s2">"</span> <span class="o">&gt;</span>&amp;2
+        <span class="nb">exit </span>1
+    <span class="k">fi
+done</span>
+</code></pre></div></div>
+
+<h3 id="check-arguments">Check arguments</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">((</span> <span class="nv">$# </span><span class="o">!=</span> 1 <span class="o">))</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Usage: %s FILE\n'</span> <span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>2
+<span class="k">fi
+
+</span><span class="nv">input_file</span><span class="o">=</span><span class="nv">$1</span>
+</code></pre></div></div>
+
+<p>Do not rely on <code class="language-plaintext highlighter-rouge">set -e</code> alone for critical actions. Test the exact commands and failure paths your script depends on.</p>
+
+<hr />
+
+<h2 id="9-functions">9. Functions</h2>
+
+<p>Functions group reusable commands.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>greet<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">local </span><span class="nv">name</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">Guest</span><span class="k">}</span>
+    <span class="nb">printf</span> <span class="s1">'Hello, %s!\n'</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span>
+<span class="o">}</span>
+
+greet <span class="s2">"Ada"</span>
+greet
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">local</code> limits a variable to the function.</li>
+  <li>Arguments are accessed with <code class="language-plaintext highlighter-rouge">$1</code>, <code class="language-plaintext highlighter-rouge">$2</code>, and so on.</li>
+  <li><code class="language-plaintext highlighter-rouge">$#</code> is the number of arguments.</li>
+  <li><code class="language-plaintext highlighter-rouge">"$@"</code> represents all arguments as separate words.</li>
+</ul>
+
+<h3 id="pass-all-arguments-safely">Pass all arguments safely</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>show_arguments<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">local </span>argument
+
+    <span class="k">for </span>argument <span class="k">in</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+        </span><span class="nb">printf</span> <span class="s1">'Argument: %s\n'</span> <span class="s2">"</span><span class="nv">$argument</span><span class="s2">"</span>
+    <span class="k">done</span>
+<span class="o">}</span>
+
+show_arguments <span class="s2">"two words"</span> <span class="s2">"*.txt"</span>
+</code></pre></div></div>
+
+<h3 id="return-status-not-general-data">Return status, not general data</h3>
+
+<p>Bash function <code class="language-plaintext highlighter-rouge">return</code> values are exit statuses, normally in the range 0–255. To return text, print it and capture the output:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>get_kernel<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">uname</span> <span class="nt">-r</span>
+<span class="o">}</span>
+
+<span class="nv">kernel</span><span class="o">=</span><span class="si">$(</span>get_kernel<span class="si">)</span>
+<span class="nb">printf</span> <span class="s1">'Kernel: %s\n'</span> <span class="s2">"</span><span class="nv">$kernel</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Use the exit status to report success or failure:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>is_root<span class="o">()</span> <span class="o">{</span>
+    <span class="o">[[</span> <span class="s2">"</span><span class="nv">$EUID</span><span class="s2">"</span> <span class="nt">-eq</span> 0 <span class="o">]]</span>
+<span class="o">}</span>
+
+<span class="k">if </span>is_root<span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Running as root.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Be mindful that command substitution runs in a subshell environment, so variable changes made inside it do not affect the parent shell.</p>
+
+<hr />
+
+<h2 id="10-arrays-and-dictionaries">10. Arrays and Dictionaries</h2>
+
+<h3 id="indexed-arrays">Indexed arrays</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">packages</span><span class="o">=(</span>curl jq git<span class="o">)</span>
+
+<span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="k">${</span><span class="nv">packages</span><span class="p">[0]</span><span class="k">}</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s1">'Count: %d\n'</span> <span class="s2">"</span><span class="k">${#</span><span class="nv">packages</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span>
+
+<span class="k">for </span>package <span class="k">in</span> <span class="s2">"</span><span class="k">${</span><span class="nv">packages</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'Package: %s\n'</span> <span class="s2">"</span><span class="nv">$package</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<p>Important forms:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Syntax</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${array[0]}</code></td>
+      <td>Element at index 0</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${array[@]}</code></td>
+      <td>All elements, preserving element boundaries when quoted</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${#array[@]}</code></td>
+      <td>Number of elements</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">array+=(value)</code></td>
+      <td>Append an element</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">unset 'array[1]'</code></td>
+      <td>Remove an element</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Use <code class="language-plaintext highlighter-rouge">"${array[@]}"</code>, not <code class="language-plaintext highlighter-rouge">"${array[*]}"</code>, when passing each element as a separate argument.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">files</span><span class="o">=(</span><span class="s2">"file one.txt"</span> <span class="s2">"file two.txt"</span><span class="o">)</span>
+<span class="nb">printf</span> <span class="s1">'File: %s\n'</span> <span class="s2">"</span><span class="k">${</span><span class="nv">files</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="build-an-array-from-arguments">Build an array from arguments</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">arguments</span><span class="o">=(</span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Avoid this unsafe pattern:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Unsafe: splits on whitespace and expands wildcard characters.</span>
+<span class="nv">arguments</span><span class="o">=(</span><span class="nv">$input</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h3 id="associative-arrays-dictionaries">Associative arrays (dictionaries)</h3>
+
+<p>Associative arrays use string keys. They require Bash 4 or newer, which Debian 13 provides.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">declare</span> <span class="nt">-A</span> <span class="nv">ports</span><span class="o">=(</span>
+    <span class="o">[</span>http]<span class="o">=</span>80
+    <span class="o">[</span>https]<span class="o">=</span>443
+    <span class="o">[</span>ssh]<span class="o">=</span>22
+<span class="o">)</span>
+
+<span class="nb">printf</span> <span class="s1">'SSH port: %s\n'</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ports</span><span class="p">[ssh]</span><span class="k">}</span><span class="s2">"</span>
+
+<span class="k">for </span>service <span class="k">in</span> <span class="s2">"</span><span class="k">${</span><span class="p">!ports[@]</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'%s: %s\n'</span> <span class="s2">"</span><span class="nv">$service</span><span class="s2">"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ports</span><span class="p">[</span><span class="nv">$service</span><span class="p">]</span><span class="k">}</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">${!ports[@]}</code> expands to the keys.</li>
+  <li><code class="language-plaintext highlighter-rouge">${ports[$key]}</code> looks up a value.</li>
+  <li>The order of associative-array iteration is not guaranteed.</li>
+</ul>
+
+<p>Always quote associative-array expansions when using their values in commands.</p>
+
+<hr />
+
+<h2 id="11-brace-expansion">11. Brace Expansion</h2>
+
+<p>Brace expansion generates text before normal command execution. It does not evaluate variables.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">printf</span> <span class="s1">'%s\n'</span> file<span class="o">{</span>1,2,3<span class="o">}</span>.txt
+<span class="c"># file1.txt file2.txt file3.txt</span>
+
+<span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="o">{</span>01..05<span class="o">}</span>
+<span class="c"># 01 02 03 04 05</span>
+
+<span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="o">{</span>1..10..2<span class="o">}</span>
+<span class="c"># 1 3 5 7 9</span>
+</code></pre></div></div>
+
+<p>Create several directories:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> project/<span class="o">{</span>src,tests,docs<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Brace expansion is useful for fixed lists. For values computed at runtime, use loops or arrays instead.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">start</span><span class="o">=</span>1
+<span class="nv">end</span><span class="o">=</span>5
+
+<span class="k">for</span> <span class="o">((</span>i <span class="o">=</span> start<span class="p">;</span> i &lt;<span class="o">=</span> end<span class="p">;</span> i++<span class="o">))</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'%d\n'</span> <span class="s2">"</span><span class="nv">$i</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="12-parameter-expansion-and-special-variables">12. Parameter Expansion and Special Variables</h2>
+
+<h3 id="useful-parameter-expansions">Useful parameter expansions</h3>
+
+<p>Assume <code class="language-plaintext highlighter-rouge">filename="report.tar.gz"</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Syntax</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename}</code></td>
+      <td>Value of variable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename:-default}</code></td>
+      <td>Default if unset or empty</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename-default}</code></td>
+      <td>Default only if unset</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename:=default}</code></td>
+      <td>Assign default if unset or empty</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename:?message}</code></td>
+      <td>Report an error if unset or empty</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${#filename}</code></td>
+      <td>Length of string</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename%.gz}</code></td>
+      <td>Remove shortest matching suffix</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename%%.*}</code></td>
+      <td>Remove longest matching suffix</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename#*.}</code></td>
+      <td>Remove shortest matching prefix</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename##*.}</code></td>
+      <td>Remove longest matching prefix</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename/old/new}</code></td>
+      <td>Replace first matching pattern</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename//old/new}</code></td>
+      <td>Replace all matching patterns</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">${filename:0:6}</code></td>
+      <td>Substring by offset and length</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Examples:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">filename</span><span class="o">=</span><span class="s2">"report.tar.gz"</span>
+
+<span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="k">${</span><span class="nv">filename</span><span class="p">%.gz</span><span class="k">}</span><span class="s2">"</span>    <span class="c"># report.tar</span>
+<span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="k">${</span><span class="nv">filename</span><span class="p">##*.</span><span class="k">}</span><span class="s2">"</span>    <span class="c"># gz</span>
+<span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="k">${</span><span class="nv">filename</span><span class="p">//./_</span><span class="k">}</span><span class="s2">"</span>   <span class="c"># report_tar_gz</span>
+</code></pre></div></div>
+
+<h3 id="special-variables">Special variables</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$0</code></td>
+      <td>Script name or shell invocation name</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$1</code>, <code class="language-plaintext highlighter-rouge">$2</code>, …</td>
+      <td>Positional arguments</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$#</code></td>
+      <td>Number of positional arguments</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"$@"</code></td>
+      <td>All positional arguments as separate words when quoted</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"$*"</code></td>
+      <td>All positional arguments combined into one word when quoted</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$?</code></td>
+      <td>Exit status of the last command</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$$</code></td>
+      <td>PID of the current shell</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$!</code></td>
+      <td>PID of the most recent background command</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$-</code></td>
+      <td>Current shell option flags</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$_</code></td>
+      <td>Context-dependent: often the last argument of the previous command</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$BASH_VERSION</code></td>
+      <td>Bash version</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$LINENO</code></td>
+      <td>Current source line number in the script</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$EUID</code></td>
+      <td>Effective user ID</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">BASH_SOURCE[0]</code></td>
+      <td>Path associated with the current Bash source file</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="prefer-for-forwarding-arguments">Prefer <code class="language-plaintext highlighter-rouge">"$@"</code> for forwarding arguments</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>run_command<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">command </span>some-tool <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>This preserves each argument, including arguments containing spaces. Avoid unquoted <code class="language-plaintext highlighter-rouge">$@</code>.</p>
+
+<h3 id="arrays-and-indirect-data">Arrays and indirect data</h3>
+
+<p>Do not use <code class="language-plaintext highlighter-rouge">eval</code> to turn strings into commands or variable references. <code class="language-plaintext highlighter-rouge">eval</code> re-parses text as shell code and can introduce command injection vulnerabilities. Use arrays, explicit <code class="language-plaintext highlighter-rouge">case</code> statements, and parameter expansion instead.</p>
+
+<hr />
+
+<h2 id="13-shell-options-set-and-shopt">13. Shell Options: <code class="language-plaintext highlighter-rouge">set</code> and <code class="language-plaintext highlighter-rouge">shopt</code></h2>
+
+<p><code class="language-plaintext highlighter-rouge">set</code> controls shell options and positional parameters. <code class="language-plaintext highlighter-rouge">shopt</code> controls additional Bash-specific behavior.</p>
+
+<h3 id="common-set-options">Common <code class="language-plaintext highlighter-rouge">set</code> options</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set</span> <span class="nt">-e</span>          <span class="c"># Exit in many cases when a command fails</span>
+<span class="nb">set</span> <span class="nt">-u</span>          <span class="c"># Treat many unset-variable expansions as errors</span>
+<span class="nb">set</span> <span class="nt">-o</span> pipefail <span class="c"># Fail a pipeline if any command fails</span>
+<span class="nb">set</span> <span class="nt">-x</span>          <span class="c"># Trace commands</span>
+<span class="nb">set</span> +x          <span class="c"># Stop command tracing</span>
+<span class="nb">set</span> +e          <span class="c"># Disable errexit</span>
+<span class="nb">set</span> +u          <span class="c"># Disable nounset</span>
+</code></pre></div></div>
+
+<p>Set common defensive options together:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set</span> <span class="nt">-Eeuo</span> pipefail
+</code></pre></div></div>
+
+<p>Remember the limitations of <code class="language-plaintext highlighter-rouge">-e</code>; explicit error checks are still necessary.</p>
+
+<h3 id="useful-shopt-options">Useful <code class="language-plaintext highlighter-rouge">shopt</code> options</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">shopt</span> <span class="nt">-s</span> nullglob
+<span class="nb">shopt</span> <span class="nt">-s</span> globstar
+<span class="nb">shopt</span> <span class="nt">-s</span> extglob
+<span class="nb">shopt</span> <span class="nt">-u</span> nocaseglob
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">nullglob</code>: an unmatched glob expands to nothing rather than remaining as a literal pattern.</li>
+  <li><code class="language-plaintext highlighter-rouge">globstar</code>: enables <code class="language-plaintext highlighter-rouge">**</code> to match files and directories recursively when used in a pathname pattern.</li>
+  <li><code class="language-plaintext highlighter-rouge">extglob</code>: enables extended pattern-matching operators.</li>
+  <li><code class="language-plaintext highlighter-rouge">nocaseglob</code>: makes pathname glob matching case-insensitive when enabled.</li>
+</ul>
+
+<p>Example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">shopt</span> <span class="nt">-s</span> nullglob
+
+<span class="nv">log_files</span><span class="o">=(</span>./<span class="k">*</span>.log<span class="o">)</span>
+
+<span class="k">for </span>file <span class="k">in</span> <span class="s2">"</span><span class="k">${</span><span class="nv">log_files</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<p>Options affect the current shell and may change the behavior of later code. Enable them deliberately and document non-obvious choices.</p>
+
+<hr />
+
+<h2 id="14-command-history-and-interactive-shortcuts">14. Command History and Interactive Shortcuts</h2>
+
+<p>History expansion is mainly an <strong>interactive shell feature</strong>. It is generally not available in ordinary non-interactive scripts. Do not use <code class="language-plaintext highlighter-rouge">!!</code> in a script to repeat a command.</p>
+
+<p>Common interactive shortcuts:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Shortcut / expansion</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">!!</code></td>
+      <td>Repeat the previous command</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">!$</code></td>
+      <td>Use the last argument of the previous command</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">!*</code></td>
+      <td>Use all arguments of the previous command</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">!n</code></td>
+      <td>Run history entry number <code class="language-plaintext highlighter-rouge">n</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">!string</code></td>
+      <td>Run the most recent command beginning with <code class="language-plaintext highlighter-rouge">string</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Ctrl+R</code></td>
+      <td>Search command history</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Ctrl+A</code></td>
+      <td>Move to start of command line</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Ctrl+E</code></td>
+      <td>Move to end of command line</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Ctrl+U</code></td>
+      <td>Delete from cursor to beginning of line</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Ctrl+K</code></td>
+      <td>Delete from cursor to end of line</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Ctrl+W</code></td>
+      <td>Delete the word before the cursor</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Alt+.</code></td>
+      <td>Insert the previous command's last argument in many Readline setups</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>History expansion can execute an unexpected command if used carelessly. Review the expanded command before pressing Enter.</p>
+
+<p>Useful history-related commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">history
+history </span>20
+<span class="nb">history</span> <span class="nt">-c</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">history -c</code> clears the current shell's in-memory history list; history persistence behavior depends on shell configuration. Do not assume it securely erases all historical records.</p>
+
+<hr />
+
+<h2 id="15-arithmetic-operations">15. Arithmetic Operations</h2>
+
+<p>Use <code class="language-plaintext highlighter-rouge">(( ... ))</code> for integer arithmetic:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">a</span><span class="o">=</span>10
+<span class="nv">b</span><span class="o">=</span>3
+
+<span class="nb">printf</span> <span class="s1">'Sum: %d\n'</span> <span class="s2">"</span><span class="k">$((</span>a <span class="o">+</span> b<span class="k">))</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s1">'Difference: %d\n'</span> <span class="s2">"</span><span class="k">$((</span>a <span class="o">-</span> b<span class="k">))</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s1">'Product: %d\n'</span> <span class="s2">"</span><span class="k">$((</span>a <span class="o">*</span> b<span class="k">))</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s1">'Quotient: %d\n'</span> <span class="s2">"</span><span class="k">$((</span>a <span class="o">/</span> b<span class="k">))</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s1">'Remainder: %d\n'</span> <span class="s2">"</span><span class="k">$((</span>a <span class="o">%</span> b<span class="k">))</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Bash arithmetic uses integers, not floating-point numbers. Division truncates toward zero.</p>
+
+<h3 id="arithmetic-operators">Arithmetic operators</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Operator</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">+</code>, <code class="language-plaintext highlighter-rouge">-</code></td>
+      <td>Addition, subtraction</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">*</code>, <code class="language-plaintext highlighter-rouge">/</code>, <code class="language-plaintext highlighter-rouge">%</code></td>
+      <td>Multiplication, integer division, remainder</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">**</code></td>
+      <td>Exponentiation</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">++</code>, <code class="language-plaintext highlighter-rouge">--</code></td>
+      <td>Increment, decrement</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">+=</code>, <code class="language-plaintext highlighter-rouge">-=</code></td>
+      <td>Update a variable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code>, <code class="language-plaintext highlighter-rouge">&lt;</code>, <code class="language-plaintext highlighter-rouge">&gt;</code></td>
+      <td>Comparisons in arithmetic contexts</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&amp;&amp;</code>, <code class="language-plaintext highlighter-rouge">||</code>, <code class="language-plaintext highlighter-rouge">!</code></td>
+      <td>Logical AND, OR, NOT</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">count</span><span class="o">=</span>0
+<span class="o">((</span>count +<span class="o">=</span> 1<span class="o">))</span>
+
+<span class="k">if</span> <span class="o">((</span> count <span class="o">&gt;=</span> 1 <span class="o">))</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Count is at least one.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p><strong>Strict-mode note:</strong> <code class="language-plaintext highlighter-rouge">((expression))</code> returns exit status 1 when its arithmetic result is zero. Under <code class="language-plaintext highlighter-rouge">set -e</code>, a standalone command such as <code class="language-plaintext highlighter-rouge">((count++))</code> can therefore unexpectedly terminate the script when <code class="language-plaintext highlighter-rouge">count</code> starts at zero. Prefer <code class="language-plaintext highlighter-rouge">((count += 1))</code> or <code class="language-plaintext highlighter-rouge">count=$((count + 1))</code> when incrementing from zero under strict mode.</p>
+
+<p>Arithmetic expansion:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">total</span><span class="o">=</span><span class="k">$((</span>price <span class="o">*</span> quantity<span class="k">))</span>
+</code></pre></div></div>
+
+<p>Do not pass untrusted text into arithmetic expressions without validating it. Bash arithmetic is not a general-purpose decimal calculator.</p>
+
+<hr />
+
+<h2 id="16-redirection-and-file-descriptors">16. Redirection and File Descriptors</h2>
+
+<p>By default, a command receives standard input and writes to standard output and standard error.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>File descriptor</th>
+      <th>Name</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">0</code></td>
+      <td>Standard input (<code class="language-plaintext highlighter-rouge">stdin</code>)</td>
+      <td>Keyboard or inherited input</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1</code></td>
+      <td>Standard output (<code class="language-plaintext highlighter-rouge">stdout</code>)</td>
+      <td>Terminal or inherited output</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">2</code></td>
+      <td>Standard error (<code class="language-plaintext highlighter-rouge">stderr</code>)</td>
+      <td>Terminal or inherited error output</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="common-redirections">Common redirections</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command</span> <span class="o">&gt;</span> output.txt       <span class="c"># Write stdout, replacing the file</span>
+<span class="nb">command</span> <span class="o">&gt;&gt;</span> output.txt      <span class="c"># Append stdout</span>
+<span class="nb">command </span>2&gt; errors.txt      <span class="c"># Write stderr</span>
+<span class="nb">command </span>2&gt;&gt; errors.txt     <span class="c"># Append stderr</span>
+<span class="nb">command</span> <span class="o">&gt;</span> all.txt 2&gt;&amp;1     <span class="c"># Send stdout and stderr to the same destination</span>
+<span class="nb">command</span> &amp;&gt; all.txt         <span class="c"># Bash shorthand for stdout and stderr</span>
+<span class="nb">command</span> &lt; input.txt        <span class="c"># Read stdin from a file</span>
+<span class="nb">command</span> <span class="o">&gt;</span>/dev/null         <span class="c"># Discard stdout</span>
+<span class="nb">command </span>2&gt;/dev/null        <span class="c"># Discard stderr</span>
+</code></pre></div></div>
+
+<p>Redirection order matters:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command</span> <span class="o">&gt;</span> output.txt 2&gt;&amp;1
+</code></pre></div></div>
+
+<p>Both streams go to <code class="language-plaintext highlighter-rouge">output.txt</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command </span>2&gt;&amp;1 <span class="o">&gt;</span> output.txt
+</code></pre></div></div>
+
+<p>Stderr first follows the original stdout destination; it does not follow the later redirection to <code class="language-plaintext highlighter-rouge">output.txt</code>.</p>
+
+<h3 id="pipes">Pipes</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps aux | <span class="nb">grep</span> <span class="s1">'[s]sh'</span>
+</code></pre></div></div>
+
+<p>A pipe sends one command's stdout to the next command's stdin. Unless redirected separately, stderr remains separate.</p>
+
+<p>With strict mode, <code class="language-plaintext highlighter-rouge">set -o pipefail</code> helps detect failures in earlier pipeline commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set</span> <span class="nt">-o</span> pipefail
+producer | processor | consumer
+</code></pre></div></div>
+
+<h3 id="save-output-while-displaying-it">Save output while displaying it</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command </span>2&gt;&amp;1 | <span class="nb">tee </span>command.log
+</code></pre></div></div>
+
+<p>Append instead:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command </span>2&gt;&amp;1 | <span class="nb">tee</span> <span class="nt">-a</span> command.log
+</code></pre></div></div>
+
+<h3 id="use-a-separate-file-descriptor-for-logs">Use a separate file descriptor for logs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">exec </span>3&gt;script.log
+
+<span class="nb">printf</span> <span class="s1">'This goes to the terminal.\n'</span>
+<span class="nb">printf</span> <span class="s1">'This goes to the log.\n'</span> <span class="o">&gt;</span>&amp;3
+
+<span class="nb">exec </span>3&gt;&amp;-
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">exec</code> with redirection can also change the script's default output streams:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">exec</span> <span class="o">&gt;&gt;</span>script.log 2&gt;&amp;1
+</code></pre></div></div>
+
+<p>After this line, subsequent stdout and stderr are appended to <code class="language-plaintext highlighter-rouge">script.log</code>.</p>
+
+<hr />
+
+<h2 id="17-here-documents-and-here-strings">17. Here Documents and Here Strings</h2>
+
+<h3 id="here-document">Here document (<code class="language-plaintext highlighter-rouge">&lt;&lt;</code>)</h3>
+
+<p>A here document sends a block of text to a command's standard input:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh">
+Hello, </span><span class="nv">$USER</span><span class="sh">.
+Today is </span><span class="si">$(</span><span class="nb">date</span> +%F<span class="si">)</span><span class="sh">.
+</span><span class="no">EOF
+</span></code></pre></div></div>
+
+<p>When the delimiter is unquoted, parameter expansion, command substitution, and arithmetic expansion occur.</p>
+
+<p>Quote the delimiter to prevent those expansions:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">EOF</span><span class="sh">'
+This prints </span><span class="nv">$USER</span><span class="sh"> literally.
+This does not run </span><span class="si">$(</span><span class="nb">date</span><span class="si">)</span><span class="sh">.
+</span><span class="no">EOF
+</span></code></pre></div></div>
+
+<h3 id="indented-here-documents--">Indented here documents (<code class="language-plaintext highlighter-rouge">&lt;&lt;-</code>)</h3>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;&lt;-</code> removes leading <strong>tab characters</strong>, not spaces, from lines in the body:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span><span class="sh">
+	This line starts with a tab in the script.
+</span><span class="no">EOF
+</span></code></pre></div></div>
+
+<h3 id="here-strings">Here strings (<code class="language-plaintext highlighter-rouge">&lt;&lt;&lt;</code>)</h3>
+
+<p>A here string sends one string, followed by a newline, to a command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="nt">-i</span> <span class="s1">'error'</span> <span class="o">&lt;&lt;&lt;</span> <span class="s2">"</span><span class="nv">$message</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Another example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">read</span> <span class="nt">-r</span> first rest <span class="o">&lt;&lt;&lt;</span> <span class="s2">"hello world again"</span>
+<span class="nb">printf</span> <span class="s1">'First: %s\nRest: %s\n'</span> <span class="s2">"</span><span class="nv">$first</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$rest</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Use here documents for multiline input and here strings for a single string. Avoid embedding secrets in scripts or logs.</p>
+
+<hr />
+
+<h2 id="18-error-handling-and-trap">18. Error Handling and <code class="language-plaintext highlighter-rouge">trap</code></h2>
+
+<h3 id="handle-errors-explicitly">Handle errors explicitly</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">!</span> <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="nt">--</span> <span class="s2">"</span><span class="nv">$destination</span><span class="s2">"</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Error: unable to create destination directory.\n'</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>1
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Send error messages to stderr with <code class="language-plaintext highlighter-rouge">&gt;&amp;2</code>.</p>
+
+<h3 id="capture-an-exit-status">Capture an exit status</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if </span><span class="nb">cp</span> <span class="nt">--</span> <span class="s2">"</span><span class="nv">$source</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$destination</span><span class="s2">"</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Copy complete.\n'</span>
+<span class="k">else
+    </span><span class="nv">status</span><span class="o">=</span><span class="nv">$?</span>
+    <span class="nb">printf</span> <span class="s1">'Copy failed with status %d.\n'</span> <span class="s2">"</span><span class="nv">$status</span><span class="s2">"</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit</span> <span class="s2">"</span><span class="nv">$status</span><span class="s2">"</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Capture <code class="language-plaintext highlighter-rouge">$?</code> immediately. Running another command first overwrites it.</p>
+
+<h3 id="use-trap-for-cleanup">Use <code class="language-plaintext highlighter-rouge">trap</code> for cleanup</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> <span class="nt">-Eeuo</span> pipefail
+
+<span class="nv">tmp_file</span><span class="o">=</span><span class="si">$(</span><span class="nb">mktemp</span><span class="si">)</span>
+
+cleanup<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">rm</span> <span class="nt">-f</span> <span class="nt">--</span> <span class="s2">"</span><span class="nv">$tmp_file</span><span class="s2">"</span>
+<span class="o">}</span>
+
+<span class="nb">trap </span>cleanup EXIT
+
+<span class="nb">printf</span> <span class="s1">'Temporary data\n'</span> <span class="o">&gt;</span> <span class="s2">"</span><span class="nv">$tmp_file</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">EXIT</code> trap runs when the shell exits, including many error exits. Cleanup functions should be safe if called during an incomplete operation.</p>
+
+<h3 id="handle-interruption-signals">Handle interruption signals</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">trap</span> <span class="s1">'printf "Interrupted.\n" &gt;&amp;2; exit 130'</span> INT
+<span class="nb">trap</span> <span class="s1">'printf "Terminated.\n" &gt;&amp;2; exit 143'</span> TERM
+</code></pre></div></div>
+
+<p>Signal traps may run at points different from what beginners expect, depending on what the shell is doing. Keep traps simple.</p>
+
+<h3 id="an-err-trap">An <code class="language-plaintext highlighter-rouge">ERR</code> trap</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set</span> <span class="nt">-E</span>
+<span class="nb">trap</span> <span class="s1">'status=$?; printf "Error at line %s (status %s)\n" "$LINENO" "$status" &gt;&amp;2'</span> ERR
+</code></pre></div></div>
+
+<p>An <code class="language-plaintext highlighter-rouge">ERR</code> trap has exceptions similar to <code class="language-plaintext highlighter-rouge">set -e</code>; it is not a universal handler for every failed command. For critical operations, check statuses explicitly.</p>
+
+<hr />
+
+<h2 id="19-process-substitution">19. Process Substitution</h2>
+
+<p>Process substitution lets a command read the output of another command as if it were a file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diff <span class="nt">-u</span> &lt;<span class="o">(</span><span class="nb">sort </span>file_a.txt<span class="o">)</span> &lt;<span class="o">(</span><span class="nb">sort </span>file_b.txt<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Compare command outputs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diff <span class="nt">-u</span> &lt;<span class="o">(</span>ip address show<span class="o">)</span> &lt;<span class="o">(</span>ip route show<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Use it to read command output without storing it in a temporary file. It is Bash-specific and commonly implemented using <code class="language-plaintext highlighter-rouge">/dev/fd</code> or named pipes.</p>
+
+<h3 id="compare-two-streams-with-a-loop">Compare two streams with a loop</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while </span><span class="nv">IFS</span><span class="o">=</span> <span class="nb">read</span> <span class="nt">-r</span> line<span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'Line: %s\n'</span> <span class="s2">"</span><span class="nv">$line</span><span class="s2">"</span>
+<span class="k">done</span> &lt; &lt;<span class="o">(</span>find <span class="nb">.</span> <span class="nt">-maxdepth</span> 1 <span class="nt">-type</span> f <span class="nt">-print</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">&lt; &lt;(...)</code> combination means: redirect the loop's input from the output of the command inside process substitution. This helps avoid the variable-scope problem that can occur with a pipeline loop.</p>
+
+<p>Process substitution can make failure handling less obvious. If the producer command fails, the consuming command may still run. Use explicit status handling when producer success is important.</p>
+
+<hr />
+
+<h2 id="20-reading-and-processing-files">20. Reading and Processing Files</h2>
+
+<h3 id="read-a-file-line-by-line-1">Read a file line by line</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">input_file</span><span class="o">=</span><span class="s2">"servers.txt"</span>
+
+<span class="k">if</span> <span class="o">[[</span> <span class="o">!</span> <span class="nt">-r</span> <span class="s2">"</span><span class="nv">$input_file</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Error: cannot read %s\n'</span> <span class="s2">"</span><span class="nv">$input_file</span><span class="s2">"</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>1
+<span class="k">fi
+
+while </span><span class="nv">IFS</span><span class="o">=</span> <span class="nb">read</span> <span class="nt">-r</span> line <span class="o">||</span> <span class="o">[[</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$line</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'Value: %s\n'</span> <span class="s2">"</span><span class="nv">$line</span><span class="s2">"</span>
+<span class="k">done</span> &lt; <span class="s2">"</span><span class="nv">$input_file</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Why use <code class="language-plaintext highlighter-rouge">IFS= read -r</code>?</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">IFS=</code> prevents <code class="language-plaintext highlighter-rouge">read</code> from trimming leading and trailing whitespace.</li>
+  <li><code class="language-plaintext highlighter-rouge">-r</code> prevents backslashes from being treated as escape characters.</li>
+  <li>The final <code class="language-plaintext highlighter-rouge">|| [[ -n "$line" ]]</code> processes a last line that does not end with a newline.</li>
+</ul>
+
+<h3 id="read-a-file-into-a-variable">Read a file into a variable</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">contents</span><span class="o">=</span><span class="si">$(</span>&lt; <span class="s2">"</span><span class="nv">$input_file</span><span class="s2">"</span><span class="si">)</span>
+</code></pre></div></div>
+
+<p>This Bash shortcut is efficient for small text files. Command substitution removes trailing newlines, so it does not preserve the file byte-for-byte. Do not use it for binary data or files where exact newline preservation matters.</p>
+
+<h3 id="read-an-entire-file-into-an-array-of-lines">Read an entire file into an array of lines</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mapfile</span> <span class="nt">-t</span> lines &lt; <span class="s2">"</span><span class="nv">$input_file</span><span class="s2">"</span>
+
+<span class="k">for </span>line <span class="k">in</span> <span class="s2">"</span><span class="k">${</span><span class="nv">lines</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="nv">$line</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">mapfile</code> (also known as <code class="language-plaintext highlighter-rouge">readarray</code>) is a Bash builtin. <code class="language-plaintext highlighter-rouge">-t</code> removes trailing newline characters from each line. This approach stores the whole file in memory, so use a loop for very large files.</p>
+
+<h3 id="useful-text-processing-commands">Useful text-processing commands</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Command</th>
+      <th>Common use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">grep</code></td>
+      <td>Find lines matching a pattern</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sed</code></td>
+      <td>Perform stream edits and substitutions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">awk</code></td>
+      <td>Select and process fields or records</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">cut</code></td>
+      <td>Extract simple character or delimiter-separated fields</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sort</code></td>
+      <td>Sort lines</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">uniq</code></td>
+      <td>Collapse adjacent duplicate lines</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">wc</code></td>
+      <td>Count lines, words, or bytes</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">head</code></td>
+      <td>Show the beginning of input</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tail</code></td>
+      <td>Show the end of input or follow a growing log</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tr</code></td>
+      <td>Translate or delete characters</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">find</code></td>
+      <td>Search directory trees for files</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">xargs</code></td>
+      <td>Build command arguments from input; use NUL-delimited mode for filenames</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Examples:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'error'</span> application.log
+<span class="nb">grep</span> <span class="nt">-i</span> <span class="s1">'warning'</span> application.log
+<span class="nb">awk</span> <span class="s1">'{print $1}'</span> access.log
+<span class="nb">cut</span> <span class="nt">-d</span>: <span class="nt">-f1</span> /etc/passwd
+<span class="nb">sort </span>names.txt | <span class="nb">uniq</span> <span class="nt">-c</span>
+<span class="nb">wc</span> <span class="nt">-l</span> application.log
+<span class="nb">tail</span> <span class="nt">-n</span> 50 application.log
+<span class="nb">tail</span> <span class="nt">-F</span> /var/log/syslog
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">cut -d: -f1</code> is suitable for simple colon-delimited data such as <code class="language-plaintext highlighter-rouge">/etc/passwd</code>. It is not a general CSV parser.</p>
+
+<h3 id="process-filenames-safely">Process filenames safely</h3>
+
+<p>Prefer NUL-delimited filenames because Unix filenames can contain spaces, tabs, quotes, and newlines (but not NUL bytes):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find /some/path <span class="nt">-type</span> f <span class="nt">-name</span> <span class="s1">'*.log'</span> <span class="nt">-print0</span> |
+    <span class="k">while </span><span class="nv">IFS</span><span class="o">=</span> <span class="nb">read</span> <span class="nt">-r</span> <span class="nt">-d</span> <span class="s1">''</span> file<span class="p">;</span> <span class="k">do
+        </span><span class="nb">printf</span> <span class="s1">'Found: %s\n'</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span>
+    <span class="k">done</span>
+</code></pre></div></div>
+
+<p>If you need to modify variables outside the loop, use process substitution or redirect from a file rather than a pipeline loop.</p>
+
+<p>With GNU <code class="language-plaintext highlighter-rouge">xargs</code>, use:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find /some/path <span class="nt">-type</span> f <span class="nt">-name</span> <span class="s1">'*.log'</span> <span class="nt">-print0</span> |
+    xargs <span class="nt">-0</span> <span class="nt">-r</span> <span class="nb">printf</span> <span class="s1">'%s\n'</span>
+</code></pre></div></div>
+
+<p>Do not parse <code class="language-plaintext highlighter-rouge">ls</code> output to get filenames. Use globs, <code class="language-plaintext highlighter-rouge">find</code>, or NUL-delimited output.</p>
+
+<h3 id="read-a-simple-configuration-file">Read a simple configuration file</h3>
+
+<p>For a trusted, deliberately simple <code class="language-plaintext highlighter-rouge">KEY=VALUE</code> file, sourcing it may be appropriate:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> ./app.conf
+</code></pre></div></div>
+
+<p><strong>Warning:</strong> <code class="language-plaintext highlighter-rouge">source</code> executes the file as shell code. Do not source a configuration file that an untrusted person can modify.</p>
+
+<p>If the file is plain data rather than trusted shell syntax, parse its documented format without <code class="language-plaintext highlighter-rouge">source</code> and validate the values.</p>
+
+<hr />
+
+<h2 id="21-structured-data-csv-and-json">21. Structured Data: CSV and JSON</h2>
+
+<p>CSV and JSON are structured formats. Their quoting and nesting rules mean they should not always be treated as ordinary lines of text.</p>
+
+<h3 id="csv-simple-delimited-text">CSV: simple delimited text</h3>
+
+<p>For a simple file such as:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>name,department
+Ada,Engineering
+Grace,Research
+</code></pre></div></div>
+
+<p>you can use <code class="language-plaintext highlighter-rouge">awk</code> for basic field operations:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">awk</span> <span class="nt">-F</span>, <span class="s1">'NR &gt; 1 { print $1 }'</span> employees.csv
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-F,</code> sets the field separator to a comma, and <code class="language-plaintext highlighter-rouge">NR &gt; 1</code> skips the header.</p>
+
+<p>However, this does <strong>not</strong> correctly parse general CSV. Real CSV files may contain:</p>
+
+<pre><code class="language-csv">name,description
+Ada,"Engineer, researcher"
+Grace,"Said ""hello"""
+</code></pre>
+
+<p>Commas and escaped quotes inside quoted fields make naive <code class="language-plaintext highlighter-rouge">cut</code>, <code class="language-plaintext highlighter-rouge">awk -F,</code>, or <code class="language-plaintext highlighter-rouge">IFS=, read</code> approaches unreliable for general CSV.</p>
+
+<h3 id="csv-use-a-real-parser-for-real-csv">CSV: use a real parser for real CSV</h3>
+
+<p>Ruby includes a CSV library in its standard library on normal Ruby installations. Example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ruby <span class="nt">-rcsv</span> <span class="nt">-e</span> <span class="s1">'
+  CSV.foreach(ARGV.fetch(0), headers: true) do |row|
+    puts row["name"]
+  end
+'</span> employees.csv
+</code></pre></div></div>
+
+<p>This handles quoted fields far more reliably than splitting each line on commas. Check the CSV header names and file encoding for your actual data.</p>
+
+<p>If you already have a suitable dedicated CSV-processing tool installed, it can be used instead. Choose a parser that follows the CSV format expected by the file.</p>
+
+<h3 id="useful-csv-tasks">Useful CSV tasks</h3>
+
+<p>With a proper parser, you can:</p>
+
+<ul>
+  <li>Select columns by header name.</li>
+  <li>Filter rows based on values.</li>
+  <li>Count records.</li>
+  <li>Convert selected fields into another format.</li>
+  <li>Generate summaries or reports.</li>
+</ul>
+
+<p>Do not assume that every file ending in <code class="language-plaintext highlighter-rouge">.csv</code> uses exactly the same delimiter, quote character, encoding, or header conventions.</p>
+
+<h3 id="json-use-jq">JSON: use <code class="language-plaintext highlighter-rouge">jq</code></h3>
+
+<p>Install <code class="language-plaintext highlighter-rouge">jq</code> if needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>jq
+</code></pre></div></div>
+
+<p>Example <code class="language-plaintext highlighter-rouge">system.json</code>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"hostname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"debian-lab"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"services"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ssh"</span><span class="p">,</span><span class="w"> </span><span class="nl">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nginx"</span><span class="p">,</span><span class="w"> </span><span class="nl">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Pretty-print JSON:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jq <span class="nb">.</span> system.json
+</code></pre></div></div>
+
+<p>Select a property:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jq <span class="nt">-r</span> <span class="s1">'.hostname'</span> system.json
+</code></pre></div></div>
+
+<p>Select an array element:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jq <span class="s1">'.services[0]'</span> system.json
+</code></pre></div></div>
+
+<p>Extract names from an array:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jq <span class="nt">-r</span> <span class="s1">'.services[].name'</span> system.json
+</code></pre></div></div>
+
+<p>Filter records:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jq <span class="nt">-r</span> <span class="s1">'.services[] | select(.enabled == true) | .name'</span> system.json
+</code></pre></div></div>
+
+<p>Count array elements:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jq <span class="s1">'.services | length'</span> system.json
+</code></pre></div></div>
+
+<p>Provide a default when a property is missing or null:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jq <span class="nt">-r</span> <span class="s1">'.owner // "unknown"'</span> system.json
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">-r</code> option prints strings as raw text rather than JSON-quoted strings. This is useful for command-line output, but remember that extracted values can still contain newlines or other characters.</p>
+
+<h3 id="validate-json">Validate JSON</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if </span>jq empty system.json <span class="o">&gt;</span>/dev/null<span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Valid JSON.\n'</span>
+<span class="k">else
+    </span><span class="nb">printf</span> <span class="s1">'Invalid JSON.\n'</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>1
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">jq</code> exits unsuccessfully when it cannot parse invalid JSON. A valid JSON document can still have the wrong shape or unexpected values, so validate the fields your script needs.</p>
+
+<h3 id="safely-use-extracted-json-values">Safely use extracted JSON values</h3>
+
+<p>For a single expected string value:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">hostname</span><span class="o">=</span><span class="si">$(</span>jq <span class="nt">-er</span> <span class="s1">'.hostname | strings'</span> system.json<span class="si">)</span> <span class="o">||</span> <span class="o">{</span>
+    <span class="nb">printf</span> <span class="s1">'Missing or invalid hostname.\n'</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>1
+<span class="o">}</span>
+
+<span class="nb">printf</span> <span class="s1">'Hostname: %s\n'</span> <span class="s2">"</span><span class="nv">$hostname</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-e</code> makes <code class="language-plaintext highlighter-rouge">jq</code> return a failing status for certain false/null/no-result outcomes. The <code class="language-plaintext highlighter-rouge">strings</code> filter ensures the selected value is a string; <code class="language-plaintext highlighter-rouge">-r</code> outputs it as raw text.</p>
+
+<p>Be careful when converting arbitrary JSON arrays into shell variables. Newlines and shell word splitting can destroy record boundaries. Prefer keeping the data in JSON and processing it with <code class="language-plaintext highlighter-rouge">jq</code>, or use a well-defined encoding when passing values to another program.</p>
+
+<h3 id="csv-and-json-safety-rules">CSV and JSON safety rules</h3>
+
+<ul>
+  <li>Do not parse JSON with <code class="language-plaintext highlighter-rouge">grep</code> or <code class="language-plaintext highlighter-rouge">sed</code> when <code class="language-plaintext highlighter-rouge">jq</code> is available.</li>
+  <li>Do not parse arbitrary CSV by splitting on commas.</li>
+  <li>Validate that required properties and fields exist.</li>
+  <li>Treat external data as untrusted.</li>
+  <li>Quote shell variables when passing values to commands.</li>
+  <li>Do not use <code class="language-plaintext highlighter-rouge">eval</code> to execute data extracted from a file or API.</li>
+  <li>Keep data separate from shell code.</li>
+</ul>
+
+<hr />
+
+<h2 id="22-reading-data-from-network-requests">22. Reading Data from Network Requests</h2>
+
+<h3 id="make-an-http-request-with-curl">Make an HTTP request with <code class="language-plaintext highlighter-rouge">curl</code></h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://example.com/
+</code></pre></div></div>
+
+<p>Save the response body:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--fail</span> <span class="nt">--show-error</span> <span class="nt">--silent</span> <span class="se">\</span>
+    <span class="nt">--output</span> response.html <span class="se">\</span>
+    https://example.com/
+</code></pre></div></div>
+
+<p>Options:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">--fail</code>: return a failure status for HTTP responses with error status codes (with some behavior differences for redirects and protocol details).</li>
+  <li><code class="language-plaintext highlighter-rouge">--show-error</code>: display an error message when used with <code class="language-plaintext highlighter-rouge">--silent</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">--silent</code>: suppress progress output.</li>
+  <li><code class="language-plaintext highlighter-rouge">--output</code>: write the response body to a file.</li>
+</ul>
+
+<p>Set a connection timeout and an overall timeout:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--fail</span> <span class="nt">--show-error</span> <span class="nt">--silent</span> <span class="se">\</span>
+    <span class="nt">--connect-timeout</span> 5 <span class="se">\</span>
+    <span class="nt">--max-time</span> 20 <span class="se">\</span>
+    https://example.com/
+</code></pre></div></div>
+
+<h3 id="check-the-result-explicitly">Check the result explicitly</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if </span><span class="nv">response</span><span class="o">=</span><span class="si">$(</span>curl <span class="nt">--fail</span> <span class="nt">--show-error</span> <span class="nt">--silent</span> <span class="se">\</span>
+    <span class="nt">--connect-timeout</span> 5 <span class="se">\</span>
+    <span class="nt">--max-time</span> 20 <span class="se">\</span>
+    https://example.com/api/status<span class="si">)</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Response received.\n'</span>
+<span class="k">else
+    </span><span class="nb">printf</span> <span class="s1">'Request failed.\n'</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>1
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Do not assume a successful network connection means the response contains the data you expected. Check HTTP status, content type when relevant, and response structure.</p>
+
+<h3 id="retrieve-json-from-an-api">Retrieve JSON from an API</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--fail</span> <span class="nt">--show-error</span> <span class="nt">--silent</span> <span class="se">\</span>
+    <span class="nt">--connect-timeout</span> 5 <span class="se">\</span>
+    <span class="nt">--max-time</span> 20 <span class="se">\</span>
+    https://api.example.com/status |
+    jq <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>For important scripts, capture and check the request result before processing it, especially when you need to distinguish network failure from JSON parsing failure.</p>
+
+<h3 id="send-a-request-with-a-header">Send a request with a header</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--fail</span> <span class="nt">--show-error</span> <span class="nt">--silent</span> <span class="se">\</span>
+    <span class="nt">-H</span> <span class="s1">'Accept: application/json'</span> <span class="se">\</span>
+    https://api.example.com/status
+</code></pre></div></div>
+
+<h3 id="send-json-data">Send JSON data</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--fail</span> <span class="nt">--show-error</span> <span class="nt">--silent</span> <span class="se">\</span>
+    <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"enabled":true}'</span> <span class="se">\</span>
+    https://api.example.com/settings
+</code></pre></div></div>
+
+<p>For dynamic values, use <code class="language-plaintext highlighter-rouge">jq</code> to build valid JSON rather than manually concatenating strings:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">payload</span><span class="o">=</span><span class="si">$(</span>jq <span class="nt">-n</span> <span class="nt">--arg</span> name <span class="s2">"</span><span class="nv">$username</span><span class="s2">"</span> <span class="s1">'{username: $name}'</span><span class="si">)</span>
+
+curl <span class="nt">--fail</span> <span class="nt">--show-error</span> <span class="nt">--silent</span> <span class="se">\</span>
+    <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s2">"</span><span class="nv">$payload</span><span class="s2">"</span> <span class="se">\</span>
+    https://api.example.com/users
+</code></pre></div></div>
+
+<p>Do not put real API tokens directly in scripts that may be committed to version control. Read secrets from an appropriate protected source or environment variable and avoid printing them.</p>
+
+<h3 id="download-a-file">Download a file</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--fail</span> <span class="nt">--show-error</span> <span class="nt">--location</span> <span class="se">\</span>
+    <span class="nt">--output</span> archive.tar.gz <span class="se">\</span>
+    https://example.com/archive.tar.gz
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">--location</code> follows redirects. Do not blindly download and execute scripts from the internet. Verify the source and integrity of downloaded files, and use trusted package repositories when possible.</p>
+
+<h3 id="retries">Retries</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--fail</span> <span class="nt">--show-error</span> <span class="nt">--silent</span> <span class="se">\</span>
+    <span class="nt">--retry</span> 3 <span class="se">\</span>
+    <span class="nt">--retry-delay</span> 2 <span class="se">\</span>
+    <span class="nt">--connect-timeout</span> 5 <span class="se">\</span>
+    <span class="nt">--max-time</span> 30 <span class="se">\</span>
+    https://api.example.com/status
+</code></pre></div></div>
+
+<p>Retries are useful for transient failures, but do not blindly retry non-idempotent requests that might create duplicate actions. Check the API's retry guidance and use idempotency keys where supported.</p>
+
+<hr />
+
+<h2 id="23-reading-data-over-ssh">23. Reading Data over SSH</h2>
+
+<p>SSH lets a script run commands on another computer. Data may flow from the remote command to the local script through standard output.</p>
+
+<h3 id="run-a-remote-command">Run a remote command</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh user@server.example.com <span class="s1">'hostname'</span>
+ssh user@server.example.com <span class="s1">'df -h /'</span>
+</code></pre></div></div>
+
+<p>The quoted command is interpreted by the remote shell. Be careful when including local variables in a remote command.</p>
+
+<h3 id="capture-remote-output">Capture remote output</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if </span><span class="nv">remote_hostname</span><span class="o">=</span><span class="si">$(</span>ssh <span class="se">\</span>
+    <span class="nt">-o</span> <span class="nv">BatchMode</span><span class="o">=</span><span class="nb">yes</span> <span class="se">\</span>
+    <span class="nt">-o</span> <span class="nv">ConnectTimeout</span><span class="o">=</span>5 <span class="se">\</span>
+    user@server.example.com <span class="s1">'hostname'</span><span class="si">)</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Remote host: %s\n'</span> <span class="s2">"</span><span class="nv">$remote_hostname</span><span class="s2">"</span>
+<span class="k">else
+    </span><span class="nb">printf</span> <span class="s1">'SSH command failed.\n'</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>1
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">BatchMode=yes</code> disables interactive password and host-key prompts that could block automation. Configure trusted host keys and authentication before using it.</p>
+
+<h3 id="read-a-remote-file">Read a remote file</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh user@server.example.com <span class="s1">'cat /etc/os-release'</span>
+</code></pre></div></div>
+
+<p>If you need to parse the result locally, remember that command substitution removes trailing newlines:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if </span><span class="nv">os_release</span><span class="o">=</span><span class="si">$(</span>ssh user@server.example.com <span class="s1">'cat /etc/os-release'</span><span class="si">)</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="nv">$os_release</span><span class="s2">"</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<h3 id="transfer-files">Transfer files</h3>
+
+<p>Copy a file to a remote system:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp ./report.txt user@server.example.com:/tmp/report.txt
+</code></pre></div></div>
+
+<p>Copy a file from a remote system:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp user@server.example.com:/var/log/syslog ./remote-syslog
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">rsync</code> for efficient synchronization:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rsync <span class="nt">-av</span> <span class="nt">--</span> ./reports/ user@server.example.com:/srv/reports/
+</code></pre></div></div>
+
+<p>Review source and destination paths carefully, particularly when using <code class="language-plaintext highlighter-rouge">--delete</code>, which removes destination files that are absent from the source.</p>
+
+<h3 id="use-ssh-keys-for-automation">Use SSH keys for automation</h3>
+
+<p>Configure public-key authentication and verify the remote host's identity. Do not disable host-key checking merely to make an automation script work. A strict host-key policy helps protect against connecting to an impersonated server.</p>
+
+<p>Useful options:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="se">\</span>
+    <span class="nt">-o</span> <span class="nv">BatchMode</span><span class="o">=</span><span class="nb">yes</span> <span class="se">\</span>
+    <span class="nt">-o</span> <span class="nv">ConnectTimeout</span><span class="o">=</span>5 <span class="se">\</span>
+    <span class="nt">-o</span> <span class="nv">ServerAliveInterval</span><span class="o">=</span>15 <span class="se">\</span>
+    <span class="nt">-o</span> <span class="nv">ServerAliveCountMax</span><span class="o">=</span>3 <span class="se">\</span>
+    user@server.example.com <span class="s1">'uptime'</span>
+</code></pre></div></div>
+
+<h3 id="local-versus-remote-variable-expansion">Local versus remote variable expansion</h3>
+
+<p>This command expands <code class="language-plaintext highlighter-rouge">$HOME</code> on the remote system because the variable is inside single quotes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh user@server.example.com <span class="s1">'printf "%s\n" "$HOME"'</span>
+</code></pre></div></div>
+
+<p>This command expands the local shell's <code class="language-plaintext highlighter-rouge">$HOME</code> before SSH is started:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh user@server.example.com <span class="s2">"printf '%s</span><span class="se">\n</span><span class="s2">' '</span><span class="nv">$HOME</span><span class="s2">'"</span>
+</code></pre></div></div>
+
+<p>The second example is only suitable for values that cannot introduce quoting problems. Do not interpolate arbitrary or untrusted values into a remote command string.</p>
+
+<h3 id="pass-data-safely">Pass data safely</h3>
+
+<p>When possible, send data through standard input instead of constructing a remote shell command from untrusted strings:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="nv">$value</span><span class="s2">"</span> |
+    ssh user@server.example.com <span class="s1">'cat &gt; /tmp/value.txt'</span>
+</code></pre></div></div>
+
+<p>Use a safe, intentional destination path and ensure the remote command is appropriate. For more complex data, use <code class="language-plaintext highlighter-rouge">scp</code>, <code class="language-plaintext highlighter-rouge">rsync</code>, or a program that accepts data on stdin.</p>
+
+<p><strong>Important:</strong> Quoting a variable in the local shell does not automatically protect it from interpretation by the remote shell. Remote commands pass through shell parsing on the remote side too. Prefer fixed remote commands, validated inputs, and standard-input/file-transfer methods over dynamic command construction.</p>
+
+<h3 id="check-several-hosts">Check several hosts</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">hosts</span><span class="o">=(</span>server1.example.com server2.example.com<span class="o">)</span>
+
+<span class="k">for </span>host <span class="k">in</span> <span class="s2">"</span><span class="k">${</span><span class="nv">hosts</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+    if </span>ssh <span class="nt">-o</span> <span class="nv">BatchMode</span><span class="o">=</span><span class="nb">yes</span> <span class="nt">-o</span> <span class="nv">ConnectTimeout</span><span class="o">=</span>5 <span class="se">\</span>
+        <span class="s2">"admin@</span><span class="nv">$host</span><span class="s2">"</span> <span class="s1">'uptime'</span><span class="p">;</span> <span class="k">then
+        </span><span class="nb">printf</span> <span class="s1">'OK: %s\n'</span> <span class="s2">"</span><span class="nv">$host</span><span class="s2">"</span>
+    <span class="k">else
+        </span><span class="nb">printf</span> <span class="s1">'FAILED: %s\n'</span> <span class="s2">"</span><span class="nv">$host</span><span class="s2">"</span> <span class="o">&gt;</span>&amp;2
+    <span class="k">fi
+done</span>
+</code></pre></div></div>
+
+<p>Hostnames and usernames should come from trusted configuration or be validated. For many hosts, consider concurrency limits, logging, and per-host timeouts.</p>
+
+<hr />
+
+<h2 id="24-quick-reference">24. Quick Reference</h2>
+
+<h3 id="script-skeleton">Script skeleton</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> <span class="nt">-Eeuo</span> pipefail
+
+usage<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">printf</span> <span class="s1">'Usage: %s FILE\n'</span> <span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span> <span class="o">&gt;</span>&amp;2
+<span class="o">}</span>
+
+main<span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">((</span> <span class="nv">$# </span><span class="o">!=</span> 1 <span class="o">))</span><span class="p">;</span> <span class="k">then
+        </span>usage
+        <span class="k">return </span>2
+    <span class="k">fi
+
+    </span><span class="nb">local </span><span class="nv">file</span><span class="o">=</span><span class="nv">$1</span>
+
+    <span class="k">if</span> <span class="o">[[</span> <span class="o">!</span> <span class="nt">-r</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+        </span><span class="nb">printf</span> <span class="s1">'Error: cannot read %s\n'</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="o">&gt;</span>&amp;2
+        <span class="k">return </span>1
+    <span class="k">fi
+
+    </span><span class="nb">printf</span> <span class="s1">'Processing: %s\n'</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span>
+<span class="o">}</span>
+
+main <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="common-syntax">Common syntax</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Syntax</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge"># comment</code></td>
+      <td>Comment</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">name=value</code></td>
+      <td>Assign a variable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"$name"</code></td>
+      <td>Expand a variable as one word</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"${array[@]}"</code></td>
+      <td>Expand array elements as separate words</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$(command)</code></td>
+      <td>Capture command output</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$(( expression ))</code></td>
+      <td>Arithmetic expansion</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">[[ condition ]]</code></td>
+      <td>Bash conditional test</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">(( expression ))</code></td>
+      <td>Arithmetic evaluation</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">command1 &amp;&amp; command2</code></td>
+      <td>Run second if first succeeds</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">command1 || command2</code></td>
+      <td>Run second if first fails</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">command1 \| command2</code></td>
+      <td>Pipe stdout to next command</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&gt; file</code></td>
+      <td>Redirect stdout, replacing file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&gt;&gt; file</code></td>
+      <td>Append stdout</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">2&gt; file</code></td>
+      <td>Redirect stderr</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt; file</code></td>
+      <td>Redirect stdin</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"$@"</code></td>
+      <td>All arguments, preserving boundaries</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"$HOME"</code></td>
+      <td>Home directory environment variable</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="useful-exit-statuses">Useful exit statuses</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">0</code>: success by convention.</li>
+  <li>Nonzero: failure or a condition reported by the command.</li>
+  <li><code class="language-plaintext highlighter-rouge">exit 1</code>: exit with a general failure status.</li>
+  <li><code class="language-plaintext highlighter-rouge">exit 2</code>: often used for usage or argument errors, though conventions vary.</li>
+  <li><code class="language-plaintext highlighter-rouge">return 1</code>: return a failure status from a function.</li>
+</ul>
+
+<h3 id="essential-commands">Essential commands</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Find a command</td>
+      <td><code class="language-plaintext highlighter-rouge">command -v name</code></td>
+    </tr>
+    <tr>
+      <td>Show current directory</td>
+      <td><code class="language-plaintext highlighter-rouge">pwd</code></td>
+    </tr>
+    <tr>
+      <td>List files</td>
+      <td><code class="language-plaintext highlighter-rouge">find</code> or a shell glob</td>
+    </tr>
+    <tr>
+      <td>Search text</td>
+      <td><code class="language-plaintext highlighter-rouge">grep</code></td>
+    </tr>
+    <tr>
+      <td>Process fields</td>
+      <td><code class="language-plaintext highlighter-rouge">awk</code></td>
+    </tr>
+    <tr>
+      <td>Edit streams</td>
+      <td><code class="language-plaintext highlighter-rouge">sed</code></td>
+    </tr>
+    <tr>
+      <td>Parse JSON</td>
+      <td><code class="language-plaintext highlighter-rouge">jq</code></td>
+    </tr>
+    <tr>
+      <td>Fetch a URL</td>
+      <td><code class="language-plaintext highlighter-rouge">curl</code></td>
+    </tr>
+    <tr>
+      <td>Read files line by line</td>
+      <td><code class="language-plaintext highlighter-rouge">while IFS= read -r line</code></td>
+    </tr>
+    <tr>
+      <td>Create a temporary file</td>
+      <td><code class="language-plaintext highlighter-rouge">mktemp</code></td>
+    </tr>
+    <tr>
+      <td>Inspect a script's syntax</td>
+      <td><code class="language-plaintext highlighter-rouge">bash -n script.sh</code></td>
+    </tr>
+    <tr>
+      <td>Trace script execution</td>
+      <td><code class="language-plaintext highlighter-rouge">bash -x script.sh</code></td>
+    </tr>
+    <tr>
+      <td>Check the current Bash version</td>
+      <td><code class="language-plaintext highlighter-rouge">bash --version</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="25-bash-tricks-for-administration">25. Bash Tricks for Administration</h2>
+
+<h3 id="check-whether-a-command-exists">Check whether a command exists</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if </span><span class="nb">command</span> <span class="nt">-v</span> rsync <span class="o">&gt;</span>/dev/null 2&gt;&amp;1<span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'rsync is installed.\n'</span>
+<span class="k">else
+    </span><span class="nb">printf</span> <span class="s1">'rsync is not available.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<h3 id="check-whether-the-script-runs-as-root">Check whether the script runs as root</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">((</span> EUID <span class="o">!=</span> 0 <span class="o">))</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'Run this script as root or with sudo.\n'</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>1
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Use elevated privileges only when required. Avoid running an entire script as root if only one command needs elevated access.</p>
+
+<h3 id="check-a-systemd-service">Check a systemd service</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if </span>systemctl is-active <span class="nt">--quiet</span> ssh<span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'SSH service is active.\n'</span>
+<span class="k">else
+    </span><span class="nb">printf</span> <span class="s1">'SSH service is not active.\n'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>The service unit name can vary by application or distribution.</p>
+
+<h3 id="check-disk-space">Check disk space</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">df</span> <span class="nt">-h</span> /
+</code></pre></div></div>
+
+<p>Check a particular mount point:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">df</span> <span class="nt">-h</span> /var
+</code></pre></div></div>
+
+<p>For a script, parse command output carefully and avoid assuming a fixed column layout unless you control the output format.</p>
+
+<h3 id="check-memory">Check memory</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>free <span class="nt">-h</span>
+</code></pre></div></div>
+
+<h3 id="find-large-files">Find large files</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find /var <span class="nt">-type</span> f <span class="nt">-size</span> +100M <span class="nt">-print</span>
+</code></pre></div></div>
+
+<p>Permission errors may appear when searching system directories. Redirect stderr only if you intentionally want to hide those errors:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find /var <span class="nt">-type</span> f <span class="nt">-size</span> +100M <span class="nt">-print</span> 2&gt;/dev/null
+</code></pre></div></div>
+
+<h3 id="find-recently-modified-files">Find recently modified files</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find <span class="s2">"</span><span class="nv">$HOME</span><span class="s2">"</span> <span class="nt">-type</span> f <span class="nt">-mtime</span> <span class="nt">-1</span> <span class="nt">-print</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-mtime -1</code> means modified less than approximately 24 hours ago, not necessarily since midnight.</p>
+
+<h3 id="create-a-timestamped-backup">Create a timestamped backup</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">backup</span><span class="o">=</span><span class="s2">"config.</span><span class="si">$(</span><span class="nb">date</span> +%Y%m%d-%H%M%S<span class="si">)</span><span class="s2">.bak"</span>
+<span class="nb">cp</span> <span class="nt">--</span> config <span class="s2">"</span><span class="nv">$backup</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>For important backups, check the copy's exit status and consider ownership, permissions, metadata, and restoration testing.</p>
+
+<h3 id="create-a-temporary-directory-and-clean-it-up">Create a temporary directory and clean it up</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">tmp_dir</span><span class="o">=</span><span class="si">$(</span><span class="nb">mktemp</span> <span class="nt">-d</span><span class="si">)</span>
+
+cleanup<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">rm</span> <span class="nt">-rf</span> <span class="nt">--</span> <span class="s2">"</span><span class="nv">$tmp_dir</span><span class="s2">"</span>
+<span class="o">}</span>
+<span class="nb">trap </span>cleanup EXIT
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">mktemp -d</code> creates a unique directory. Only remove a path you created and control. Never build a cleanup path from untrusted input.</p>
+
+<h3 id="process-a-list-of-packages">Process a list of packages</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">packages</span><span class="o">=(</span>curl jq git<span class="o">)</span>
+
+<span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install</span> <span class="nt">--</span> <span class="s2">"</span><span class="k">${</span><span class="nv">packages</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="check-the-exit-status-of-a-service-restart">Check the exit status of a service restart</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if </span><span class="nb">sudo </span>systemctl restart ssh<span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s1">'SSH restart command succeeded.\n'</span>
+<span class="k">else
+    </span><span class="nb">printf</span> <span class="s1">'SSH restart failed.\n'</span> <span class="o">&gt;</span>&amp;2
+    <span class="nb">exit </span>1
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>A successful restart command does not necessarily prove the service is healthy afterward. Check service status when required.</p>
+
+<h3 id="print-a-progress-message">Print a progress message</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">printf</span> <span class="s1">'[%s] Starting task...\n'</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">date</span> <span class="s1">'+%F %T'</span><span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="log-messages-consistently">Log messages consistently</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>log<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">printf</span> <span class="s1">'[%s] %s\n'</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">date</span> <span class="s1">'+%F %T'</span><span class="si">)</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$*</span><span class="s2">"</span> <span class="o">&gt;</span>&amp;2
+<span class="o">}</span>
+
+log <span class="s2">"Starting maintenance"</span>
+</code></pre></div></div>
+
+<p>This simple function is suitable for ordinary messages. If message arguments may contain arbitrary data, consider a format that avoids joining arguments ambiguously.</p>
+
+<hr />
+
+<h2 id="26-secure-script-writing-practices">26. Secure Script-Writing Practices</h2>
+
+<ol>
+  <li><strong>Quote expansions.</strong> Prefer <code class="language-plaintext highlighter-rouge">"$value"</code> and <code class="language-plaintext highlighter-rouge">"${array[@]}"</code> unless splitting or glob expansion is intentional.</li>
+  <li><strong>Use <code class="language-plaintext highlighter-rouge">--</code> when supported.</strong> For example, <code class="language-plaintext highlighter-rouge">rm -- "$file"</code> helps prevent a filename beginning with <code class="language-plaintext highlighter-rouge">-</code> from being treated as an option. Check whether the command supports <code class="language-plaintext highlighter-rouge">--</code>.</li>
+  <li><strong>Validate input.</strong> Check argument count, expected formats, and allowed values before using them.</li>
+  <li><strong>Avoid <code class="language-plaintext highlighter-rouge">eval</code>.</strong> It can turn data into executable shell code.</li>
+  <li><strong>Do not parse <code class="language-plaintext highlighter-rouge">ls</code> output.</strong> Use globs, <code class="language-plaintext highlighter-rouge">find</code>, or NUL-delimited filename handling.</li>
+  <li><strong>Do not parse JSON with regular expressions.</strong> Use <code class="language-plaintext highlighter-rouge">jq</code>.</li>
+  <li><strong>Do not split arbitrary CSV on commas.</strong> Use a real CSV parser.</li>
+  <li><strong>Treat network and remote data as untrusted.</strong> Validate expected fields and values.</li>
+  <li><strong>Protect credentials.</strong> Do not commit tokens, passwords, private keys, or sensitive output to version control.</li>
+  <li><strong>Use least privilege.</strong> Run as an ordinary user unless elevated privileges are needed.</li>
+  <li><strong>Use safe temporary files.</strong> Use <code class="language-plaintext highlighter-rouge">mktemp</code> rather than predictable filenames such as <code class="language-plaintext highlighter-rouge">/tmp/my-script.tmp</code>.</li>
+  <li><strong>Handle failures explicitly.</strong> Strict mode is helpful, but not a substitute for checking important operations.</li>
+  <li><strong>Test before destructive changes.</strong> Consider a dry-run mode, backups, and explicit confirmation for irreversible actions.</li>
+  <li><strong>Be careful with <code class="language-plaintext highlighter-rouge">rm -rf</code>.</strong> Validate paths and never let an empty or unexpected variable become a deletion target.</li>
+  <li><strong>Do not disable SSH host-key checking casually.</strong> Verify server identity and configure known hosts for automation.</li>
+  <li><strong>Do not execute downloads blindly.</strong> Verify the source and integrity of downloaded code.</li>
+  <li><strong>Use <code class="language-plaintext highlighter-rouge">bash -n</code> to check syntax.</strong> It does not prove the script behaves correctly, but it catches many syntax errors.</li>
+  <li><strong>Test failure paths.</strong> Try missing files, empty input, permission errors, failed network requests, and unexpected values.</li>
+  <li><strong>Use meaningful messages.</strong> Send diagnostics to stderr and provide useful exit statuses.</li>
+  <li><strong>Keep scripts readable.</strong> Prefer clear names, small functions, consistent formatting, and comments explaining why a decision was made.</li>
+</ol>
+
+<h3 id="final-checklist">Final checklist</h3>
+
+<p>Before using a script for an important task, ask:</p>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Does it have the correct shebang?</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Are variable expansions quoted appropriately?</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Are arguments and external input validated?</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Are required commands checked or documented?</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Are failures handled intentionally?</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Are temporary files cleaned up safely?</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Are credentials protected?</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Have I tested it with missing, empty, and malformed input?</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Have I checked any destructive operations before running them?</li>
+</ul>
+
+<hr />
+
+<p><strong>Remember:</strong> Bash is strongest when it connects reliable command-line tools. Keep shell code focused on control flow and automation, use dedicated tools for structured data, and make failure handling explicit.</p>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

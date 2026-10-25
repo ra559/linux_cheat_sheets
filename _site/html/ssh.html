@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>SSH and SCP Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#ssh-and-scp-cheat-sheet-for-debian-13" id="toc-ssh-and-scp-cheat-sheet-for-debian-13">SSH and SCP Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-check-availability-and-install-openssh" id="toc-1-check-availability-and-install-openssh">1. Check availability and install OpenSSH</a>
+<ul>
+<li><a href="#allow-a-debian-machine-to-accept-ssh-connections" id="toc-allow-a-debian-machine-to-accept-ssh-connections">Allow a Debian machine to accept SSH connections</a></li>
+</ul>
+</li>
+<li><a href="#2-ssh-basics" id="toc-2-ssh-basics">2. SSH basics</a></li>
+<li><a href="#3-connect-to-a-remote-system" id="toc-3-connect-to-a-remote-system">3. Connect to a remote system</a></li>
+<li><a href="#4-common-ssh-options" id="toc-4-common-ssh-options">4. Common SSH options</a></li>
+<li><a href="#5-ssh-keys" id="toc-5-ssh-keys">5. SSH keys</a></li>
+<li><a href="#6-use-an-ssh-configuration-file" id="toc-6-use-an-ssh-configuration-file">6. Use an SSH configuration file</a></li>
+<li><a href="#7-copy-files-with-scp" id="toc-7-copy-files-with-scp">7. Copy files with SCP</a></li>
+<li><a href="#8-copy-directories-and-preserve-attributes" id="toc-8-copy-directories-and-preserve-attributes">8. Copy directories and preserve attributes</a>
+<ul>
+<li><a href="#note-about-modern-scp" id="toc-note-about-modern-scp">Note about modern SCP</a></li>
+</ul>
+</li>
+<li><a href="#9-troubleshooting" id="toc-9-troubleshooting">9. Troubleshooting</a></li>
+<li><a href="#10-security-and-safe-habits" id="toc-10-security-and-safe-habits">10. Security and safe habits</a></li>
+<li><a href="#11-quick-command-index" id="toc-11-quick-command-index">11. Quick command index</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="ssh-and-scp-cheat-sheet-for-debian-13">SSH and SCP Cheat Sheet for Debian 13</h1>
+
+<blockquote>
+  <p><strong>Purpose:</strong> A practical guide to secure remote login and file transfers with SSH and SCP.</p>
+
+  <p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">openssh-client</code> provides <code class="language-plaintext highlighter-rouge">ssh</code>, <code class="language-plaintext highlighter-rouge">scp</code>, <code class="language-plaintext highlighter-rouge">sftp</code>, and <code class="language-plaintext highlighter-rouge">ssh-keygen</code>. A remote Debian machine generally needs <code class="language-plaintext highlighter-rouge">openssh-server</code> to accept SSH connections.</p>
+
+  <p><strong>Safety note:</strong> Verify remote host identities and protect private SSH keys. Never share a private key or casually ignore host-key warnings.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ol>
+  <li><a href="#1-check-availability-and-install-openssh">Check availability and install OpenSSH</a></li>
+  <li><a href="#2-ssh-basics">SSH basics</a></li>
+  <li><a href="#3-connect-to-a-remote-system">Connect to a remote system</a></li>
+  <li><a href="#4-common-ssh-options">Common SSH options</a></li>
+  <li><a href="#5-ssh-keys">SSH keys</a></li>
+  <li><a href="#6-use-an-ssh-configuration-file">Use an SSH configuration file</a></li>
+  <li><a href="#7-copy-files-with-scp">Copy files with SCP</a></li>
+  <li><a href="#8-copy-directories-and-preserve-attributes">Copy directories and preserve attributes</a></li>
+  <li><a href="#9-troubleshooting">Troubleshooting</a></li>
+  <li><a href="#10-security-and-safe-habits">Security and safe habits</a></li>
+  <li><a href="#11-quick-command-index">Quick command index</a></li>
+</ol>
+
+<hr />
+
+<h2 id="1-check-availability-and-install-openssh">1. Check availability and install OpenSSH</h2>
+
+<p>Check whether the client commands are available:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command</span> <span class="nt">-v</span> ssh
+<span class="nb">command</span> <span class="nt">-v</span> scp
+<span class="nb">command</span> <span class="nt">-v</span> ssh-keygen
+</code></pre></div></div>
+
+<p>Check which installed Debian package owns a command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg-query <span class="nt">-S</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">command</span> <span class="nt">-v</span> ssh<span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Install the client if needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>openssh-client
+</code></pre></div></div>
+
+<h3 id="allow-a-debian-machine-to-accept-ssh-connections">Allow a Debian machine to accept SSH connections</h3>
+
+<p>On the remote computer, install and start the SSH server:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>openssh-server
+<span class="nb">sudo </span>systemctl <span class="nb">enable</span> <span class="nt">--now</span> ssh
+</code></pre></div></div>
+
+<p>Check its status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status ssh
+</code></pre></div></div>
+
+<p>The server and client are separate packages. You need <code class="language-plaintext highlighter-rouge">openssh-server</code> only on machines that should accept incoming SSH connections.</p>
+
+<h2 id="2-ssh-basics">2. SSH basics</h2>
+
+<p>SSH (Secure Shell) provides an encrypted connection to another computer. It is commonly used to log in remotely, administer servers, and securely transfer files.</p>
+
+<p>General syntax:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh [OPTIONS] USER@HOST
+</code></pre></div></div>
+
+<p>For example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh student@192.0.2.25
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">student</code> and the documentation-only IP address with the actual account and host you are authorized to access. <code class="language-plaintext highlighter-rouge">192.0.2.0/24</code> is reserved for examples and is not intended for real hosts.</p>
+
+<h2 id="3-connect-to-a-remote-system">3. Connect to a remote system</h2>
+
+<p>Connect using a hostname:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh alice@server.example.com
+</code></pre></div></div>
+
+<p>Connect using an IP address:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh alice@192.0.2.10
+</code></pre></div></div>
+
+<p>Connect to a non-default port:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-p</span> 2222 alice@server.example.com
+</code></pre></div></div>
+
+<p>SSH uses TCP port 22 by default.</p>
+
+<p>Run a single command remotely:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh alice@server.example.com <span class="s1">'hostname'</span>
+</code></pre></div></div>
+
+<p>For example, check disk usage:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh alice@server.example.com <span class="s1">'df -h'</span>
+</code></pre></div></div>
+
+<p>Exit an interactive session with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">exit</span>
+</code></pre></div></div>
+
+<p>You can also press <code class="language-plaintext highlighter-rouge">Ctrl+D</code> in a normal interactive shell.</p>
+
+<h2 id="4-common-ssh-options">4. Common SSH options</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Meaning</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-p PORT</code></td>
+      <td>Connect to a specified port</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -p 2222 user@host</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-i FILE</code></td>
+      <td>Use a specified private key</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -i ~/.ssh/id_ed25519 user@host</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-v</code></td>
+      <td>Show connection diagnostics</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -v user@host</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-vv</code></td>
+      <td>Show more diagnostics</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -vv user@host</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-J HOST</code></td>
+      <td>Connect through a jump host</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -J gateway user@target</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-L</code></td>
+      <td>Forward a local port through SSH</td>
+      <td>See below</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-o NAME=VALUE</code></td>
+      <td>Set a configuration option</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -o ConnectTimeout=10 user@host</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Set a connection timeout:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-o</span> <span class="nv">ConnectTimeout</span><span class="o">=</span>10 alice@server.example.com
+</code></pre></div></div>
+
+<p>Forward a local port:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-L</span> 8080:localhost:80 alice@server.example.com
+</code></pre></div></div>
+
+<p>While the SSH session is open, visiting <code class="language-plaintext highlighter-rouge">http://localhost:8080</code> on your local computer forwards the connection to port 80 on the remote computer, as seen from that remote host. The service must be listening and the SSH server must permit forwarding.</p>
+
+<p>Connect through a jump host:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-J</span> alice@gateway.example.com bob@internal.example.com
+</code></pre></div></div>
+
+<p>Replace both example hostnames with systems you are authorized to access.</p>
+
+<h2 id="5-ssh-keys">5. SSH keys</h2>
+
+<p>SSH keys can provide authentication without entering the remote account password each time. A key pair has a <strong>private key</strong> (keep it secret) and a <strong>public key</strong> (which can be installed on the remote account).</p>
+
+<p>Generate an Ed25519 key pair:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-keygen <span class="nt">-t</span> ed25519
+</code></pre></div></div>
+
+<p>Follow the prompts. A passphrase is recommended to protect the private key.</p>
+
+<p>The default files are usually:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">~/.ssh/id_ed25519</code> — private key; do not share it.</li>
+  <li><code class="language-plaintext highlighter-rouge">~/.ssh/id_ed25519.pub</code> — public key; can be installed on systems where you want to log in.</li>
+</ul>
+
+<p>Install your public key on a remote account:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-copy-id alice@server.example.com
+</code></pre></div></div>
+
+<p>You may be prompted for the remote account password during setup. <code class="language-plaintext highlighter-rouge">ssh-copy-id</code> is normally included with Debian's <code class="language-plaintext highlighter-rouge">openssh-client</code> package.</p>
+
+<p>Log in using a particular key:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-i</span> ~/.ssh/id_ed25519 alice@server.example.com
+</code></pre></div></div>
+
+<p>List public keys:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> <span class="nt">-l</span> ~/.ssh/<span class="k">*</span>.pub
+</code></pre></div></div>
+
+<p>Set common permissions:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod </span>700 ~/.ssh
+<span class="nb">chmod </span>600 ~/.ssh/id_ed25519
+<span class="nb">chmod </span>644 ~/.ssh/id_ed25519.pub
+</code></pre></div></div>
+
+<p>Only change permissions on your own key files. Never make a private key readable by other users.</p>
+
+<h2 id="6-use-an-ssh-configuration-file">6. Use an SSH configuration file</h2>
+
+<p>SSH settings can be saved in <code class="language-plaintext highlighter-rouge">~/.ssh/config</code> so you do not have to type the same options repeatedly.</p>
+
+<p>Create or edit the file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim ~/.ssh/config
+</code></pre></div></div>
+
+<p>Example configuration:</p>
+
+<pre><code class="language-sshconfig">Host homelab
+    HostName 192.0.2.10
+    User alice
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519
+</code></pre>
+
+<p>Connect using the alias:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh homelab
+</code></pre></div></div>
+
+<p>Use real host details in your own configuration. A common permission setting for this file is:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod </span>600 ~/.ssh/config
+</code></pre></div></div>
+
+<h2 id="7-copy-files-with-scp">7. Copy files with SCP</h2>
+
+<p><code class="language-plaintext highlighter-rouge">scp</code> copies files between computers over SSH.</p>
+
+<p>General syntax:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp [OPTIONS] SOURCE DESTINATION
+</code></pre></div></div>
+
+<p>Copy a local file to a remote computer:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp report.txt alice@server.example.com:/home/alice/
+</code></pre></div></div>
+
+<p>Copy a remote file to the current local directory:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp alice@server.example.com:/home/alice/report.txt <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>The dot (<code class="language-plaintext highlighter-rouge">.</code>) means the current directory.</p>
+
+<p>Copy to a remote path containing spaces:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp report.txt <span class="s1">'alice@server.example.com:/home/alice/My Reports/'</span>
+</code></pre></div></div>
+
+<p>Use a non-default SSH port:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp <span class="nt">-P</span> 2222 report.txt alice@server.example.com:/home/alice/
+</code></pre></div></div>
+
+<p><strong>Important:</strong> <code class="language-plaintext highlighter-rouge">ssh</code> uses lowercase <code class="language-plaintext highlighter-rouge">-p</code> for the port, but <code class="language-plaintext highlighter-rouge">scp</code> uses uppercase <code class="language-plaintext highlighter-rouge">-P</code>.</p>
+
+<p>Use a specific private key:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp <span class="nt">-i</span> ~/.ssh/id_ed25519 report.txt alice@server.example.com:/home/alice/
+</code></pre></div></div>
+
+<h2 id="8-copy-directories-and-preserve-attributes">8. Copy directories and preserve attributes</h2>
+
+<p>Copy a directory recursively:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp <span class="nt">-r</span> website/ alice@server.example.com:/home/alice/
+</code></pre></div></div>
+
+<p>Preserve file times and mode bits where possible:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp <span class="nt">-p</span> report.txt alice@server.example.com:/home/alice/
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">-p</code> option preserves modification times, access times, and file mode bits where possible. It does not guarantee that the remote file owner will match the local owner.</p>
+
+<p>Copy a file from one remote host to another:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp alice@host-a.example.com:/home/alice/report.txt bob@host-b.example.com:/home/bob/
+</code></pre></div></div>
+
+<p>Depending on options and configuration, data may be relayed through the local machine or transferred directly between remote hosts. Confirm connectivity and behavior before relying on this for large transfers.</p>
+
+<h3 id="note-about-modern-scp">Note about modern SCP</h3>
+
+<p>Modern OpenSSH <code class="language-plaintext highlighter-rouge">scp</code> uses SFTP over SSH by default. Very old servers may require compatibility options. Avoid enabling legacy behavior unless you understand the security implications.</p>
+
+<h2 id="9-troubleshooting">9. Troubleshooting</h2>
+
+<p>Show detailed connection diagnostics:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-v</span> alice@server.example.com
+</code></pre></div></div>
+
+<p>If <code class="language-plaintext highlighter-rouge">nc</code> is installed, check whether the SSH port is reachable:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc <span class="nt">-vz</span> server.example.com 22
+</code></pre></div></div>
+
+<p>A failed connection can mean the host is offline, the port is wrong, a firewall is blocking access, or the SSH server is not listening.</p>
+
+<p>Common errors:</p>
+
+<ul>
+  <li><strong>Connection timed out:</strong> Check routing, firewall rules, host address, and whether the host is reachable.</li>
+  <li><strong>Connection refused:</strong> The host may be reachable, but no service is accepting connections on that port.</li>
+  <li><strong>Permission denied:</strong> Check the username, authentication method, key installation, and file permissions.</li>
+  <li><strong>Host key verification failed:</strong> The saved host key does not match the presented key. Verify the change through a trusted channel before updating the known-hosts entry.</li>
+  <li><strong>Could not resolve hostname:</strong> Check spelling and DNS or local name resolution.</li>
+</ul>
+
+<p>If a host was legitimately reinstalled or its host key changed, verify the new fingerprint through a trusted channel before removing the old entry:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-keygen <span class="nt">-R</span> server.example.com
+</code></pre></div></div>
+
+<p>Do not blindly remove host-key records to bypass a warning. An unexpected host-key change can indicate a security problem.</p>
+
+<h2 id="10-security-and-safe-habits">10. Security and safe habits</h2>
+
+<ul>
+  <li><strong>Verify host fingerprints</strong> when connecting for the first time and whenever a key changes unexpectedly.</li>
+  <li><strong>Keep private keys private.</strong> Never send <code class="language-plaintext highlighter-rouge">id_ed25519</code> to another person or upload it to a repository.</li>
+  <li><strong>Use a passphrase</strong> on private keys where practical.</li>
+  <li><strong>Use least privilege.</strong> Log in with an ordinary account and use <code class="language-plaintext highlighter-rouge">sudo</code> when required.</li>
+  <li><strong>Be careful with remote paths.</strong> Check the destination before running <code class="language-plaintext highlighter-rouge">scp</code>, especially when copying directories.</li>
+  <li><strong>Do not bypass host-key checks casually.</strong> Disabling verification weakens protection against impersonation.</li>
+  <li><strong>Use only systems you are authorized to access.</strong></li>
+</ul>
+
+<h2 id="11-quick-command-index">11. Quick command index</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Check SSH availability</td>
+      <td><code class="language-plaintext highlighter-rouge">command -v ssh</code></td>
+    </tr>
+    <tr>
+      <td>Connect to a host</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh user@host</code></td>
+    </tr>
+    <tr>
+      <td>Connect on a custom port</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -p 2222 user@host</code></td>
+    </tr>
+    <tr>
+      <td>Run a remote command</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh user@host 'hostname'</code></td>
+    </tr>
+    <tr>
+      <td>Generate a key pair</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh-keygen -t ed25519</code></td>
+    </tr>
+    <tr>
+      <td>Install public key</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh-copy-id user@host</code></td>
+    </tr>
+    <tr>
+      <td>Connect using a key</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -i ~/.ssh/id_ed25519 user@host</code></td>
+    </tr>
+    <tr>
+      <td>Debug a connection</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -v user@host</code></td>
+    </tr>
+    <tr>
+      <td>Copy a local file to remote</td>
+      <td><code class="language-plaintext highlighter-rouge">scp file.txt user@host:/remote/path/</code></td>
+    </tr>
+    <tr>
+      <td>Copy a remote file locally</td>
+      <td><code class="language-plaintext highlighter-rouge">scp user@host:/remote/file.txt .</code></td>
+    </tr>
+    <tr>
+      <td>Copy a directory</td>
+      <td><code class="language-plaintext highlighter-rouge">scp -r directory/ user@host:/remote/path/</code></td>
+    </tr>
+    <tr>
+      <td>Use a custom SCP port</td>
+      <td><code class="language-plaintext highlighter-rouge">scp -P 2222 file.txt user@host:/remote/path/</code></td>
+    </tr>
+    <tr>
+      <td>Find package ownership</td>
+      <td><code class="language-plaintext highlighter-rouge">dpkg-query -S "$(command -v ssh)"</code></td>
+    </tr>
+  </tbody>
+</table>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

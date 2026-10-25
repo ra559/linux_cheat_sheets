@@ -1,0 +1,10 @@
+Configuration file: /home/rap/linux_cheat_sheets/_config.yml
+            Source: /home/rap/linux_cheat_sheets
+       Destination: /home/rap/linux_cheat_sheets/_site
+ Incremental build: disabled. Enable with --incremental
+      Generating... 
+                    done in 1.302 seconds.
+ Auto-regeneration: disabled. Use --watch to enable.
+    Server address: http://127.0.0.1:4000
+  Server running... press ctrl-c to stop.
+[2026-10-25 17:27:57] ERROR '/favicon.ico' not found.

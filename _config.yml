@@ -1,0 +1,30 @@
+title: Cheat Sheets
+tagline: Quick references for programming, Linux, and web development.
+lang: en
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  auto_ids: true
+  # Keep straight quotes, matching the previous Pandoc output.
+  smart_quotes: ["apos", "apos", "quot", "quot"]
+  syntax_highlighter: rouge
+
+defaults:
+  - scope:
+      path: "docs/markdown"
+    values:
+      # Cheat sheets contain literal {{ }} template syntax (Go templates in
+      # docker, for example), so their bodies must not be run through Liquid.
+      render_with_liquid: false
+
+# Files kept in the repository but not part of the published site.
+exclude:
+  - docs/html
+  - templates
+  - pandoc-script.sh
+  - README.md
+  - Dockerfile
+  - backup_pre_jekyll.tar
+  - data

@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>curl and wget Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#curl-and-wget-cheat-sheet-for-debian-13" id="toc-curl-and-wget-cheat-sheet-for-debian-13">curl and wget Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of Contents</a></li>
+<li><a href="#1-installation" id="toc-1-installation">1. Installation</a></li>
+<li><a href="#2-curl-vs-wget" id="toc-2-curl-vs-wget">2. curl vs. wget</a></li>
+<li><a href="#3-basic-curl-commands" id="toc-3-basic-curl-commands">3. Basic curl Commands</a></li>
+<li><a href="#4-downloading-files-with-curl" id="toc-4-downloading-files-with-curl">4. Downloading Files with curl</a></li>
+<li><a href="#5-http-headers-and-status-codes" id="toc-5-http-headers-and-status-codes">5. HTTP Headers and Status Codes</a>
+<ul>
+<li><a href="#mimic-browser-like-http-requests-and-maintain-a-session" id="toc-mimic-browser-like-http-requests-and-maintain-a-session">Mimic browser-like HTTP requests and maintain a session</a></li>
+</ul>
+</li>
+<li><a href="#6-sending-data-with-curl" id="toc-6-sending-data-with-curl">6. Sending Data with curl</a>
+<ul>
+<li><a href="#send-a-get-request" id="toc-send-a-get-request">Send a GET request</a></li>
+<li><a href="#send-form-data-with-post" id="toc-send-form-data-with-post">Send form data with POST</a></li>
+<li><a href="#send-json-data" id="toc-send-json-data">Send JSON data</a></li>
+<li><a href="#read-json-data-from-a-local-file" id="toc-read-json-data-from-a-local-file">Read JSON data from a local file</a></li>
+<li><a href="#choose-a-request-method-explicitly" id="toc-choose-a-request-method-explicitly">Choose a request method explicitly</a></li>
+</ul>
+</li>
+<li><a href="#7-authentication-and-certificates" id="toc-7-authentication-and-certificates">7. Authentication and Certificates</a></li>
+<li><a href="#8-basic-wget-commands" id="toc-8-basic-wget-commands">8. Basic wget Commands</a></li>
+<li><a href="#9-resuming-and-limiting-downloads" id="toc-9-resuming-and-limiting-downloads">9. Resuming and Limiting Downloads</a></li>
+<li><a href="#10-useful-options-at-a-glance" id="toc-10-useful-options-at-a-glance">10. Useful Options at a Glance</a>
+<ul>
+<li><a href="#curl" id="toc-curl">curl</a></li>
+<li><a href="#wget" id="toc-wget">wget</a></li>
+</ul>
+</li>
+<li><a href="#11-practical-examples" id="toc-11-practical-examples">11. Practical Examples</a>
+<ul>
+<li><a href="#test-whether-a-website-responds" id="toc-test-whether-a-website-responds">Test whether a website responds</a></li>
+<li><a href="#download-a-script-for-inspection" id="toc-download-a-script-for-inspection">Download a script for inspection</a></li>
+<li><a href="#download-a-file-and-save-it-to-downloads" id="toc-download-a-file-and-save-it-to-downloads">Download a file and save it to Downloads</a></li>
+<li><a href="#check-dns-tls-and-connection-details" id="toc-check-dns-tls-and-connection-details">Check DNS, TLS, and connection details</a></li>
+<li><a href="#use-curl-to-query-a-json-api" id="toc-use-curl-to-query-a-json-api">Use curl to query a JSON API</a></li>
+</ul>
+</li>
+<li><a href="#12-help-and-documentation" id="toc-12-help-and-documentation">12. Help and Documentation</a></li>
+<li><a href="#13-troubleshoot-redirects-and-click-tracking-urls" id="toc-13-troubleshoot-redirects-and-click-tracking-urls">13. Troubleshoot Redirects and Click-Tracking URLs</a>
+<ul>
+<li><a href="#quick-check-show-the-http-status-and-final-url" id="toc-quick-check-show-the-http-status-and-final-url">Quick check: show the HTTP status and final URL</a></li>
+<li><a href="#show-each-redirect-response-and-its-location-header" id="toc-show-each-redirect-response-and-its-location-header">Show each redirect response and its Location header</a></li>
+<li><a href="#compact-redirect-chain-report" id="toc-compact-redirect-chain-report">Compact redirect-chain report</a></li>
+<li><a href="#understand-common-redirect-status-codes" id="toc-understand-common-redirect-status-codes">Understand common redirect status codes</a></li>
+<li><a href="#troubleshoot-a-redirect-without-following-it" id="toc-troubleshoot-a-redirect-without-following-it">Troubleshoot a redirect without following it</a></li>
+<li><a href="#important-notes-for-email-click-tracking" id="toc-important-notes-for-email-click-tracking">Important notes for email click tracking</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="curl-and-wget-cheat-sheet-for-debian-13">curl and wget Cheat Sheet for Debian 13</h1>
+
+<p>A practical reference for downloading files, testing URLs, inspecting HTTP responses, and making HTTP requests from the terminal.</p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+  <li><a href="#13-troubleshoot-redirects-and-click-tracking-urls">13. Troubleshoot Redirects and Click-Tracking URLs</a></li>
+  <li><a href="#1-installation">1. Installation</a></li>
+  <li><a href="#2-curl-vs-wget">2. curl vs. wget</a></li>
+  <li><a href="#3-basic-curl-commands">3. Basic curl Commands</a></li>
+  <li><a href="#4-downloading-files-with-curl">4. Downloading Files with curl</a></li>
+  <li><a href="#5-http-headers-and-status-codes">5. HTTP Headers and Status Codes</a></li>
+  <li><a href="#6-sending-data-with-curl">6. Sending Data with curl</a></li>
+  <li><a href="#7-authentication-and-certificates">7. Authentication and Certificates</a></li>
+  <li><a href="#8-basic-wget-commands">8. Basic wget Commands</a></li>
+  <li><a href="#9-resuming-and-limiting-downloads">9. Resuming and Limiting Downloads</a></li>
+  <li><a href="#10-useful-options-at-a-glance">10. Useful Options at a Glance</a></li>
+  <li><a href="#11-practical-examples">11. Practical Examples</a></li>
+  <li><a href="#12-help-and-documentation">12. Help and Documentation</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-installation">1. Installation</h2>
+
+<p>On Debian 13, install both tools with APT:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>curl wget
+</code></pre></div></div>
+
+<p>Check that they are installed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--version</span>
+wget <span class="nt">--version</span>
+</code></pre></div></div>
+
+<p>Find which Debian package provides each command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg <span class="nt">-S</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">command</span> <span class="nt">-v</span> curl<span class="si">)</span><span class="s2">"</span>
+dpkg <span class="nt">-S</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">command</span> <span class="nt">-v</span> wget<span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h2 id="2-curl-vs-wget">2. curl vs. wget</h2>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">curl</code></strong> is designed to transfer data to or from URLs. It supports many protocols and is especially useful for inspecting HTTP responses and sending API requests.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">wget</code></strong> is especially convenient for downloading files. It supports retries, recursive downloads, and resuming interrupted downloads.</li>
+</ul>
+
+<p>Both tools can download files over HTTP and HTTPS.</p>
+
+<h2 id="3-basic-curl-commands">3. Basic curl Commands</h2>
+
+<p>Display the content returned by a URL:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://example.com
+</code></pre></div></div>
+
+<p>Follow redirects:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> https://example.com
+</code></pre></div></div>
+
+<p>Show request and response details:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> https://example.com
+</code></pre></div></div>
+
+<p>Show only the response headers:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-I</span> https://example.com
+</code></pre></div></div>
+
+<p>Print the HTTP status code:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> <span class="nt">-o</span> /dev/null <span class="nt">-w</span> <span class="s1">'%{http_code}\n'</span> https://example.com
+</code></pre></div></div>
+
+<p>Set a connection timeout of 10 seconds:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--connect-timeout</span> 10 https://example.com
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">-sS</code> to hide the progress meter while still displaying errors:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> https://example.com
+</code></pre></div></div>
+
+<h2 id="4-downloading-files-with-curl">4. Downloading Files with curl</h2>
+
+<p>Save the response to a specific filename:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-o</span> page.html https://example.com
+</code></pre></div></div>
+
+<p>Use the filename suggested by the URL:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-O</span> https://example.com/file.zip
+</code></pre></div></div>
+
+<p>Follow redirects while saving a file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="nt">-o</span> file.zip https://example.com/download
+</code></pre></div></div>
+
+<p>Resume an interrupted download:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-C</span> - <span class="nt">-O</span> https://example.com/file.zip
+</code></pre></div></div>
+
+<p><strong>Note:</strong> <code class="language-plaintext highlighter-rouge">-o</code> specifies a local filename. <code class="language-plaintext highlighter-rouge">-O</code> uses the filename from the URL.</p>
+
+<h2 id="5-http-headers-and-status-codes">5. HTTP Headers and Status Codes</h2>
+
+<p>Display response headers without downloading the body to the terminal:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-I</span> https://example.com
+</code></pre></div></div>
+
+<p>Send a custom request header:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-H</span> <span class="s1">'Accept: application/json'</span> https://example.com
+</code></pre></div></div>
+
+<h3 id="mimic-browser-like-http-requests-and-maintain-a-session">Mimic browser-like HTTP requests and maintain a session</h3>
+
+<p>Some websites reject simple <code class="language-plaintext highlighter-rouge">curl</code> requests because they expect browser-like request headers or a session established by an earlier request. You can add headers, follow redirects, store cookies, and send those cookies on later requests.</p>
+
+<h4 id="send-browser-like-headers">Send browser-like headers</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="se">\</span>
+  <span class="nt">-A</span> <span class="s1">'Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Accept-Language: en-US,en;q=0.5'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Upgrade-Insecure-Requests: 1'</span> <span class="se">\</span>
+  https://example.com
+</code></pre></div></div>
+
+<p>A more Chromium-like example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="se">\</span>
+  <span class="nt">-A</span> <span class="s1">'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Accept-Language: en-US,en;q=0.9'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Sec-Fetch-Dest: document'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Sec-Fetch-Mode: navigate'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Sec-Fetch-Site: none'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Sec-Fetch-User: ?1'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Upgrade-Insecure-Requests: 1'</span> <span class="se">\</span>
+  https://example.com
+</code></pre></div></div>
+
+<p>These headers can help with basic servers that check request headers, but they do not guarantee acceptance. Some <code class="language-plaintext highlighter-rouge">Sec-Fetch-*</code> values should reflect the actual request context; do not blindly reuse them for every request.</p>
+
+<h4 id="save-cookies-and-reuse-them-on-a-follow-up-request">Save cookies and reuse them on a follow-up request</h4>
+
+<p>Make an initial request, follow redirects, and save cookies the server sets:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="se">\</span>
+  <span class="nt">-c</span> cookies.txt <span class="se">\</span>
+  <span class="nt">-A</span> <span class="s1">'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0.0.0 Safari/537.36'</span> <span class="se">\</span>
+  https://example.com/
+</code></pre></div></div>
+
+<p>Then make a second request using those cookies:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="se">\</span>
+  <span class="nt">-b</span> cookies.txt <span class="se">\</span>
+  <span class="nt">-c</span> cookies.txt <span class="se">\</span>
+  <span class="nt">-e</span> <span class="s1">'https://example.com/'</span> <span class="se">\</span>
+  <span class="nt">-A</span> <span class="s1">'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0.0.0 Safari/537.36'</span> <span class="se">\</span>
+  https://example.com/account
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-c cookies.txt</code> writes cookies received from the server to a file.</li>
+  <li><code class="language-plaintext highlighter-rouge">-b cookies.txt</code> sends saved cookies with the next request.</li>
+  <li><code class="language-plaintext highlighter-rouge">-e</code> sets the <code class="language-plaintext highlighter-rouge">Referer</code> header.</li>
+  <li>Using both <code class="language-plaintext highlighter-rouge">-b</code> and <code class="language-plaintext highlighter-rouge">-c</code> lets curl send existing cookies and update the cookie file.</li>
+</ul>
+
+<p>Treat cookie files as sensitive: they can contain session credentials. Do not commit them to Git or share them publicly.</p>
+
+<h4 id="keep-cookies-for-multiple-requests-in-one-shell-session">Keep cookies for multiple requests in one shell session</h4>
+
+<p>Use a cookie jar for each command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> <span class="nt">-L</span> <span class="nt">-c</span> cookies.txt <span class="nt">-b</span> cookies.txt https://example.com/
+curl <span class="nt">-sS</span> <span class="nt">-L</span> <span class="nt">-c</span> cookies.txt <span class="nt">-b</span> cookies.txt https://example.com/next-page
+</code></pre></div></div>
+
+<p>The second request can use cookies set by the first request. Add the same required headers to both commands if the server expects them.</p>
+
+<h4 id="submit-a-form-with-a-session-cookie">Submit a form with a session cookie</h4>
+
+<p>For a simple form endpoint that accepts URL-encoded data:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="se">\</span>
+  <span class="nt">-b</span> cookies.txt <span class="nt">-c</span> cookies.txt <span class="se">\</span>
+  <span class="nt">-e</span> <span class="s1">'https://example.com/form'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Content-Type: application/x-www-form-urlencoded'</span> <span class="se">\</span>
+  <span class="nt">--data</span> <span class="s1">'name=Alex&amp;role=student'</span> <span class="se">\</span>
+  https://example.com/submit
+</code></pre></div></div>
+
+<p>Real websites may require a CSRF token or hidden form value. You must obtain the correct token from the preceding page and send it with the form submission. Do not assume every site uses the same field name or token mechanism.</p>
+
+<h4 id="follow-redirects-and-inspect-what-happened">Follow redirects and inspect what happened</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> <span class="nt">-L</span> <span class="nt">-c</span> cookies.txt <span class="nt">-b</span> cookies.txt https://example.com/
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-L</code> follows redirects, while <code class="language-plaintext highlighter-rouge">-v</code> shows request and response details. Review verbose logs before sharing them because they may reveal sensitive headers or session information.</p>
+
+<p><strong>Important:</strong> Matching headers and retaining cookies can help with basic browser checks and multi-step HTTP sessions. It will not reproduce browser TLS fingerprints, JavaScript-generated tokens, or other browser-specific behavior. Use these techniques on sites and accounts you are authorized to access.</p>
+
+<p>Display the response headers and body:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-i</span> https://example.com
+</code></pre></div></div>
+
+<p>Common HTTP status codes:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">200</code></td>
+      <td>OK; request succeeded</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">301</code> / <code class="language-plaintext highlighter-rouge">302</code></td>
+      <td>Redirect</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">400</code></td>
+      <td>Bad request</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">401</code></td>
+      <td>Authentication required or failed</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">403</code></td>
+      <td>Forbidden</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">404</code></td>
+      <td>Not found</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">500</code></td>
+      <td>Server error</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A server can respond differently depending on the URL, request headers, authentication, and other conditions.</p>
+
+<h2 id="6-sending-data-with-curl">6. Sending Data with curl</h2>
+
+<h3 id="send-a-get-request">Send a GET request</h3>
+
+<p>GET is the default HTTP method:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://example.com
+</code></pre></div></div>
+
+<h3 id="send-form-data-with-post">Send form data with POST</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'name=Alex&amp;role=student'</span> https://example.com/submit
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-d</code> sends data and normally makes curl use POST. The example endpoint is illustrative; it will only work if the server accepts that request.</p>
+
+<h3 id="send-json-data">Send JSON data</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{"name":"Alex","role":"student"}'</span> <span class="se">\</span>
+  https://example.com/api
+</code></pre></div></div>
+
+<h3 id="read-json-data-from-a-local-file">Read JSON data from a local file</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data-binary</span> @data.json <span class="se">\</span>
+  https://example.com/api
+</code></pre></div></div>
+
+<h3 id="choose-a-request-method-explicitly">Choose a request method explicitly</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> DELETE https://example.com/api/items/123
+</code></pre></div></div>
+
+<p>Only use methods such as POST, PUT, PATCH, or DELETE when the target service supports them and you are authorized to make the change.</p>
+
+<h2 id="7-authentication-and-certificates">7. Authentication and Certificates</h2>
+
+<p>Send basic authentication credentials:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-u</span> username https://example.com/private
+</code></pre></div></div>
+
+<p>curl prompts for the password when it is not included in the command. Avoid placing passwords directly in shell history.</p>
+
+<p>Use a client certificate when a service requires one:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--cert</span> client.crt <span class="nt">--key</span> client.key https://example.com
+</code></pre></div></div>
+
+<p><strong>Do not disable certificate verification for routine use.</strong> The <code class="language-plaintext highlighter-rouge">-k</code> / <code class="language-plaintext highlighter-rouge">--insecure</code> option skips TLS certificate checks and can expose you to interception. Use it only for a controlled test when you understand the risk.</p>
+
+<h2 id="8-basic-wget-commands">8. Basic wget Commands</h2>
+
+<p>Download a file using the remote filename:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://example.com/file.zip
+</code></pre></div></div>
+
+<p>Choose a local filename:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-O</span> downloaded-file.zip https://example.com/file.zip
+</code></pre></div></div>
+
+<p>Save the download in a specific directory:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-P</span> ~/Downloads https://example.com/file.zip
+</code></pre></div></div>
+
+<p>Download quietly:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-q</span> https://example.com/file.zip
+</code></pre></div></div>
+
+<p>Show response details:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-S</span> https://example.com
+</code></pre></div></div>
+
+<p>Check a URL without saving the response body:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">--spider</span> https://example.com
+</code></pre></div></div>
+
+<p>Follow links recursively (use carefully):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">--recursive</span> <span class="nt">--level</span><span class="o">=</span>1 https://example.com/
+</code></pre></div></div>
+
+<p>Recursive downloading can retrieve many files. Only use it where permitted, and be mindful of site terms, robots rules, and server load.</p>
+
+<h2 id="9-resuming-and-limiting-downloads">9. Resuming and Limiting Downloads</h2>
+
+<p>Resume an interrupted wget download:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-c</span> https://example.com/file.zip
+</code></pre></div></div>
+
+<p>Retry failed downloads up to five times:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">--tries</span><span class="o">=</span>5 https://example.com/file.zip
+</code></pre></div></div>
+
+<p>Set a timeout for wget network operations:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">--timeout</span><span class="o">=</span>15 https://example.com/file.zip
+</code></pre></div></div>
+
+<p>Limit wget's download rate to 500 KiB/s:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">--limit-rate</span><span class="o">=</span>500k https://example.com/file.zip
+</code></pre></div></div>
+
+<p>Limit curl's transfer rate to 500 KiB/s:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--limit-rate</span> 500K <span class="nt">-O</span> https://example.com/file.zip
+</code></pre></div></div>
+
+<h2 id="10-useful-options-at-a-glance">10. Useful Options at a Glance</h2>
+
+<h3 id="curl">curl</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-L</code></td>
+      <td>Follow redirects</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-I</code></td>
+      <td>Fetch headers only</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-i</code></td>
+      <td>Include response headers in output</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-v</code></td>
+      <td>Verbose connection and protocol details</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-o FILE</code></td>
+      <td>Save output to a named file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-O</code></td>
+      <td>Save using the URL's filename</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-H 'Header: value'</code></td>
+      <td>Add a request header</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-d DATA</code></td>
+      <td>Send request data</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-u USER</code></td>
+      <td>Use basic authentication</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-C -</code></td>
+      <td>Resume a download</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-sS</code></td>
+      <td>Quiet output, but show errors</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--connect-timeout SECONDS</code></td>
+      <td>Limit connection-establishment time</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-w FORMAT</code></td>
+      <td>Print selected transfer information</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="wget">wget</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-O FILE</code></td>
+      <td>Save to a specified filename</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-P DIR</code></td>
+      <td>Save to a specified directory</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-c</code></td>
+      <td>Continue a partial download</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-q</code></td>
+      <td>Quiet output</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-S</code></td>
+      <td>Print server response headers</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--spider</code></td>
+      <td>Check a URL without downloading its body to a file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--tries=N</code></td>
+      <td>Set the number of attempts</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--timeout=SECONDS</code></td>
+      <td>Set network timeout</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--limit-rate=RATE</code></td>
+      <td>Limit download speed</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--recursive</code></td>
+      <td>Download linked content recursively</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="11-practical-examples">11. Practical Examples</h2>
+
+<h3 id="test-whether-a-website-responds">Test whether a website responds</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> <span class="nt">-o</span> /dev/null <span class="nt">-w</span> <span class="s1">'HTTP status: %{http_code}\n'</span> https://example.com
+</code></pre></div></div>
+
+<h3 id="download-a-script-for-inspection">Download a script for inspection</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="nt">-o</span> script.sh https://example.com/script.sh
+less script.sh
+</code></pre></div></div>
+
+<p>Inspect downloaded scripts before running them, especially when they come from unfamiliar sources.</p>
+
+<h3 id="download-a-file-and-save-it-to-downloads">Download a file and save it to Downloads</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-P</span> ~/Downloads https://example.com/file.zip
+</code></pre></div></div>
+
+<h3 id="check-dns-tls-and-connection-details">Check DNS, TLS, and connection details</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> https://example.com
+</code></pre></div></div>
+
+<p>The verbose output can help identify where a connection fails, but it may include request details. Review it before sharing logs publicly.</p>
+
+<h3 id="use-curl-to-query-a-json-api">Use curl to query a JSON API</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> https://jsonplaceholder.typicode.com/todos/1
+</code></pre></div></div>
+
+<p>If <code class="language-plaintext highlighter-rouge">jq</code> is installed, format JSON output:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> https://jsonplaceholder.typicode.com/todos/1 | jq
+</code></pre></div></div>
+
+<p>Install <code class="language-plaintext highlighter-rouge">jq</code> on Debian if needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>jq
+</code></pre></div></div>
+
+<h2 id="12-help-and-documentation">12. Help and Documentation</h2>
+
+<p>Show curl help:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--help</span>
+curl <span class="nt">--manual</span>
+</code></pre></div></div>
+
+<p>Show wget help:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">--help</span>
+man wget
+</code></pre></div></div>
+
+<p>On Debian, the manual pages are usually available through the <code class="language-plaintext highlighter-rouge">man</code> command after installing the relevant packages.</p>
+
+<h2 id="13-troubleshoot-redirects-and-click-tracking-urls">13. Troubleshoot Redirects and Click-Tracking URLs</h2>
+
+<p>Use these commands to inspect redirects in marketing email links and determine the HTTP status, redirect destination, and final URL.</p>
+
+<h3 id="quick-check-show-the-http-status-and-final-url">Quick check: show the HTTP status and final URL</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> <span class="nt">-L</span> <span class="nt">-o</span> /dev/null <span class="se">\</span>
+  <span class="nt">-w</span> <span class="s1">'HTTP status: %{http_code}\nFinal URL: %{url_effective}\nRedirects followed: %{num_redirects}\n'</span> <span class="se">\</span>
+  <span class="s1">'https://example.com/tracking-link'</span>
+</code></pre></div></div>
+
+<p>This follows redirects and prints the final HTTP status, the URL reached at the end, and the number of redirects followed.</p>
+
+<h3 id="show-each-redirect-response-and-its-location-header">Show each redirect response and its Location header</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> <span class="nt">-L</span> <span class="nt">-D</span> - <span class="nt">-o</span> /dev/null <span class="se">\</span>
+  <span class="nt">-w</span> <span class="s1">'\nFinal HTTP status: %{http_code}\nFinal URL: %{url_effective}\nRedirects followed: %{num_redirects}\n'</span> <span class="se">\</span>
+  <span class="s1">'https://example.com/tracking-link'</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-L</code> follows redirects.</li>
+  <li><code class="language-plaintext highlighter-rouge">-D -</code> prints response headers for each response to standard output.</li>
+  <li><code class="language-plaintext highlighter-rouge">-o /dev/null</code> discards response bodies.</li>
+  <li><code class="language-plaintext highlighter-rouge">-w</code> prints a summary after the transfer.</li>
+  <li>Look for each <code class="language-plaintext highlighter-rouge">HTTP/...</code> status line and its <code class="language-plaintext highlighter-rouge">Location:</code> header. A <code class="language-plaintext highlighter-rouge">Location</code> header usually identifies the next URL in an HTTP redirect.</li>
+</ul>
+
+<p>This is a handy one-command diagnostic. It shows the response headers for the chain and then the final URL.</p>
+
+<h3 id="compact-redirect-chain-report">Compact redirect-chain report</h3>
+
+<p>If you want to print only each response's status and <code class="language-plaintext highlighter-rouge">Location</code> header, save headers to a temporary file and filter them:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">headers</span><span class="o">=</span><span class="si">$(</span><span class="nb">mktemp</span><span class="si">)</span>
+curl <span class="nt">-sS</span> <span class="nt">-L</span> <span class="nt">-D</span> <span class="s2">"</span><span class="nv">$headers</span><span class="s2">"</span> <span class="nt">-o</span> /dev/null <span class="se">\</span>
+  <span class="nt">-w</span> <span class="s1">'\nFinal HTTP status: %{http_code}\nFinal URL: %{url_effective}\nRedirects followed: %{num_redirects}\n'</span> <span class="se">\</span>
+  <span class="s1">'https://example.com/tracking-link'</span>
+<span class="nb">grep</span> <span class="nt">-iE</span> <span class="s1">'^(HTTP/|Location:)'</span> <span class="s2">"</span><span class="nv">$headers</span><span class="s2">"</span>
+<span class="nb">rm</span> <span class="nt">-f</span> <span class="s2">"</span><span class="nv">$headers</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>This prints the final summary and then the redirect status/<code class="language-plaintext highlighter-rouge">Location</code> lines. To display the chain in order with each response's status immediately followed by its <code class="language-plaintext highlighter-rouge">Location</code>, use:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> <span class="nt">-L</span> <span class="nt">-D</span> - <span class="nt">-o</span> /dev/null <span class="se">\</span>
+  <span class="s1">'https://example.com/tracking-link'</span> 2&gt;/dev/null |
+  <span class="nb">awk</span> <span class="s1">'BEGIN { IGNORECASE=1 }
+       /^HTTP\// { print; next }
+       /^Location:/ { print; next }'</span>
+</code></pre></div></div>
+
+<h3 id="understand-common-redirect-status-codes">Understand common redirect status codes</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Meaning</th>
+      <th>Typical use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">301</code></td>
+      <td>Moved Permanently</td>
+      <td>A URL has a permanent new location</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">302</code></td>
+      <td>Found</td>
+      <td>Common temporary redirect</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">303</code></td>
+      <td>See Other</td>
+      <td>Redirects to another resource, often after a form submission</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">307</code></td>
+      <td>Temporary Redirect</td>
+      <td>Temporary redirect that preserves the request method</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">308</code></td>
+      <td>Permanent Redirect</td>
+      <td>Permanent redirect that preserves the request method</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">200</code></td>
+      <td>OK</td>
+      <td>The requested resource was returned successfully; this may be the final landing page</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">4xx</code></td>
+      <td>Client error</td>
+      <td>The request was rejected or the resource was unavailable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">5xx</code></td>
+      <td>Server error</td>
+      <td>The server or an upstream service encountered an error</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="troubleshoot-a-redirect-without-following-it">Troubleshoot a redirect without following it</h3>
+
+<p>To inspect only the first response, including its status and <code class="language-plaintext highlighter-rouge">Location</code> header:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> <span class="nt">-D</span> - <span class="nt">-o</span> /dev/null <span class="se">\</span>
+  <span class="nt">-w</span> <span class="s1">'\nHTTP status: %{http_code}\n'</span> <span class="se">\</span>
+  <span class="s1">'https://example.com/tracking-link'</span>
+</code></pre></div></div>
+
+<p>This does <strong>not</strong> use <code class="language-plaintext highlighter-rouge">-L</code>, so curl does not follow the redirect. It is useful when you need to inspect the first tracking server's response.</p>
+
+<h3 id="important-notes-for-email-click-tracking">Important notes for email click tracking</h3>
+
+<ul>
+  <li>Test the exact tracking URL copied from the email, including its query parameters.</li>
+  <li>Tracking links may expire, require cookies, or behave differently depending on the <code class="language-plaintext highlighter-rouge">User-Agent</code>, IP address, or security-scanning systems.</li>
+  <li>A redirect may be generated by an HTTP <code class="language-plaintext highlighter-rouge">Location</code> header, while some pages redirect using JavaScript or HTML meta refresh. <code class="language-plaintext highlighter-rouge">curl -L</code> follows HTTP redirects, but does not execute JavaScript or meta refresh.</li>
+  <li>Avoid sharing complete tracking URLs publicly: query parameters can contain recipient identifiers or other sensitive tracking data.</li>
+</ul>
+
+<hr />
+
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quick references for programming, Linux, and web development.">
+  <title>Cheat Sheets | Home</title>
+  <link rel="stylesheet" href="/css/home_style.css">
+  <script src="/js/home.js" defer></script>
+</head>
+<body>
+<div class="site-shell">
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="sidebar-top">
+      <a class="brand" href="/"><span class="logo" aria-hidden="true">CS</span><span class="brand-name">Cheat Sheets</span></a>
+      <button class="close-menu" id="close-menu" type="button" aria-label="Close menu">×</button>
+    </div>
+    <nav class="primary-nav" aria-label="Primary navigation"><a class="nav-link active" href="/" aria-current="page">Home</a></nav>
+    <section class="browse">
+      <h2>Browse cheat sheets</h2>
+      <label class="sr-only" for="sheet-search">Filter cheat sheets</label>
+      <input id="sheet-search" type="search" placeholder="Filter cheat sheets…" autocomplete="off">
+      <p id="sheet-status" class="sheet-status" role="status">Loading cheat sheets…</p>
+      <nav class="sheet-list" id="sheet-list" aria-label="Cheat sheets">
+        <a class="sheet-link" href="/html/bash.html" data-title="Bash Scripting Cheat Sheet">Bash Scripting Cheat Sheet</a>
+        <a class="sheet-link" href="/html/c.html" data-title="C Programming Language Cheat Sheet">C Programming Language Cheat Sheet</a>
+        <a class="sheet-link" href="/html/package_management.html" data-title="Debian Package Management Cheat Sheet">Debian Package Management Cheat Sheet</a>
+        <a class="sheet-link" href="/html/docker.html" data-title="Docker Cheat Sheet for Debian 13">Docker Cheat Sheet for Debian 13</a>
+        <a class="sheet-link" href="/html/docker_compose.html" data-title="Docker Compose Cheat Sheet for Debian 13">Docker Compose Cheat Sheet for Debian 13</a>
+        <a class="sheet-link" href="/html/sed.html" data-title="GNU sed Cheat Sheet for Debian 13">GNU sed Cheat Sheet for Debian 13</a>
+        <a class="sheet-link" href="/html/git.html" data-title="Git and GitHub CLI Cheat Sheet for Debian 13">Git and GitHub CLI Cheat Sheet for Debian 13</a>
+        <a class="sheet-link" href="/html/disk_partitioning.html" data-title="Linux Disk, Partition, Filesystem, and Mounting Cheat Sheet">Linux Disk, Partition, Filesystem, and Mounting Cheat Sheet</a>
+        <a class="sheet-link" href="/html/networking.html" data-title="Linux Networking Cheat Sheet for Debian 13">Linux Networking Cheat Sheet for Debian 13</a>
+        <a class="sheet-link" href="/html/process_management.html" data-title="Linux Process Management Cheat Sheet">Linux Process Management Cheat Sheet</a>
+        <a class="sheet-link" href="/html/nmap.html" data-title="Nmap Cheat Sheet for Debian 13">Nmap Cheat Sheet for Debian 13</a>
+        <a class="sheet-link" href="/html/ruby.html" data-title="Ruby Programming Language Cheat Sheet">Ruby Programming Language Cheat Sheet</a>
+        <a class="sheet-link" href="/html/ssh.html" data-title="SSH and SCP Cheat Sheet for Debian 13">SSH and SCP Cheat Sheet for Debian 13</a>
+        <a class="sheet-link" href="/html/text_manipulation.html" data-title="Text-File Manipulation Reference for Debian 13">Text-File Manipulation Reference for Debian 13</a>
+        <a class="sheet-link" href="/html/virtualbox.html" data-title="VirtualBox Management Cheat Sheet for Debian 13">VirtualBox Management Cheat Sheet for Debian 13</a>
+        <a class="sheet-link" href="/html/windows.html" data-title="Windows Administration Cheat Sheet">Windows Administration Cheat Sheet</a>
+        <a class="sheet-link" href="/html/curl_wget.html" data-title="curl and wget Cheat Sheet for Debian 13">curl and wget Cheat Sheet for Debian 13</a>
+        <a class="sheet-link" href="/html/systemd.html" data-title="systemd Cheat Sheet for Debian 13">systemd Cheat Sheet for Debian 13</a>
+      </nav>
+      <p id="empty-message" class="empty-message" hidden>No matching cheat sheets.</p>
+    </section>
+  </aside>
+  <button class="backdrop" id="backdrop" type="button" aria-label="Close menu"></button>
+
+  <main class="main-content">
+    <header class="mobile-header">
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="sidebar" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a href="/">Cheat Sheets</a>
+    </header>
+
+        <section class="hero">
+      <p class="eyebrow">Quick references. Less searching.</p>
+      <h1>Cheat Sheets</h1>
+      <p>Practical, easy-to-scan references for the tools and technologies you use.</p>
+    </section>
+
+    <section class="latest" aria-labelledby="latest-heading">
+      <div class="section-heading">
+        <div><p class="eyebrow">Recently added</p><h2 id="latest-heading">Latest cheat sheets</h2></div>
+      </div>
+      <div class="sheet-grid" id="latest-grid">
+        <a class="sheet-card" href="/html/windows.html" data-added="2026-10-24">
+          <span class="category">Windows</span><h3>Windows Administration Cheat Sheet</h3>
+          <p>Local users, processes, services, disks, networking, and updates with built-in Windows tools.</p>
+          <span class="card-meta">Added October 24, 2026</span><span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="sheet-card" href="/html/c.html" data-added="2026-10-24">
+          <span class="category">Programming</span><h3>C Programming Language Cheat Sheet</h3>
+          <p>Core C syntax, data types, control flow, pointers, and standard library essentials.</p>
+          <span class="card-meta">Added October 24, 2026</span><span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="sheet-card" href="/html/networking.html" data-added="2026-10-24">
+          <span class="category">Networking</span><h3>Linux Networking Cheat Sheet for Debian 13</h3>
+          <p>Inspect network configuration, test connectivity, manage DNS, and read routes and ports.</p>
+          <span class="card-meta">Added October 24, 2026</span><span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="sheet-card" href="/html/virtualbox.html" data-added="2026-10-24">
+          <span class="category">Virtualization</span><h3>VirtualBox Management Cheat Sheet for Debian 13</h3>
+          <p>Create VMs, take snapshots, configure networking, and convert disks from the command line.</p>
+          <span class="card-meta">Added October 24, 2026</span><span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+
+
+    <footer class="site-footer">Built for quick reference. Made to be useful.</footer>
+  </main>
+</div>
+</body>
+</html>

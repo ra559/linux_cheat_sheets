@@ -1,0 +1,9 @@
+---
+layout: null
+---
+{%- assign sheets = site.pages | where: "layout", "sheet" | sort: "title" -%}
+[
+{%- for sheet in sheets %}
+  {"title": {{ sheet.title | jsonify }}, "url": {{ sheet.url | relative_url | jsonify }}}{% unless forloop.last %},{% endunless %}
+{%- endfor %}
+]

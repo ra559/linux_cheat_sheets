@@ -1,0 +1,7 @@
+_site
+.git
+.gitignore
+backup_pre_jekyll.tar
+docs/html
+assets/pdfs.7z
+README.md

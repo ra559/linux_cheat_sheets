@@ -1,0 +1,26 @@
+---
+layout: home
+title: Cheat Sheets | Home
+description: Quick references for programming, Linux, and web development.
+---
+    <section class="hero">
+      <p class="eyebrow">Quick references. Less searching.</p>
+      <h1>Cheat Sheets</h1>
+      <p>Practical, easy-to-scan references for the tools and technologies you use.</p>
+    </section>
+
+    <section class="latest" aria-labelledby="latest-heading">
+      <div class="section-heading">
+        <div><p class="eyebrow">Recently added</p><h2 id="latest-heading">Latest cheat sheets</h2></div>
+      </div>
+      <div class="sheet-grid" id="latest-grid">
+        {%- assign latest = site.pages | where: "layout", "sheet" | sort: "date" | reverse %}
+        {%- for sheet in latest limit: 4 %}
+        <a class="sheet-card" href="{{ sheet.url | relative_url }}" data-added="{{ sheet.date | date: '%Y-%m-%d' }}">
+          <span class="category">{{ sheet.category }}</span><h3>{{ sheet.title }}</h3>
+          <p>{{ sheet.summary }}</p>
+          <span class="card-meta">Added {{ sheet.date | date: '%B %-d, %Y' }}</span><span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
+        {%- endfor %}
+      </div>
+    </section>

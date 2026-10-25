@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Linux Networking Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#linux-networking-cheat-sheet-for-debian-13" id="toc-linux-networking-cheat-sheet-for-debian-13">Linux Networking Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-install-common-networking-tools" id="toc-1-install-common-networking-tools">1. Install common networking tools</a></li>
+<li><a href="#2-inspect-network-interfaces" id="toc-2-inspect-network-interfaces">2. Inspect network interfaces</a>
+<ul>
+<li><a href="#list-interfaces-and-their-addresses" id="toc-list-interfaces-and-their-addresses">List interfaces and their addresses</a></li>
+<li><a href="#show-link-state" id="toc-show-link-state">Show link state</a></li>
+<li><a href="#show-one-interface" id="toc-show-one-interface">Show one interface</a></li>
+<li><a href="#enable-or-disable-an-interface-temporarily" id="toc-enable-or-disable-an-interface-temporarily">Enable or disable an interface temporarily</a></li>
+<li><a href="#show-link-speed-and-duplex" id="toc-show-link-speed-and-duplex">Show link speed and duplex</a></li>
+</ul>
+</li>
+<li><a href="#3-ip-addresses-and-subnets" id="toc-3-ip-addresses-and-subnets">3. IP addresses and subnets</a>
+<ul>
+<li><a href="#show-the-hosts-ipv4-addresses" id="toc-show-the-hosts-ipv4-addresses">Show the host's IPv4 addresses</a></li>
+<li><a href="#show-ipv6-addresses" id="toc-show-ipv6-addresses">Show IPv6 addresses</a></li>
+<li><a href="#add-an-address-temporarily" id="toc-add-an-address-temporarily">Add an address temporarily</a></li>
+<li><a href="#understand-cidr-notation" id="toc-understand-cidr-notation">Understand CIDR notation</a></li>
+</ul>
+</li>
+<li><a href="#4-routes-and-the-default-gateway" id="toc-4-routes-and-the-default-gateway">4. Routes and the default gateway</a>
+<ul>
+<li><a href="#show-the-routing-table" id="toc-show-the-routing-table">Show the routing table</a></li>
+<li><a href="#ask-linux-how-it-will-route-to-a-destination" id="toc-ask-linux-how-it-will-route-to-a-destination">Ask Linux how it will route to a destination</a></li>
+<li><a href="#add-a-temporary-default-route" id="toc-add-a-temporary-default-route">Add a temporary default route</a></li>
+</ul>
+</li>
+<li><a href="#5-test-connectivity" id="toc-5-test-connectivity">5. Test connectivity</a>
+<ul>
+<li><a href="#ping-a-host" id="toc-ping-a-host">Ping a host</a></li>
+<li><a href="#test-local-networking-first" id="toc-test-local-networking-first">Test local networking first</a></li>
+<li><a href="#trace-the-route-to-a-destination" id="toc-trace-the-route-to-a-destination">Trace the route to a destination</a></li>
+<li><a href="#mtr-repeated-route-diagnostics" id="toc-mtr-repeated-route-diagnostics">MTR: repeated route diagnostics</a></li>
+<li><a href="#test-a-tcp-port" id="toc-test-a-tcp-port">Test a TCP port</a></li>
+<li><a href="#test-a-udp-port" id="toc-test-a-udp-port">Test a UDP port</a></li>
+</ul>
+</li>
+<li><a href="#6-dns-troubleshooting" id="toc-6-dns-troubleshooting">6. DNS troubleshooting</a>
+<ul>
+<li><a href="#look-up-a-name" id="toc-look-up-a-name">Look up a name</a></li>
+<li><a href="#query-specific-record-types" id="toc-query-specific-record-types">Query specific record types</a></li>
+<li><a href="#query-a-specific-dns-server" id="toc-query-a-specific-dns-server">Query a specific DNS server</a></li>
+<li><a href="#check-dns-configuration" id="toc-check-dns-configuration">Check DNS configuration</a></li>
+<li><a href="#distinguish-dns-failure-from-general-connectivity-failure" id="toc-distinguish-dns-failure-from-general-connectivity-failure">Distinguish DNS failure from general connectivity failure</a></li>
+</ul>
+</li>
+<li><a href="#7-inspect-ports-and-sockets" id="toc-7-inspect-ports-and-sockets">7. Inspect ports and sockets</a>
+<ul>
+<li><a href="#show-listening-tcp-sockets" id="toc-show-listening-tcp-sockets">Show listening TCP sockets</a></li>
+<li><a href="#show-listening-udp-sockets" id="toc-show-listening-udp-sockets">Show listening UDP sockets</a></li>
+<li><a href="#show-all-tcp-connections" id="toc-show-all-tcp-connections">Show all TCP connections</a></li>
+<li><a href="#show-all-udp-sockets" id="toc-show-all-udp-sockets">Show all UDP sockets</a></li>
+<li><a href="#find-a-process-listening-on-a-port" id="toc-find-a-process-listening-on-a-port">Find a process listening on a port</a></li>
+<li><a href="#check-which-process-uses-a-file-or-socket" id="toc-check-which-process-uses-a-file-or-socket">Check which process uses a file or socket</a></li>
+</ul>
+</li>
+<li><a href="#8-network-connections-with-curl-and-wget" id="toc-8-network-connections-with-curl-and-wget">8. Network connections with curl and wget</a>
+<ul>
+<li><a href="#check-whether-a-web-server-responds" id="toc-check-whether-a-web-server-responds">Check whether a web server responds</a></li>
+<li><a href="#show-http-status-and-final-url" id="toc-show-http-status-and-final-url">Show HTTP status and final URL</a></li>
+<li><a href="#resolve-a-name-to-a-specific-address-for-testing" id="toc-resolve-a-name-to-a-specific-address-for-testing">Resolve a name to a specific address for testing</a></li>
+<li><a href="#download-a-file" id="toc-download-a-file">Download a file</a></li>
+</ul>
+</li>
+<li><a href="#9-download-and-transfer-files" id="toc-9-download-and-transfer-files">9. Download and transfer files</a>
+<ul>
+<li><a href="#copy-a-file-over-ssh" id="toc-copy-a-file-over-ssh">Copy a file over SSH</a></li>
+<li><a href="#copy-a-directory-recursively" id="toc-copy-a-directory-recursively">Copy a directory recursively</a></li>
+<li><a href="#synchronize-files-with-rsync-over-ssh" id="toc-synchronize-files-with-rsync-over-ssh">Synchronize files with rsync over SSH</a></li>
+<li><a href="#check-remote-ssh-access" id="toc-check-remote-ssh-access">Check remote SSH access</a></li>
+</ul>
+</li>
+<li><a href="#10-ssh-and-secure-file-transfer" id="toc-10-ssh-and-secure-file-transfer">10. SSH and secure file transfer</a>
+<ul>
+<li><a href="#generate-an-ssh-key" id="toc-generate-an-ssh-key">Generate an SSH key</a></li>
+<li><a href="#copy-the-public-key-to-a-server" id="toc-copy-the-public-key-to-a-server">Copy the public key to a server</a></li>
+<li><a href="#test-authentication" id="toc-test-authentication">Test authentication</a></li>
+<li><a href="#inspect-known-host-keys" id="toc-inspect-known-host-keys">Inspect known host keys</a></li>
+</ul>
+</li>
+<li><a href="#11-network-configuration-on-debian" id="toc-11-network-configuration-on-debian">11. Network configuration on Debian</a>
+<ul>
+<li><a href="#check-interface-and-route-state" id="toc-check-interface-and-route-state">Check interface and route state</a></li>
+<li><a href="#check-common-network-services" id="toc-check-common-network-services">Check common network services</a></li>
+<li><a href="#inspect-networkmanager-connections" id="toc-inspect-networkmanager-connections">Inspect NetworkManager connections</a></li>
+<li><a href="#inspect-traditional-ifupdown-configuration" id="toc-inspect-traditional-ifupdown-configuration">Inspect traditional ifupdown configuration</a></li>
+<li><a href="#inspect-systemd-networkd-configuration" id="toc-inspect-systemd-networkd-configuration">Inspect systemd-networkd configuration</a></li>
+</ul>
+</li>
+<li><a href="#12-dhcp-and-static-ip-addresses" id="toc-12-dhcp-and-static-ip-addresses">12. DHCP and static IP addresses</a>
+<ul>
+<li><a href="#renew-dhcp-with-networkmanager" id="toc-renew-dhcp-with-networkmanager">Renew DHCP with NetworkManager</a></li>
+<li><a href="#dhcp-using-ifupdown" id="toc-dhcp-using-ifupdown">DHCP using ifupdown</a></li>
+<li><a href="#configure-a-static-ipv4-address-with-networkmanager" id="toc-configure-a-static-ipv4-address-with-networkmanager">Configure a static IPv4 address with NetworkManager</a></li>
+<li><a href="#return-to-dhcp-with-networkmanager" id="toc-return-to-dhcp-with-networkmanager">Return to DHCP with NetworkManager</a></li>
+</ul>
+</li>
+<li><a href="#13-networkmanager-and-nmcli" id="toc-13-networkmanager-and-nmcli">13. NetworkManager and nmcli</a>
+<ul>
+<li><a href="#show-devices-and-connections" id="toc-show-devices-and-connections">Show devices and connections</a></li>
+<li><a href="#show-device-details" id="toc-show-device-details">Show device details</a></li>
+<li><a href="#connect-or-disconnect-a-device" id="toc-connect-or-disconnect-a-device">Connect or disconnect a device</a></li>
+<li><a href="#show-wi-fi-networks" id="toc-show-wi-fi-networks">Show Wi-Fi networks</a></li>
+<li><a href="#connect-to-wi-fi" id="toc-connect-to-wi-fi">Connect to Wi-Fi</a></li>
+<li><a href="#activate-a-saved-connection" id="toc-activate-a-saved-connection">Activate a saved connection</a></li>
+<li><a href="#inspect-networkmanager-logs" id="toc-inspect-networkmanager-logs">Inspect NetworkManager logs</a></li>
+</ul>
+</li>
+<li><a href="#14-dns-and-dhcp-configuration" id="toc-14-dns-and-dhcp-configuration">14. DNS and DHCP configuration</a>
+<ul>
+<li><a href="#configure-ipv4-dhcp-with-networkmanager" id="toc-configure-ipv4-dhcp-with-networkmanager">Configure IPv4 DHCP with NetworkManager</a></li>
+<li><a href="#use-dhcp-for-the-address-but-specify-dns-servers" id="toc-use-dhcp-for-the-address-but-specify-dns-servers">Use DHCP for the address but specify DNS servers</a></li>
+<li><a href="#set-dns-temporarily-with-systemd-resolved" id="toc-set-dns-temporarily-with-systemd-resolved">Set DNS temporarily with systemd-resolved</a></li>
+<li><a href="#configure-dhcp-and-dns-with-systemd-networkd" id="toc-configure-dhcp-and-dns-with-systemd-networkd">Configure DHCP and DNS with systemd-networkd</a></li>
+<li><a href="#inspect-and-troubleshoot-dhcp" id="toc-inspect-and-troubleshoot-dhcp">Inspect and troubleshoot DHCP</a></li>
+<li><a href="#inspect-and-troubleshoot-dns" id="toc-inspect-and-troubleshoot-dns">Inspect and troubleshoot DNS</a></li>
+</ul>
+</li>
+<li><a href="#15-firewall-basics-with-nftables-and-ufw" id="toc-15-firewall-basics-with-nftables-and-ufw">15. Firewall basics with nftables and ufw</a>
+<ul>
+<li><a href="#inspect-nftables-rules" id="toc-inspect-nftables-rules">Inspect nftables rules</a></li>
+<li><a href="#check-ufw-status" id="toc-check-ufw-status">Check ufw status</a></li>
+<li><a href="#allow-ssh-before-enabling-a-firewall-remotely" id="toc-allow-ssh-before-enabling-a-firewall-remotely">Allow SSH before enabling a firewall remotely</a></li>
+<li><a href="#allow-a-service-port" id="toc-allow-a-service-port">Allow a service port</a></li>
+<li><a href="#remove-a-rule" id="toc-remove-a-rule">Remove a rule</a></li>
+</ul>
+</li>
+<li><a href="#16-packet-capture-and-traffic-inspection" id="toc-16-packet-capture-and-traffic-inspection">16. Packet capture and traffic inspection</a>
+<ul>
+<li><a href="#capture-packets-on-an-interface" id="toc-capture-packets-on-an-interface">Capture packets on an interface</a></li>
+<li><a href="#capture-a-limited-number-of-packets" id="toc-capture-a-limited-number-of-packets">Capture a limited number of packets</a></li>
+<li><a href="#capture-traffic-to-or-from-a-host" id="toc-capture-traffic-to-or-from-a-host">Capture traffic to or from a host</a></li>
+<li><a href="#capture-traffic-for-a-port" id="toc-capture-traffic-for-a-port">Capture traffic for a port</a></li>
+<li><a href="#save-a-capture-to-a-pcap-file" id="toc-save-a-capture-to-a-pcap-file">Save a capture to a PCAP file</a></li>
+</ul>
+</li>
+<li><a href="#17-hostname-mac-address-and-neighbor-table" id="toc-17-hostname-mac-address-and-neighbor-table">17. Hostname, MAC address, and neighbor table</a>
+<ul>
+<li><a href="#show-or-set-the-hostname" id="toc-show-or-set-the-hostname">Show or set the hostname</a></li>
+<li><a href="#show-mac-addresses" id="toc-show-mac-addresses">Show MAC addresses</a></li>
+<li><a href="#show-the-neighbor-arpndp-table" id="toc-show-the-neighbor-arpndp-table">Show the neighbor (ARP/NDP) table</a></li>
+<li><a href="#clear-a-neighbor-entry" id="toc-clear-a-neighbor-entry">Clear a neighbor entry</a></li>
+</ul>
+</li>
+<li><a href="#18-wireless-networking-wi-fi" id="toc-18-wireless-networking-wi-fi">18. Wireless networking (Wi-Fi)</a>
+<ul>
+<li><a href="#install-wireless-tools" id="toc-install-wireless-tools">Install wireless tools</a></li>
+<li><a href="#identify-the-wireless-interface" id="toc-identify-the-wireless-interface">Identify the wireless interface</a></li>
+<li><a href="#check-whether-wi-fi-is-blocked" id="toc-check-whether-wi-fi-is-blocked">Check whether Wi-Fi is blocked</a></li>
+<li><a href="#check-the-adapter-and-driver" id="toc-check-the-adapter-and-driver">Check the adapter and driver</a></li>
+<li><a href="#inspect-supported-wireless-capabilities" id="toc-inspect-supported-wireless-capabilities">Inspect supported wireless capabilities</a></li>
+<li><a href="#scan-for-nearby-wi-fi-networks" id="toc-scan-for-nearby-wi-fi-networks">Scan for nearby Wi-Fi networks</a></li>
+<li><a href="#connect-to-a-wi-fi-network-with-networkmanager" id="toc-connect-to-a-wi-fi-network-with-networkmanager">Connect to a Wi-Fi network with NetworkManager</a></li>
+<li><a href="#disconnect-reconnect-and-forget-a-saved-network" id="toc-disconnect-reconnect-and-forget-a-saved-network">Disconnect, reconnect, and forget a saved network</a></li>
+<li><a href="#inspect-the-current-wi-fi-connection" id="toc-inspect-the-current-wi-fi-connection">Inspect the current Wi-Fi connection</a></li>
+<li><a href="#check-signal-strength-and-link-quality" id="toc-check-signal-strength-and-link-quality">Check signal strength and link quality</a></li>
+<li><a href="#inspect-wi-fi-frequency-and-channel" id="toc-inspect-wi-fi-frequency-and-channel">Inspect Wi-Fi frequency and channel</a></li>
+<li><a href="#troubleshoot-a-connection-that-will-not-work" id="toc-troubleshoot-a-connection-that-will-not-work">Troubleshoot a connection that will not work</a></li>
+<li><a href="#view-networkmanager-wi-fi-logs" id="toc-view-networkmanager-wi-fi-logs">View NetworkManager Wi-Fi logs</a></li>
+<li><a href="#restart-wi-fi-or-networkmanager-carefully" id="toc-restart-wi-fi-or-networkmanager-carefully">Restart Wi-Fi or NetworkManager carefully</a></li>
+<li><a href="#optional-inspect-wireless-statistics" id="toc-optional-inspect-wireless-statistics">Optional: inspect wireless statistics</a></li>
+</ul>
+</li>
+<li><a href="#19-common-troubleshooting-workflows" id="toc-19-common-troubleshooting-workflows">19. Common troubleshooting workflows</a>
+<ul>
+<li><a href="#a-no-network-connectivity" id="toc-a-no-network-connectivity">A. No network connectivity</a></li>
+<li><a href="#b-dns-is-broken" id="toc-b-dns-is-broken">B. DNS is broken</a></li>
+<li><a href="#c-a-service-is-not-reachable" id="toc-c-a-service-is-not-reachable">C. A service is not reachable</a></li>
+<li><a href="#d-the-server-is-listening-only-on-localhost" id="toc-d-the-server-is-listening-only-on-localhost">D. The server is listening only on localhost</a></li>
+<li><a href="#e-find-the-route-chosen-for-a-connection" id="toc-e-find-the-route-chosen-for-a-connection">E. Find the route chosen for a connection</a></li>
+<li><a href="#f-inspect-dropped-or-failed-packets" id="toc-f-inspect-dropped-or-failed-packets">F. Inspect dropped or failed packets</a></li>
+</ul>
+</li>
+<li><a href="#20-quick-reference" id="toc-20-quick-reference">20. Quick reference</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="linux-networking-cheat-sheet-for-debian-13">Linux Networking Cheat Sheet for Debian 13</h1>
+
+<p>A practical command reference for checking network configuration, diagnosing connectivity, managing DNS, inspecting routes and ports, and performing common networking tasks on Debian 13.</p>
+
+<blockquote>
+  <p><strong>Caution:</strong> Network configuration changes can disconnect SSH sessions or interrupt services. Before changing an interface, route, firewall, or remote host configuration, make sure you have a recovery path. Examples use documentation/private IP addresses; replace them with values from your own network.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#1-install-common-networking-tools">1. Install common networking tools</a></li>
+  <li><a href="#2-inspect-network-interfaces">2. Inspect network interfaces</a></li>
+  <li><a href="#3-ip-addresses-and-subnets">3. IP addresses and subnets</a></li>
+  <li><a href="#4-routes-and-the-default-gateway">4. Routes and the default gateway</a></li>
+  <li><a href="#5-test-connectivity">5. Test connectivity</a></li>
+  <li><a href="#6-dns-troubleshooting">6. DNS troubleshooting</a></li>
+  <li><a href="#7-inspect-ports-and-sockets">7. Inspect ports and sockets</a></li>
+  <li><a href="#8-network-connections-with-curl-and-wget">8. Network connections with curl and wget</a></li>
+  <li><a href="#9-download-and-transfer-files">9. Download and transfer files</a></li>
+  <li><a href="#10-ssh-and-secure-file-transfer">10. SSH and secure file transfer</a></li>
+  <li><a href="#11-network-configuration-on-debian">11. Network configuration on Debian</a></li>
+  <li><a href="#12-dhcp-and-static-ip-addresses">12. DHCP and static IP addresses</a></li>
+  <li><a href="#13-networkmanager-and-nmcli">13. NetworkManager and nmcli</a></li>
+  <li><a href="#14-dns-and-dhcp-configuration">14. DNS and DHCP configuration</a></li>
+  <li><a href="#15-firewall-basics-with-nftables-and-ufw">15. Firewall basics with nftables and ufw</a></li>
+  <li><a href="#16-packet-capture-and-traffic-inspection">16. Packet capture and traffic inspection</a></li>
+  <li><a href="#17-hostname-mac-address-and-neighbor-table">17. Hostname, MAC address, and neighbor table</a></li>
+  <li><a href="#18-wireless-networking-wi-fi">18. Wireless networking (Wi-Fi)</a></li>
+  <li><a href="#19-common-troubleshooting-workflows">19. Common troubleshooting workflows</a></li>
+  <li><a href="#20-quick-reference">20. Quick reference</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-install-common-networking-tools">1. Install common networking tools</h2>
+
+<p>Many commands are included in a standard Debian installation. Install tools as needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>iproute2 iputils-ping dnsutils traceroute curl wget <span class="se">\</span>
+  netcat-openbsd tcpdump ethtool mtr-tiny lsof
+</code></pre></div></div>
+
+<p>Useful tools:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ip</code></td>
+      <td>Inspect and configure interfaces, addresses, routes, and neighbors</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ping</code></td>
+      <td>Test reachability using ICMP echo</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ss</code></td>
+      <td>Inspect sockets and listening ports</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">dig</code>, <code class="language-plaintext highlighter-rouge">nslookup</code></td>
+      <td>Query DNS</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">curl</code>, <code class="language-plaintext highlighter-rouge">wget</code></td>
+      <td>Make HTTP requests and download files</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">traceroute</code>, <code class="language-plaintext highlighter-rouge">mtr</code></td>
+      <td>Investigate network paths</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nc</code></td>
+      <td>Test TCP/UDP connectivity and simple socket interactions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tcpdump</code></td>
+      <td>Capture and inspect packets</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ethtool</code></td>
+      <td>Inspect Ethernet link properties</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nmcli</code></td>
+      <td>Manage NetworkManager connections, if NetworkManager is installed</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">resolvectl</code></td>
+      <td>Inspect systemd-resolved DNS configuration, if systemd-resolved is active</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="2-inspect-network-interfaces">2. Inspect network interfaces</h2>
+
+<h3 id="list-interfaces-and-their-addresses">List interfaces and their addresses</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip address
+ip addr show
+ip <span class="nt">-brief</span> address
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ip address</code> shows interfaces, IP addresses, and interface state.</li>
+  <li><code class="language-plaintext highlighter-rouge">ip -brief address</code> gives a compact overview.</li>
+  <li><code class="language-plaintext highlighter-rouge">UP</code> means the interface is administratively enabled; <code class="language-plaintext highlighter-rouge">LOWER_UP</code> commonly indicates a live link at the lower network layer.</li>
+</ul>
+
+<h3 id="show-link-state">Show link state</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nb">link
+</span>ip <span class="nt">-brief</span> <span class="nb">link</span>
+</code></pre></div></div>
+
+<h3 id="show-one-interface">Show one interface</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip address show dev enp3s0
+ip <span class="nb">link </span>show dev enp3s0
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">enp3s0</code> with the actual interface name, such as <code class="language-plaintext highlighter-rouge">eth0</code>, <code class="language-plaintext highlighter-rouge">ens18</code>, or <code class="language-plaintext highlighter-rouge">wlan0</code>.</p>
+
+<h3 id="enable-or-disable-an-interface-temporarily">Enable or disable an interface temporarily</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ip <span class="nb">link set </span>dev enp3s0 up
+<span class="nb">sudo </span>ip <span class="nb">link set </span>dev enp3s0 down
+</code></pre></div></div>
+
+<p>Bringing an interface down can disconnect your current session. These <code class="language-plaintext highlighter-rouge">ip</code> changes are generally runtime changes and may not persist after reboot.</p>
+
+<h3 id="show-link-speed-and-duplex">Show link speed and duplex</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ethtool enp3s0
+</code></pre></div></div>
+
+<p>This can show negotiated speed, duplex, and link status for supported Ethernet interfaces. Some virtual interfaces and Wi-Fi devices do not report all fields.</p>
+
+<h2 id="3-ip-addresses-and-subnets">3. IP addresses and subnets</h2>
+
+<h3 id="show-the-hosts-ipv4-addresses">Show the host's IPv4 addresses</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nt">-4</span> address
+</code></pre></div></div>
+
+<h3 id="show-ipv6-addresses">Show IPv6 addresses</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nt">-6</span> address
+</code></pre></div></div>
+
+<h3 id="add-an-address-temporarily">Add an address temporarily</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ip address add 192.168.1.50/24 dev enp3s0
+</code></pre></div></div>
+
+<p>This adds an address to the interface at runtime. Choose an unused address and correct prefix for your network. This command does not configure a default gateway and usually does not persist across reboot.</p>
+
+<p>Remove it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ip address del 192.168.1.50/24 dev enp3s0
+</code></pre></div></div>
+
+<h3 id="understand-cidr-notation">Understand CIDR notation</h3>
+
+<p><code class="language-plaintext highlighter-rouge">192.168.1.50/24</code> means the host address <code class="language-plaintext highlighter-rouge">192.168.1.50</code> with a 24-bit network prefix. In a typical <code class="language-plaintext highlighter-rouge">/24</code> IPv4 subnet, the network is <code class="language-plaintext highlighter-rouge">192.168.1.0/24</code> and the usual usable host range is <code class="language-plaintext highlighter-rouge">192.168.1.1</code> through <code class="language-plaintext highlighter-rouge">192.168.1.254</code>. Actual address planning depends on the network design.</p>
+
+<p>Useful private IPv4 ranges include:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">10.0.0.0/8</code></li>
+  <li><code class="language-plaintext highlighter-rouge">172.16.0.0/12</code></li>
+  <li><code class="language-plaintext highlighter-rouge">192.168.0.0/16</code></li>
+</ul>
+
+<p>These are private ranges for internal networks, not public internet addresses.</p>
+
+<h2 id="4-routes-and-the-default-gateway">4. Routes and the default gateway</h2>
+
+<h3 id="show-the-routing-table">Show the routing table</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip route
+ip <span class="nt">-6</span> route
+</code></pre></div></div>
+
+<p>The default route usually points to the router or next hop used for destinations without a more specific route.</p>
+
+<h3 id="ask-linux-how-it-will-route-to-a-destination">Ask Linux how it will route to a destination</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip route get 1.1.1.1
+ip route get 192.168.1.20
+</code></pre></div></div>
+
+<p>This is often more useful than trying to infer the chosen interface and source address from the full table.</p>
+
+<h3 id="add-a-temporary-default-route">Add a temporary default route</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ip route add default via 192.168.1.1 dev enp3s0
+</code></pre></div></div>
+
+<p>Only do this if the gateway and interface are correct and a default route does not already exist. A wrong route can disconnect the host.</p>
+
+<p>Remove a route:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ip route del default via 192.168.1.1 dev enp3s0
+</code></pre></div></div>
+
+<p>Routes added with <code class="language-plaintext highlighter-rouge">ip</code> are usually runtime-only. Use the network manager or persistent configuration method used by the system to make them survive reboot.</p>
+
+<h2 id="5-test-connectivity">5. Test connectivity</h2>
+
+<h3 id="ping-a-host">Ping a host</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ping 192.168.1.1
+ping <span class="nt">-c</span> 4 1.1.1.1
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-c 4</code> sends four echo requests and then exits. Ping can test basic IP reachability, but firewalls may block ICMP, so failure does not prove that a host is offline.</p>
+
+<h3 id="test-local-networking-first">Test local networking first</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ping <span class="nt">-c</span> 4 127.0.0.1
+ping <span class="nt">-c</span> 4 <span class="s2">"</span><span class="si">$(</span>ip <span class="nt">-4</span> route show default | <span class="nb">awk</span> <span class="s1">'NR==1 {print $3}'</span><span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>The second command attempts to ping the default gateway, if one is configured. If the command produces no target, inspect <code class="language-plaintext highlighter-rouge">ip route</code>.</p>
+
+<h3 id="trace-the-route-to-a-destination">Trace the route to a destination</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>traceroute 1.1.1.1
+</code></pre></div></div>
+
+<p>Some routers do not answer traceroute probes, so <code class="language-plaintext highlighter-rouge">* * *</code> does not always indicate a broken route.</p>
+
+<h3 id="mtr-repeated-route-diagnostics">MTR: repeated route diagnostics</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mtr 1.1.1.1
+</code></pre></div></div>
+
+<p>MTR combines repeated probing with a route display. Stop it with <code class="language-plaintext highlighter-rouge">q</code> or <code class="language-plaintext highlighter-rouge">Ctrl+C</code>, depending on the interface. Some probe modes need elevated privileges.</p>
+
+<h3 id="test-a-tcp-port">Test a TCP port</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc <span class="nt">-vz</span> example.com 443
+nc <span class="nt">-vz</span> 192.168.1.25 22
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-z</code> checks whether a connection can be established without sending application data, and <code class="language-plaintext highlighter-rouge">-v</code> gives more detail. A successful connection proves the TCP handshake succeeded, not that the application is healthy or correctly configured.</p>
+
+<h3 id="test-a-udp-port">Test a UDP port</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc <span class="nt">-vzu</span> 192.168.1.25 53
+</code></pre></div></div>
+
+<p>UDP has no TCP-style handshake. A result from a UDP probe can be inconclusive; use a protocol-specific test when possible.</p>
+
+<h2 id="6-dns-troubleshooting">6. DNS troubleshooting</h2>
+
+<p>DNS translates names such as <code class="language-plaintext highlighter-rouge">debian.org</code> into IP addresses and other records.</p>
+
+<h3 id="look-up-a-name">Look up a name</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>getent hosts debian.org
+nslookup debian.org
+dig debian.org
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">getent hosts</code> uses the system's configured name-service path.</li>
+  <li><code class="language-plaintext highlighter-rouge">nslookup</code> and <code class="language-plaintext highlighter-rouge">dig</code> query DNS more directly.</li>
+</ul>
+
+<h3 id="query-specific-record-types">Query specific record types</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dig debian.org A
+dig debian.org AAAA
+dig debian.org MX
+dig debian.org NS
+dig debian.org TXT
+</code></pre></div></div>
+
+<h3 id="query-a-specific-dns-server">Query a specific DNS server</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dig @1.1.1.1 debian.org
+dig @8.8.8.8 debian.org
+</code></pre></div></div>
+
+<p>Use only DNS servers you are permitted to query. Public resolvers are examples; an organization may require its own DNS server.</p>
+
+<h3 id="check-dns-configuration">Check DNS configuration</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> /etc/resolv.conf
+</code></pre></div></div>
+
+<p>On systems using systemd-resolved:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resolvectl status
+resolvectl query debian.org
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/resolv.conf</code> may be generated or managed by NetworkManager, systemd-resolved, or another network service. Do not overwrite it without understanding which service manages it.</p>
+
+<h3 id="distinguish-dns-failure-from-general-connectivity-failure">Distinguish DNS failure from general connectivity failure</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ping <span class="nt">-c</span> 3 1.1.1.1
+getent hosts debian.org
+curl <span class="nt">-I</span> https://debian.org
+</code></pre></div></div>
+
+<p>If the IP address is reachable but name lookups fail, DNS is a likely area to investigate. However, ICMP and HTTPS can be filtered independently, so compare multiple tests.</p>
+
+<h2 id="7-inspect-ports-and-sockets">7. Inspect ports and sockets</h2>
+
+<h3 id="show-listening-tcp-sockets">Show listening TCP sockets</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span>
+</code></pre></div></div>
+
+<h3 id="show-listening-udp-sockets">Show listening UDP sockets</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-lunp</span>
+</code></pre></div></div>
+
+<h3 id="show-all-tcp-connections">Show all TCP connections</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ss <span class="nt">-tan</span>
+</code></pre></div></div>
+
+<h3 id="show-all-udp-sockets">Show all UDP sockets</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ss <span class="nt">-uan</span>
+</code></pre></div></div>
+
+<h3 id="find-a-process-listening-on-a-port">Find a process listening on a port</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span> <span class="s1">'sport = :22'</span>
+<span class="nb">sudo </span>ss <span class="nt">-ltnp</span> <span class="s1">'sport = :8080'</span>
+</code></pre></div></div>
+
+<p>Common flags:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-l</code>: listening sockets.</li>
+  <li><code class="language-plaintext highlighter-rouge">-t</code>: TCP.</li>
+  <li><code class="language-plaintext highlighter-rouge">-u</code>: UDP.</li>
+  <li><code class="language-plaintext highlighter-rouge">-n</code>: numeric addresses and ports.</li>
+  <li><code class="language-plaintext highlighter-rouge">-p</code>: process information, when permissions allow.</li>
+  <li><code class="language-plaintext highlighter-rouge">-a</code>: all sockets of the selected type.</li>
+</ul>
+
+<h3 id="check-which-process-uses-a-file-or-socket">Check which process uses a file or socket</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>lsof <span class="nt">-i</span>
+<span class="nb">sudo </span>lsof <span class="nt">-iTCP</span>:8080 <span class="nt">-sTCP</span>:LISTEN
+</code></pre></div></div>
+
+<p>Install <code class="language-plaintext highlighter-rouge">lsof</code> if needed. A listening port is only one part of exposure; firewall rules, bind address, routing, and NAT also affect reachability.</p>
+
+<h2 id="8-network-connections-with-curl-and-wget">8. Network connections with curl and wget</h2>
+
+<h3 id="check-whether-a-web-server-responds">Check whether a web server responds</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-I</span> https://example.com
+curl <span class="nt">-v</span> https://example.com
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-I</code> requests response headers using an HTTP HEAD request when supported.</li>
+  <li><code class="language-plaintext highlighter-rouge">-v</code> shows connection and protocol details useful for debugging.</li>
+</ul>
+
+<h3 id="show-http-status-and-final-url">Show HTTP status and final URL</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sS</span> <span class="nt">-L</span> <span class="nt">-o</span> /dev/null <span class="se">\</span>
+  <span class="nt">-w</span> <span class="s1">'HTTP status: %{http_code}\nFinal URL: %{url_effective}\n'</span> <span class="se">\</span>
+  https://example.com
+</code></pre></div></div>
+
+<h3 id="resolve-a-name-to-a-specific-address-for-testing">Resolve a name to a specific address for testing</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--resolve</span> example.com:443:192.0.2.10 https://example.com/
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">192.0.2.10</code> is a documentation-only example address; replace it with the intended test server address. <code class="language-plaintext highlighter-rouge">--resolve</code> overrides DNS for the specified host and port for this curl invocation while preserving the hostname for HTTP and TLS.</p>
+
+<h3 id="download-a-file">Download a file</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-fL</span> <span class="nt">-o</span> file.tar.gz https://example.com/file.tar.gz
+wget https://example.com/file.tar.gz
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-f</code> makes curl return an error for many HTTP error responses, and <code class="language-plaintext highlighter-rouge">-L</code> follows redirects. Always verify downloaded files before executing them.</p>
+
+<h2 id="9-download-and-transfer-files">9. Download and transfer files</h2>
+
+<h3 id="copy-a-file-over-ssh">Copy a file over SSH</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp file.txt user@192.168.1.25:/home/user/
+</code></pre></div></div>
+
+<h3 id="copy-a-directory-recursively">Copy a directory recursively</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp <span class="nt">-r</span> project/ user@192.168.1.25:/home/user/
+</code></pre></div></div>
+
+<h3 id="synchronize-files-with-rsync-over-ssh">Synchronize files with rsync over SSH</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rsync <span class="nt">-avh</span> <span class="nt">--progress</span> project/ user@192.168.1.25:/home/user/project/
+</code></pre></div></div>
+
+<p>The trailing slash on <code class="language-plaintext highlighter-rouge">project/</code> means “copy the contents of this directory.” Without it, rsync generally creates a directory named <code class="language-plaintext highlighter-rouge">project</code> inside the destination. Be cautious with <code class="language-plaintext highlighter-rouge">--delete</code>, which can delete destination files that are absent from the source.</p>
+
+<h3 id="check-remote-ssh-access">Check remote SSH access</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh user@192.168.1.25
+ssh <span class="nt">-v</span> user@192.168.1.25
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">-v</code> for connection troubleshooting. Do not share verbose output without checking it for usernames, hostnames, addresses, and other potentially sensitive details.</p>
+
+<h2 id="10-ssh-and-secure-file-transfer">10. SSH and secure file transfer</h2>
+
+<h3 id="generate-an-ssh-key">Generate an SSH key</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-keygen <span class="nt">-t</span> ed25519
+</code></pre></div></div>
+
+<p>Protect the private key. Never copy the private key to a server or share it with others.</p>
+
+<h3 id="copy-the-public-key-to-a-server">Copy the public key to a server</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-copy-id user@192.168.1.25
+</code></pre></div></div>
+
+<p>This normally adds the public key to the remote account's <code class="language-plaintext highlighter-rouge">authorized_keys</code> file.</p>
+
+<h3 id="test-authentication">Test authentication</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-o</span> <span class="nv">BatchMode</span><span class="o">=</span><span class="nb">yes </span>user@192.168.1.25 <span class="nb">true</span>
+</code></pre></div></div>
+
+<p>This tests non-interactive SSH authentication and command execution. It may fail if the account requires interactive authentication.</p>
+
+<h3 id="inspect-known-host-keys">Inspect known host keys</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-keygen <span class="nt">-F</span> 192.168.1.25
+</code></pre></div></div>
+
+<p>If SSH warns that a host key changed, verify the server's identity through a trusted channel before removing or replacing the saved key. Do not blindly bypass host-key checking.</p>
+
+<h2 id="11-network-configuration-on-debian">11. Network configuration on Debian</h2>
+
+<p>Debian systems may use different network managers depending on installation and environment. Identify the active configuration method before editing files.</p>
+
+<h3 id="check-interface-and-route-state">Check interface and route state</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nt">-brief</span> address
+ip route
+</code></pre></div></div>
+
+<h3 id="check-common-network-services">Check common network services</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl is-active NetworkManager
+systemctl is-active systemd-networkd
+systemctl is-active networking
+systemctl is-active systemd-resolved
+</code></pre></div></div>
+
+<p>Not all of these services are installed or active on every system.</p>
+
+<h3 id="inspect-networkmanager-connections">Inspect NetworkManager connections</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli device status
+nmcli connection show
+</code></pre></div></div>
+
+<h3 id="inspect-traditional-ifupdown-configuration">Inspect traditional ifupdown configuration</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> /etc/network/interfaces
+<span class="nb">ls</span> <span class="nt">-la</span> /etc/network/interfaces.d/
+</code></pre></div></div>
+
+<h3 id="inspect-systemd-networkd-configuration">Inspect systemd-networkd configuration</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>networkctl status
+<span class="nb">ls</span> <span class="nt">-la</span> /etc/systemd/network/
+</code></pre></div></div>
+
+<p><strong>Do not configure the same interface through multiple managers at the same time.</strong> NetworkManager, ifupdown, and systemd-networkd have different configuration mechanisms. The correct approach depends on which service owns the interface.</p>
+
+<h2 id="12-dhcp-and-static-ip-addresses">12. DHCP and static IP addresses</h2>
+
+<h3 id="renew-dhcp-with-networkmanager">Renew DHCP with NetworkManager</h3>
+
+<p>First identify the connection and device:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli device status
+nmcli connection show
+</code></pre></div></div>
+
+<p>To reconnect a NetworkManager-managed connection:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli connection down <span class="s2">"Wired connection 1"</span>
+<span class="nb">sudo </span>nmcli connection up <span class="s2">"Wired connection 1"</span>
+</code></pre></div></div>
+
+<p>Replace the connection name with the actual one. This can disconnect you, especially over SSH.</p>
+
+<h3 id="dhcp-using-ifupdown">DHCP using ifupdown</h3>
+
+<p>On systems configured with ifupdown, administrators may use:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ifdown enp3s0
+<span class="nb">sudo </span>ifup enp3s0
+</code></pre></div></div>
+
+<p>These commands depend on ifupdown being installed and the interface being configured there. Do not use them on an interface managed by a different network manager.</p>
+
+<h3 id="configure-a-static-ipv4-address-with-networkmanager">Configure a static IPv4 address with NetworkManager</h3>
+
+<p>Example connection named <code class="language-plaintext highlighter-rouge">Wired connection 1</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli connection modify <span class="s2">"Wired connection 1"</span> <span class="se">\</span>
+  ipv4.method manual <span class="se">\</span>
+  ipv4.addresses 192.168.1.50/24 <span class="se">\</span>
+  ipv4.gateway 192.168.1.1 <span class="se">\</span>
+  ipv4.dns <span class="s2">"192.168.1.1 1.1.1.1"</span>
+</code></pre></div></div>
+
+<p>Apply the change:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli connection up <span class="s2">"Wired connection 1"</span>
+</code></pre></div></div>
+
+<p>Replace the connection name, address, gateway, and DNS servers with values appropriate to your LAN. Ensure the address is unused and does not conflict with your DHCP pool or network policy. Applying the connection can disconnect an SSH session.</p>
+
+<h3 id="return-to-dhcp-with-networkmanager">Return to DHCP with NetworkManager</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli connection modify <span class="s2">"Wired connection 1"</span> <span class="se">\</span>
+  ipv4.method auto <span class="se">\</span>
+  ipv4.addresses <span class="s2">""</span> <span class="se">\</span>
+  ipv4.gateway <span class="s2">""</span> <span class="se">\</span>
+  ipv4.dns <span class="s2">""</span>
+<span class="nb">sudo </span>nmcli connection up <span class="s2">"Wired connection 1"</span>
+</code></pre></div></div>
+
+<p>NetworkManager versions can differ in accepted clearing syntax. Review the connection with <code class="language-plaintext highlighter-rouge">nmcli connection show "Wired connection 1"</code> and its manual if a property reset is rejected.</p>
+
+<h2 id="13-networkmanager-and-nmcli">13. NetworkManager and nmcli</h2>
+
+<p><code class="language-plaintext highlighter-rouge">nmcli</code> is the command-line interface for NetworkManager. It is not useful on a system where NetworkManager is not installed or does not manage the interface.</p>
+
+<h3 id="show-devices-and-connections">Show devices and connections</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli device status
+nmcli connection show
+nmcli connection show <span class="nt">--active</span>
+</code></pre></div></div>
+
+<h3 id="show-device-details">Show device details</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli device show enp3s0
+</code></pre></div></div>
+
+<h3 id="connect-or-disconnect-a-device">Connect or disconnect a device</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli device connect enp3s0
+<span class="nb">sudo </span>nmcli device disconnect enp3s0
+</code></pre></div></div>
+
+<p>This can interrupt the current connection. Prefer using the correct connection profile for managed network setups.</p>
+
+<h3 id="show-wi-fi-networks">Show Wi-Fi networks</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli device wifi list
+</code></pre></div></div>
+
+<h3 id="connect-to-wi-fi">Connect to Wi-Fi</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli device wifi connect <span class="s2">"SSID_NAME"</span> password <span class="s2">"WIFI_PASSWORD"</span>
+</code></pre></div></div>
+
+<p>This can expose the password in shell history or process information depending on the environment. For sensitive environments, use a safer credential-handling approach and protect the shell history.</p>
+
+<h3 id="activate-a-saved-connection">Activate a saved connection</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli connection up <span class="s2">"CONNECTION_NAME"</span>
+</code></pre></div></div>
+
+<h3 id="inspect-networkmanager-logs">Inspect NetworkManager logs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">-u</span> NetworkManager <span class="nt">-b</span>
+</code></pre></div></div>
+
+<h2 id="14-dns-and-dhcp-configuration">14. DNS and DHCP configuration</h2>
+
+<p>DNS translates names such as <code class="language-plaintext highlighter-rouge">debian.org</code> into IP addresses. DHCP automatically provides network settings such as an IP address, subnet, default gateway, and often DNS servers. They are related but separate: a machine can receive its IP configuration through DHCP while using manually specified DNS servers.</p>
+
+<p><strong>First identify which service manages the interface.</strong> Avoid configuring the same interface through multiple network managers.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli device status
+systemctl is-active NetworkManager
+systemctl is-active systemd-networkd
+resolvectl status
+</code></pre></div></div>
+
+<h3 id="configure-ipv4-dhcp-with-networkmanager">Configure IPv4 DHCP with NetworkManager</h3>
+
+<p>Find the saved connection profile and its associated interface:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli connection show
+nmcli device status
+</code></pre></div></div>
+
+<p>Set a connection to obtain its IPv4 address automatically:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli connection modify <span class="s2">"Wired connection 1"</span> ipv4.method auto
+<span class="nb">sudo </span>nmcli connection up <span class="s2">"Wired connection 1"</span>
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">Wired connection 1</code> with the exact connection profile name. This changes the saved profile, so it persists across reconnects and reboots.</p>
+
+<p>To renew DHCP configuration by reactivating the profile:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli connection down <span class="s2">"Wired connection 1"</span>
+<span class="nb">sudo </span>nmcli connection up <span class="s2">"Wired connection 1"</span>
+</code></pre></div></div>
+
+<p>This briefly interrupts connectivity. If connected remotely over that interface, have another way to reach the machine before doing this.</p>
+
+<h3 id="use-dhcp-for-the-address-but-specify-dns-servers">Use DHCP for the address but specify DNS servers</h3>
+
+<p>This is a common setup: the router or DHCP server still supplies the IP address and gateway, but NetworkManager uses your chosen DNS servers.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli connection modify <span class="s2">"Wired connection 1"</span> ipv4.method auto
+<span class="nb">sudo </span>nmcli connection modify <span class="s2">"Wired connection 1"</span> ipv4.dns <span class="s2">"1.1.1.1 9.9.9.9"</span>
+<span class="nb">sudo </span>nmcli connection modify <span class="s2">"Wired connection 1"</span> ipv4.ignore-auto-dns <span class="nb">yes
+sudo </span>nmcli connection up <span class="s2">"Wired connection 1"</span>
+</code></pre></div></div>
+
+<p>Here, <code class="language-plaintext highlighter-rouge">1.1.1.1</code> and <code class="language-plaintext highlighter-rouge">9.9.9.9</code> are example DNS resolver addresses. Replace them with resolvers you trust or with your local DNS server, such as a Pi-hole.</p>
+
+<p>To return to DNS servers provided automatically by DHCP:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli connection modify <span class="s2">"Wired connection 1"</span> ipv4.ignore-auto-dns no
+<span class="nb">sudo </span>nmcli connection modify <span class="s2">"Wired connection 1"</span> ipv4.dns <span class="s2">""</span>
+<span class="nb">sudo </span>nmcli connection up <span class="s2">"Wired connection 1"</span>
+</code></pre></div></div>
+
+<p>For IPv6, corresponding settings use <code class="language-plaintext highlighter-rouge">ipv6.method</code>, <code class="language-plaintext highlighter-rouge">ipv6.dns</code>, and <code class="language-plaintext highlighter-rouge">ipv6.ignore-auto-dns</code>.</p>
+
+<h3 id="set-dns-temporarily-with-systemd-resolved">Set DNS temporarily with systemd-resolved</h3>
+
+<p>On systems where <code class="language-plaintext highlighter-rouge">systemd-resolved</code> is active, <code class="language-plaintext highlighter-rouge">resolvectl</code> can set DNS for a specific interface at runtime:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resolvectl status
+<span class="nb">sudo </span>resolvectl dns enp3s0 1.1.1.1 9.9.9.9
+<span class="nb">sudo </span>resolvectl domain enp3s0 <span class="s1">'~.'</span>
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">enp3s0</code> with the correct interface. The <code class="language-plaintext highlighter-rouge">~.</code> routing domain tells systemd-resolved to prefer this link for general DNS queries. These runtime settings are not the same as a persistent NetworkManager profile and may be lost when the interface or resolver configuration changes. Do not use this method unless <code class="language-plaintext highlighter-rouge">systemd-resolved</code> is running and managing DNS on the system.</p>
+
+<p>Revert per-link runtime DNS settings when appropriate:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>resolvectl revert enp3s0
+</code></pre></div></div>
+
+<h3 id="configure-dhcp-and-dns-with-systemd-networkd">Configure DHCP and DNS with systemd-networkd</h3>
+
+<p>Use this only if <code class="language-plaintext highlighter-rouge">systemd-networkd</code> manages the interface. NetworkManager and <code class="language-plaintext highlighter-rouge">systemd-networkd</code> should not both manage the same interface.</p>
+
+<p>Example file: <code class="language-plaintext highlighter-rouge">/etc/systemd/network/20-wired.network</code></p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Match]</span><span class="w">
+</span><span class="py">Name</span><span class="p">=</span><span class="s">enp3s0</span>
+<span class="w">
+</span><span class="nn">[Network]</span><span class="w">
+</span><span class="py">DHCP</span><span class="p">=</span><span class="s">ipv4</span>
+<span class="py">DNS</span><span class="p">=</span><span class="s">1.1.1.1</span>
+<span class="py">DNS</span><span class="p">=</span><span class="s">9.9.9.9</span>
+</code></pre></div></div>
+
+<p>Edit the file with your preferred editor, for example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>vim /etc/systemd/network/20-wired.network
+</code></pre></div></div>
+
+<p>Then restart the service to apply the configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl restart systemd-networkd
+networkctl status enp3s0
+</code></pre></div></div>
+
+<p>This example requests an IPv4 address through DHCP and specifies DNS servers for the link. DNS integration depends on the resolver setup; check <code class="language-plaintext highlighter-rouge">resolvectl status</code> if <code class="language-plaintext highlighter-rouge">systemd-resolved</code> is used. Restarting network services can disconnect remote sessions.</p>
+
+<h3 id="inspect-and-troubleshoot-dhcp">Inspect and troubleshoot DHCP</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nt">-brief</span> address
+ip route
+nmcli device show
+journalctl <span class="nt">-u</span> NetworkManager <span class="nt">-b</span> <span class="nt">--no-pager</span>
+journalctl <span class="nt">-u</span> systemd-networkd <span class="nt">-b</span> <span class="nt">--no-pager</span>
+</code></pre></div></div>
+
+<p>Look for an IPv4 address, a default route, and the DNS configuration associated with the active connection. If no address is assigned, check the cable or Wi-Fi connection, DHCP server/router, VLAN, and logs.</p>
+
+<p>If the <code class="language-plaintext highlighter-rouge">dhclient</code> utility is installed, it can request or renew a lease on some configurations, but do not run it blindly on an interface managed by NetworkManager or <code class="language-plaintext highlighter-rouge">systemd-networkd</code>. Prefer the commands provided by the active network manager.</p>
+
+<h3 id="inspect-and-troubleshoot-dns">Inspect and troubleshoot DNS</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resolvectl status
+<span class="nb">cat</span> /etc/resolv.conf
+getent hosts debian.org
+</code></pre></div></div>
+
+<p>Test a specific DNS server directly if <code class="language-plaintext highlighter-rouge">dig</code> is installed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dig @1.1.1.1 debian.org
+dig @9.9.9.9 debian.org
+</code></pre></div></div>
+
+<p>If querying a DNS server by IP works but system name lookups fail, inspect the local resolver configuration and the DNS service managing it. On many Debian setups, <code class="language-plaintext highlighter-rouge">/etc/resolv.conf</code> is managed automatically or is a symbolic link; editing it directly may be overwritten. Configure DNS through the active network manager instead.</p>
+
+<hr />
+
+<h2 id="15-firewall-basics-with-nftables-and-ufw">15. Firewall basics with nftables and ufw</h2>
+
+<p>A firewall controls which network traffic is accepted, rejected, or dropped. Debian can use nftables directly; <code class="language-plaintext highlighter-rouge">ufw</code> is an optional simpler front end. Avoid managing the same firewall rules independently through multiple tools unless you understand how they interact.</p>
+
+<h3 id="inspect-nftables-rules">Inspect nftables rules</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nft list ruleset
+</code></pre></div></div>
+
+<p>This displays the active nftables ruleset. If the output is empty, it does not necessarily mean every kind of traffic is blocked or that no other firewall mechanism is active.</p>
+
+<h3 id="check-ufw-status">Check ufw status</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ufw status verbose
+</code></pre></div></div>
+
+<p>Install if needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>ufw
+</code></pre></div></div>
+
+<h3 id="allow-ssh-before-enabling-a-firewall-remotely">Allow SSH before enabling a firewall remotely</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ufw allow OpenSSH
+</code></pre></div></div>
+
+<p>Then, only after reviewing the rules and ensuring the SSH rule matches your setup:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ufw <span class="nb">enable</span>
+</code></pre></div></div>
+
+<p>Enabling a firewall over SSH without allowing the correct management port can lock you out. If SSH uses a custom port, allow that port before enabling the firewall.</p>
+
+<h3 id="allow-a-service-port">Allow a service port</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ufw allow 80/tcp
+<span class="nb">sudo </span>ufw allow 443/tcp
+</code></pre></div></div>
+
+<h3 id="remove-a-rule">Remove a rule</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ufw status numbered
+<span class="nb">sudo </span>ufw delete RULE_NUMBER
+</code></pre></div></div>
+
+<p>Confirm the numbered rule before deleting it, because rule numbers can change after edits.</p>
+
+<h2 id="16-packet-capture-and-traffic-inspection">16. Packet capture and traffic inspection</h2>
+
+<h3 id="capture-packets-on-an-interface">Capture packets on an interface</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>tcpdump <span class="nt">-i</span> enp3s0
+</code></pre></div></div>
+
+<p>Stop with <code class="language-plaintext highlighter-rouge">Ctrl+C</code>. Packet captures can contain private information, including credentials or session data in unencrypted protocols. Capture only traffic you are authorized to inspect and store the resulting files securely.</p>
+
+<h3 id="capture-a-limited-number-of-packets">Capture a limited number of packets</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>tcpdump <span class="nt">-i</span> enp3s0 <span class="nt">-c</span> 100
+</code></pre></div></div>
+
+<h3 id="capture-traffic-to-or-from-a-host">Capture traffic to or from a host</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>tcpdump <span class="nt">-i</span> enp3s0 host 192.168.1.25
+</code></pre></div></div>
+
+<h3 id="capture-traffic-for-a-port">Capture traffic for a port</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>tcpdump <span class="nt">-i</span> enp3s0 port 53
+<span class="nb">sudo </span>tcpdump <span class="nt">-i</span> enp3s0 tcp port 443
+</code></pre></div></div>
+
+<h3 id="save-a-capture-to-a-pcap-file">Save a capture to a PCAP file</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>tcpdump <span class="nt">-i</span> enp3s0 <span class="nt">-w</span> capture.pcap <span class="nt">-c</span> 500
+</code></pre></div></div>
+
+<p>Read it later:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcpdump <span class="nt">-r</span> capture.pcap
+</code></pre></div></div>
+
+<p>Use Wireshark or <code class="language-plaintext highlighter-rouge">tshark</code> for deeper analysis. Packet capture permissions and visibility vary by interface, network topology, and privileges.</p>
+
+<h2 id="17-hostname-mac-address-and-neighbor-table">17. Hostname, MAC address, and neighbor table</h2>
+
+<h3 id="show-or-set-the-hostname">Show or set the hostname</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">hostname
+</span>hostnamectl
+</code></pre></div></div>
+
+<p>Set a persistent hostname:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>hostnamectl set-hostname debian-lab
+</code></pre></div></div>
+
+<p>Choose a valid hostname for your environment. Existing shells and services may need to be refreshed or restarted to reflect changes.</p>
+
+<h3 id="show-mac-addresses">Show MAC addresses</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nb">link
+</span>ip <span class="nt">-brief</span> <span class="nb">link</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">link/ether</code> value is typically the Ethernet MAC address. Virtual machines, containers, and Wi-Fi privacy features can use randomized or virtual MAC addresses.</p>
+
+<h3 id="show-the-neighbor-arpndp-table">Show the neighbor (ARP/NDP) table</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip neigh
+ip <span class="nt">-4</span> neigh
+ip <span class="nt">-6</span> neigh
+</code></pre></div></div>
+
+<p>The neighbor table maps local-network IP addresses to link-layer addresses where available. Entries may be incomplete, stale, or absent if a host has not recently been contacted.</p>
+
+<h3 id="clear-a-neighbor-entry">Clear a neighbor entry</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ip neigh del 192.168.1.25 dev enp3s0
+</code></pre></div></div>
+
+<p>Only remove an entry when you understand why it is wrong or stale. Linux will usually relearn it when traffic flows.</p>
+
+<h2 id="18-wireless-networking-wi-fi">18. Wireless networking (Wi-Fi)</h2>
+
+<p>This section focuses specifically on Wi-Fi: identifying wireless adapters, checking radio status, discovering nearby networks, connecting, troubleshooting, and inspecting wireless link quality. Interface names vary; a Wi-Fi interface might be named <code class="language-plaintext highlighter-rouge">wlan0</code> or <code class="language-plaintext highlighter-rouge">wlp2s0</code>.</p>
+
+<h3 id="install-wireless-tools">Install wireless tools</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>iw rfkill wireless-tools network-manager
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">iw</code> is the modern command-line tool for Linux wireless devices.</li>
+  <li><code class="language-plaintext highlighter-rouge">rfkill</code> checks and controls radio blocking.</li>
+  <li><code class="language-plaintext highlighter-rouge">nmcli</code> is provided by NetworkManager and is usually the easiest way to manage Wi-Fi on a desktop or laptop.</li>
+  <li><code class="language-plaintext highlighter-rouge">wireless-tools</code> provides older commands such as <code class="language-plaintext highlighter-rouge">iwconfig</code>; use <code class="language-plaintext highlighter-rouge">iw</code> where possible.</li>
+</ul>
+
+<p>If you are managing a headless server, check which network manager is already in use before installing or enabling another one.</p>
+
+<h3 id="identify-the-wireless-interface">Identify the wireless interface</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iw dev
+iwconfig
+ip <span class="nt">-brief</span> <span class="nb">link
+</span>nmcli device status
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">iw dev</code> lists wireless interfaces known to the kernel. In the output, note the interface name, such as <code class="language-plaintext highlighter-rouge">wlp2s0</code>.</p>
+
+<p>To inspect a particular wireless interface:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iw dev wlp2s0 info
+ip address show dev wlp2s0
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">wlp2s0</code> with your actual interface name.</p>
+
+<h3 id="check-whether-wi-fi-is-blocked">Check whether Wi-Fi is blocked</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rfkill list
+nmcli radio
+</code></pre></div></div>
+
+<p>Unblock the wireless radio if it is soft-blocked:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>rfkill unblock wifi
+nmcli radio wifi on
+</code></pre></div></div>
+
+<p>A hardware switch or firmware setting can cause a <strong>hard block</strong>. Software commands cannot override a hardware hard block; check the laptop's wireless switch, function key, BIOS/UEFI settings, and airplane-mode controls.</p>
+
+<h3 id="check-the-adapter-and-driver">Check the adapter and driver</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lspci <span class="nt">-nnk</span> | <span class="nb">grep</span> <span class="nt">-A3</span> <span class="nt">-Ei</span> <span class="s1">'network|wireless'</span>
+lsusb
+<span class="nb">sudo </span>dmesg <span class="nt">-T</span> | <span class="nb">grep</span> <span class="nt">-Ei</span> <span class="s1">'wifi|wlan|wireless|firmware|iwlwifi|rtw|ath'</span>
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">lspci</code> for internal PCI/PCIe adapters and <code class="language-plaintext highlighter-rouge">lsusb</code> for USB Wi-Fi adapters. Look for the kernel driver in use and any firmware-loading errors.</p>
+
+<p>On Debian, missing firmware may prevent an adapter from working. Identify the chipset first, then consult Debian's firmware package information and install the matching package. Common examples include <code class="language-plaintext highlighter-rouge">firmware-iwlwifi</code> for many Intel adapters and <code class="language-plaintext highlighter-rouge">firmware-realtek</code> for many Realtek adapters. Package availability depends on the enabled Debian repository components and the device; do not assume every adapter uses one of these packages.</p>
+
+<h3 id="inspect-supported-wireless-capabilities">Inspect supported wireless capabilities</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iw list
+iw dev wlp2s0 info
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">iw list</code> can report supported bands, frequencies, channel widths, interface modes, and security capabilities. It is long, so filter it when needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iw list | less
+iw list | <span class="nb">grep</span> <span class="nt">-A12</span> <span class="nt">-E</span> <span class="s1">'Supported interface modes|Band [0-9]'</span>
+</code></pre></div></div>
+
+<h3 id="scan-for-nearby-wi-fi-networks">Scan for nearby Wi-Fi networks</h3>
+
+<p>With NetworkManager:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli device wifi list
+nmcli device wifi rescan
+nmcli device wifi list
+</code></pre></div></div>
+
+<p>With <code class="language-plaintext highlighter-rouge">iw</code> (scanning may require elevated privileges and an active wireless interface):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>iw dev wlp2s0 scan
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">iw</code> scan output can be lengthy. To display likely useful fields:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>iw dev wlp2s0 scan | <span class="nb">grep</span> <span class="nt">-E</span> <span class="s1">'BSS |freq:|signal:|SSID:|RSN:|WPA:'</span>
+</code></pre></div></div>
+
+<p>Scanning is not the same as connecting. A hidden SSID may not be displayed by name, and signal values can fluctuate.</p>
+
+<h3 id="connect-to-a-wi-fi-network-with-networkmanager">Connect to a Wi-Fi network with NetworkManager</h3>
+
+<p>List visible networks:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli device wifi list
+</code></pre></div></div>
+
+<p>Connect to a network with a password:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli device wifi connect <span class="s2">"My Wi-Fi"</span> password <span class="s2">"replace-with-password"</span>
+</code></pre></div></div>
+
+<p>If several adapters are present, specify the interface:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli device wifi connect <span class="s2">"My Wi-Fi"</span> password <span class="s2">"replace-with-password"</span> ifname wlp2s0
+</code></pre></div></div>
+
+<p>NetworkManager normally saves the connection profile so it can reconnect later. Avoid placing real passwords in shell history on shared systems. For interactive use, consider creating a connection profile through a trusted desktop network app or using a safer secret-handling workflow.</p>
+
+<p>For a hidden SSID:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmcli device wifi connect <span class="s2">"My Hidden Wi-Fi"</span> password <span class="s2">"replace-with-password"</span> hidden <span class="nb">yes</span>
+</code></pre></div></div>
+
+<h3 id="disconnect-reconnect-and-forget-a-saved-network">Disconnect, reconnect, and forget a saved network</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli connection show
+nmcli device disconnect wlp2s0
+nmcli connection up <span class="s2">"My Wi-Fi"</span>
+</code></pre></div></div>
+
+<p>To remove a saved connection profile, first find its exact name:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli connection show
+<span class="nb">sudo </span>nmcli connection delete <span class="s2">"My Wi-Fi"</span>
+</code></pre></div></div>
+
+<p>Deleting a connection profile removes its saved configuration; it does not delete the wireless network itself.</p>
+
+<h3 id="inspect-the-current-wi-fi-connection">Inspect the current Wi-Fi connection</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli device status
+nmcli connection show <span class="nt">--active</span>
+nmcli <span class="nt">-f</span> IN-USE,SSID,BSSID,CHAN,FREQ,RATE,SIGNAL,SECURITY device wifi list
+iw dev wlp2s0 <span class="nb">link</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">iw dev wlp2s0 link</code> reports details of the current association, including the access point, frequency, and signal when connected.</p>
+
+<h3 id="check-signal-strength-and-link-quality">Check signal strength and link quality</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>watch <span class="nt">-n</span> 2 <span class="s1">'iw dev wlp2s0 link'</span>
+nmcli <span class="nt">-f</span> IN-USE,SSID,FREQ,RATE,SIGNAL device wifi list
+</code></pre></div></div>
+
+<p>General guidance:</p>
+
+<ul>
+  <li>A signal closer to <code class="language-plaintext highlighter-rouge">0 dBm</code> is stronger; for example, <code class="language-plaintext highlighter-rouge">-45 dBm</code> is stronger than <code class="language-plaintext highlighter-rouge">-75 dBm</code>.</li>
+  <li>Signal strength alone does not determine throughput. Interference, channel congestion, access-point capacity, distance, walls, and client capabilities also matter.</li>
+  <li>A high negotiated link rate does not guarantee the same real-world internet speed.</li>
+</ul>
+
+<p>Stop <code class="language-plaintext highlighter-rouge">watch</code> with <code class="language-plaintext highlighter-rouge">Ctrl+C</code>.</p>
+
+<h3 id="inspect-wi-fi-frequency-and-channel">Inspect Wi-Fi frequency and channel</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iw dev wlp2s0 <span class="nb">link
+</span>iw list
+nmcli <span class="nt">-f</span> SSID,CHAN,FREQ,SIGNAL device wifi list
+</code></pre></div></div>
+
+<p>The 2.4 GHz band often reaches farther but has fewer non-overlapping channels and more potential interference. The 5 GHz band often offers more capacity but may have less range through walls. The 6 GHz band is available only where supported by the adapter, access point, regulatory rules, and configuration.</p>
+
+<p>Do not change a regulatory country setting arbitrarily. Use the correct country setting for the device's actual location and follow local wireless regulations.</p>
+
+<h3 id="troubleshoot-a-connection-that-will-not-work">Troubleshoot a connection that will not work</h3>
+
+<p>Check each layer in order:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 1. Is the adapter visible?</span>
+iw dev
+ip <span class="nt">-brief</span> <span class="nb">link</span>
+
+<span class="c"># 2. Is Wi-Fi blocked?</span>
+rfkill list
+
+<span class="c"># 3. Is NetworkManager managing the adapter?</span>
+nmcli device status
+
+<span class="c"># 4. Can it see access points?</span>
+nmcli device wifi list
+
+<span class="c"># 5. Does the interface have an IP address?</span>
+ip address show dev wlp2s0
+
+<span class="c"># 6. Is there a default route?</span>
+ip route
+
+<span class="c"># 7. Can it reach the local gateway? (replace with your gateway)</span>
+ping <span class="nt">-c</span> 4 192.168.1.1
+
+<span class="c"># 8. Can it reach an external IP and resolve DNS?</span>
+ping <span class="nt">-c</span> 4 1.1.1.1
+getent hosts debian.org
+</code></pre></div></div>
+
+<p>If the adapter is missing, inspect <code class="language-plaintext highlighter-rouge">lspci</code>/<code class="language-plaintext highlighter-rouge">lsusb</code>, <code class="language-plaintext highlighter-rouge">dmesg</code>, the kernel driver, and firmware. If it sees networks but cannot connect, verify the password, security compatibility, access-point settings, and whether the router has a client limit or access-control rule. If it connects but has no internet, investigate IP addressing, DHCP, routing, DNS, and firewall rules using the earlier sections of this guide.</p>
+
+<h3 id="view-networkmanager-wi-fi-logs">View NetworkManager Wi-Fi logs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">-u</span> NetworkManager <span class="nt">-b</span> <span class="nt">--no-pager</span>
+journalctl <span class="nt">-u</span> NetworkManager <span class="nt">-b</span> <span class="nt">-f</span>
+</code></pre></div></div>
+
+<p>The second command follows new log entries in real time. Press <code class="language-plaintext highlighter-rouge">Ctrl+C</code> to stop following.</p>
+
+<h3 id="restart-wi-fi-or-networkmanager-carefully">Restart Wi-Fi or NetworkManager carefully</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmcli radio wifi off
+nmcli radio wifi on
+</code></pre></div></div>
+
+<p>Or restart NetworkManager:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl restart NetworkManager
+</code></pre></div></div>
+
+<p>Restarting NetworkManager can interrupt all connections it manages, including remote sessions. Do not do this over SSH unless you have a recovery path.</p>
+
+<h3 id="optional-inspect-wireless-statistics">Optional: inspect wireless statistics</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iw dev wlp2s0 station dump
+</code></pre></div></div>
+
+<p>This is most useful when run on a device operating as a Wi-Fi station and supported by the driver. It can show signal, transmission/reception statistics, and other link details. Driver support and available fields vary.</p>
+
+<hr />
+
+<h2 id="19-common-troubleshooting-workflows">19. Common troubleshooting workflows</h2>
+
+<h3 id="a-no-network-connectivity">A. No network connectivity</h3>
+
+<p>Run these in order:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nt">-brief</span> address
+ip route
+ping <span class="nt">-c</span> 3 127.0.0.1
+ping <span class="nt">-c</span> 3 192.168.1.1
+ping <span class="nt">-c</span> 3 1.1.1.1
+getent hosts debian.org
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">192.168.1.1</code> with your actual gateway.</p>
+
+<p>Interpretation:</p>
+<ol>
+  <li>No interface address: inspect link state and the active network manager.</li>
+  <li>No default route: inspect DHCP or static route configuration.</li>
+  <li>Gateway unreachable: check local link, Wi-Fi association, VLAN, or gateway configuration.</li>
+  <li>Public IP unreachable but gateway works: investigate routing, firewall, or upstream connectivity.</li>
+  <li>IP connectivity works but name lookup fails: investigate DNS.</li>
+</ol>
+
+<p>These are clues rather than absolute rules; firewalls and network policies can affect individual tests.</p>
+
+<h3 id="b-dns-is-broken">B. DNS is broken</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>getent hosts debian.org
+<span class="nb">cat</span> /etc/resolv.conf
+resolvectl status
+dig debian.org
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">resolvectl</code> may not be available or active on every Debian installation. Inspect which service manages DNS before changing resolver configuration.</p>
+
+<h3 id="c-a-service-is-not-reachable">C. A service is not reachable</h3>
+
+<p>On the server:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span>
+<span class="nb">sudo </span>systemctl status SERVICE
+</code></pre></div></div>
+
+<p>From a client:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc <span class="nt">-vz</span> SERVER_IP PORT
+</code></pre></div></div>
+
+<p>Check that the service is listening on the expected address, the firewall permits traffic, and any NAT or port-forwarding rules are correct.</p>
+
+<h3 id="d-the-server-is-listening-only-on-localhost">D. The server is listening only on localhost</h3>
+
+<p>A service bound to <code class="language-plaintext highlighter-rouge">127.0.0.1</code> usually accepts connections only from the same host. Inspect the bind address:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span>
+</code></pre></div></div>
+
+<p>Configure the application to listen on the intended interface only if remote access is required and the firewall/security design allows it. Do not bind a service to every interface without considering exposure.</p>
+
+<h3 id="e-find-the-route-chosen-for-a-connection">E. Find the route chosen for a connection</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip route get SERVER_IP
+</code></pre></div></div>
+
+<p>This helps reveal the selected interface, next hop, and source address for a destination.</p>
+
+<h3 id="f-inspect-dropped-or-failed-packets">F. Inspect dropped or failed packets</h3>
+
+<p>Use <code class="language-plaintext highlighter-rouge">tcpdump</code> on the relevant interface, check firewall rules, and compare packet flow on the client and server where possible. A capture on one machine cannot show packets that never reach that machine.</p>
+
+<h2 id="20-quick-reference">20. Quick reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Show IP addresses</td>
+      <td><code class="language-plaintext highlighter-rouge">ip -brief address</code></td>
+    </tr>
+    <tr>
+      <td>Show interface state</td>
+      <td><code class="language-plaintext highlighter-rouge">ip -brief link</code></td>
+    </tr>
+    <tr>
+      <td>Show routes</td>
+      <td><code class="language-plaintext highlighter-rouge">ip route</code></td>
+    </tr>
+    <tr>
+      <td>Find route to a destination</td>
+      <td><code class="language-plaintext highlighter-rouge">ip route get 1.1.1.1</code></td>
+    </tr>
+    <tr>
+      <td>Test reachability</td>
+      <td><code class="language-plaintext highlighter-rouge">ping -c 4 HOST</code></td>
+    </tr>
+    <tr>
+      <td>Trace route</td>
+      <td><code class="language-plaintext highlighter-rouge">traceroute HOST</code></td>
+    </tr>
+    <tr>
+      <td>Test TCP port</td>
+      <td><code class="language-plaintext highlighter-rouge">nc -vz HOST PORT</code></td>
+    </tr>
+    <tr>
+      <td>Query DNS</td>
+      <td><code class="language-plaintext highlighter-rouge">dig NAME</code></td>
+    </tr>
+    <tr>
+      <td>Query system name service</td>
+      <td><code class="language-plaintext highlighter-rouge">getent hosts NAME</code></td>
+    </tr>
+    <tr>
+      <td>Show listening TCP ports</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo ss -ltnp</code></td>
+    </tr>
+    <tr>
+      <td>Show listening UDP ports</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo ss -lunp</code></td>
+    </tr>
+    <tr>
+      <td>Test HTTP headers</td>
+      <td><code class="language-plaintext highlighter-rouge">curl -I URL</code></td>
+    </tr>
+    <tr>
+      <td>Download a file</td>
+      <td><code class="language-plaintext highlighter-rouge">curl -fL -o FILE URL</code></td>
+    </tr>
+    <tr>
+      <td>Show NetworkManager devices</td>
+      <td><code class="language-plaintext highlighter-rouge">nmcli device status</code></td>
+    </tr>
+    <tr>
+      <td>Show active connections</td>
+      <td><code class="language-plaintext highlighter-rouge">nmcli connection show --active</code></td>
+    </tr>
+    <tr>
+      <td>Show firewall rules</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo nft list ruleset</code></td>
+    </tr>
+    <tr>
+      <td>Show ufw status</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo ufw status verbose</code></td>
+    </tr>
+    <tr>
+      <td>Capture packets</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo tcpdump -i INTERFACE</code></td>
+    </tr>
+    <tr>
+      <td>Show neighbor table</td>
+      <td><code class="language-plaintext highlighter-rouge">ip neigh</code></td>
+    </tr>
+    <tr>
+      <td>Show hostname</td>
+      <td><code class="language-plaintext highlighter-rouge">hostnamectl</code></td>
+    </tr>
+    <tr>
+      <td>Read NetworkManager logs</td>
+      <td><code class="language-plaintext highlighter-rouge">journalctl -u NetworkManager -b</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><strong>Recommended troubleshooting order:</strong> inspect the interface and IP address, check the route, test the gateway, test an external IP, then test DNS and the application port. This narrows the problem without changing configuration unnecessarily.</p>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Linux Process Management Cheat Sheet</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#linux-process-management-cheat-sheet" id="toc-linux-process-management-cheat-sheet">Linux Process Management Cheat Sheet</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-what-is-a-process" id="toc-1-what-is-a-process">1. What is a process?</a></li>
+<li><a href="#2-view-running-processes" id="toc-2-view-running-processes">2. View running processes</a>
+<ul>
+<li><a href="#show-processes-in-a-full-format-listing" id="toc-show-processes-in-a-full-format-listing">Show processes in a full-format listing</a></li>
+<li><a href="#select-useful-columns" id="toc-select-useful-columns">Select useful columns</a></li>
+<li><a href="#show-a-process-tree" id="toc-show-a-process-tree">Show a process tree</a></li>
+<li><a href="#sort-processes-by-cpu-or-memory" id="toc-sort-processes-by-cpu-or-memory">Sort processes by CPU or memory</a></li>
+</ul>
+</li>
+<li><a href="#3-find-a-process" id="toc-3-find-a-process">3. Find a process</a>
+<ul>
+<li><a href="#search-process-listings-with-pgrep" id="toc-search-process-listings-with-pgrep">Search process listings with pgrep</a></li>
+<li><a href="#search-by-command-name" id="toc-search-by-command-name">Search by command name</a></li>
+<li><a href="#find-the-executable-path" id="toc-find-the-executable-path">Find the executable path</a></li>
+<li><a href="#show-a-processs-command-line" id="toc-show-a-processs-command-line">Show a process's command line</a></li>
+</ul>
+</li>
+<li><a href="#4-understand-process-ids-and-relationships" id="toc-4-understand-process-ids-and-relationships">4. Understand process IDs and relationships</a>
+<ul>
+<li><a href="#show-pid-and-parent-pid" id="toc-show-pid-and-parent-pid">Show PID and parent PID</a></li>
+<li><a href="#inspect-a-processs-status" id="toc-inspect-a-processs-status">Inspect a process's status</a></li>
+<li><a href="#process-states" id="toc-process-states">Process states</a></li>
+</ul>
+</li>
+<li><a href="#5-monitor-processes-interactively" id="toc-5-monitor-processes-interactively">5. Monitor processes interactively</a>
+<ul>
+<li><a href="#top" id="toc-top">top</a></li>
+<li><a href="#htop" id="toc-htop">htop</a></li>
+<li><a href="#watch-a-command-repeatedly" id="toc-watch-a-command-repeatedly">Watch a command repeatedly</a></li>
+</ul>
+</li>
+<li><a href="#6-start-programs-and-manage-the-shell" id="toc-6-start-programs-and-manage-the-shell">6. Start programs and manage the shell</a>
+<ul>
+<li><a href="#run-a-program-normally" id="toc-run-a-program-normally">Run a program normally</a></li>
+<li><a href="#run-a-program-in-the-background" id="toc-run-a-program-in-the-background">Run a program in the background</a></li>
+<li><a href="#redirect-output" id="toc-redirect-output">Redirect output</a></li>
+<li><a href="#keep-a-command-running-after-logout-with-nohup" id="toc-keep-a-command-running-after-logout-with-nohup">Keep a command running after logout with nohup</a></li>
+<li><a href="#detach-from-a-terminal-session" id="toc-detach-from-a-terminal-session">Detach from a terminal session</a></li>
+</ul>
+</li>
+<li><a href="#7-stop-and-signal-processes" id="toc-7-stop-and-signal-processes">7. Stop and signal processes</a>
+<ul>
+<li><a href="#send-sigterm-by-pid" id="toc-send-sigterm-by-pid">Send SIGTERM by PID</a></li>
+<li><a href="#send-sigint" id="toc-send-sigint">Send SIGINT</a></li>
+<li><a href="#force-termination-with-sigkill" id="toc-force-termination-with-sigkill">Force termination with SIGKILL</a></li>
+<li><a href="#send-a-signal-by-process-name" id="toc-send-a-signal-by-process-name">Send a signal by process name</a></li>
+<li><a href="#stop-all-matching-processes" id="toc-stop-all-matching-processes">Stop all matching processes</a></li>
+<li><a href="#list-available-signals" id="toc-list-available-signals">List available signals</a></li>
+<li><a href="#check-whether-a-pid-still-exists" id="toc-check-whether-a-pid-still-exists">Check whether a PID still exists</a></li>
+</ul>
+</li>
+<li><a href="#8-manage-jobs-in-the-current-shell" id="toc-8-manage-jobs-in-the-current-shell">8. Manage jobs in the current shell</a>
+<ul>
+<li><a href="#list-jobs-started-by-the-current-shell" id="toc-list-jobs-started-by-the-current-shell">List jobs started by the current shell</a></li>
+<li><a href="#suspend-a-foreground-job" id="toc-suspend-a-foreground-job">Suspend a foreground job</a></li>
+<li><a href="#resume-a-stopped-job-in-the-background" id="toc-resume-a-stopped-job-in-the-background">Resume a stopped job in the background</a></li>
+<li><a href="#bring-a-job-to-the-foreground" id="toc-bring-a-job-to-the-foreground">Bring a job to the foreground</a></li>
+<li><a href="#terminate-a-shell-job" id="toc-terminate-a-shell-job">Terminate a shell job</a></li>
+</ul>
+</li>
+<li><a href="#9-process-priority-with-nice-and-renice" id="toc-9-process-priority-with-nice-and-renice">9. Process priority with nice and renice</a>
+<ul>
+<li><a href="#start-a-command-with-a-changed-nice-value" id="toc-start-a-command-with-a-changed-nice-value">Start a command with a changed nice value</a></li>
+<li><a href="#change-an-existing-processs-nice-value" id="toc-change-an-existing-processs-nice-value">Change an existing process's nice value</a></li>
+<li><a href="#check-a-processs-nice-value" id="toc-check-a-processs-nice-value">Check a process's nice value</a></li>
+</ul>
+</li>
+<li><a href="#10-cpu-and-memory-usage" id="toc-10-cpu-and-memory-usage">10. CPU and memory usage</a>
+<ul>
+<li><a href="#memory-overview" id="toc-memory-overview">Memory overview</a></li>
+<li><a href="#per-process-cpu-and-memory-snapshot" id="toc-per-process-cpu-and-memory-snapshot">Per-process CPU and memory snapshot</a></li>
+<li><a href="#see-cpu-and-memory-pressure" id="toc-see-cpu-and-memory-pressure">See CPU and memory pressure</a></li>
+<li><a href="#check-for-out-of-memory-events" id="toc-check-for-out-of-memory-events">Check for out-of-memory events</a></li>
+</ul>
+</li>
+<li><a href="#11-services-and-systemd-processes" id="toc-11-services-and-systemd-processes">11. Services and systemd processes</a>
+<ul>
+<li><a href="#show-service-status" id="toc-show-service-status">Show service status</a></li>
+<li><a href="#start-stop-restart-or-reload-a-service" id="toc-start-stop-restart-or-reload-a-service">Start, stop, restart, or reload a service</a></li>
+<li><a href="#enable-or-disable-service-startup-at-boot" id="toc-enable-or-disable-service-startup-at-boot">Enable or disable service startup at boot</a></li>
+<li><a href="#find-a-services-main-pid" id="toc-find-a-services-main-pid">Find a service's main PID</a></li>
+<li><a href="#read-service-logs" id="toc-read-service-logs">Read service logs</a></li>
+</ul>
+</li>
+<li><a href="#12-inspect-open-files-and-network-sockets" id="toc-12-inspect-open-files-and-network-sockets">12. Inspect open files and network sockets</a>
+<ul>
+<li><a href="#see-files-opened-by-a-process" id="toc-see-files-opened-by-a-process">See files opened by a process</a></li>
+<li><a href="#find-which-process-uses-a-file-or-directory" id="toc-find-which-process-uses-a-file-or-directory">Find which process uses a file or directory</a></li>
+<li><a href="#find-processes-listening-on-network-ports" id="toc-find-processes-listening-on-network-ports">Find processes listening on network ports</a></li>
+</ul>
+</li>
+<li><a href="#13-process-limits-and-resource-control" id="toc-13-process-limits-and-resource-control">13. Process limits and resource control</a>
+<ul>
+<li><a href="#show-the-current-shells-resource-limits" id="toc-show-the-current-shells-resource-limits">Show the current shell's resource limits</a></li>
+<li><a href="#show-a-processs-limits" id="toc-show-a-processs-limits">Show a process's limits</a></li>
+<li><a href="#count-a-processs-open-file-descriptors" id="toc-count-a-processs-open-file-descriptors">Count a process's open file descriptors</a></li>
+<li><a href="#systemd-resource-controls" id="toc-systemd-resource-controls">systemd resource controls</a></li>
+</ul>
+</li>
+<li><a href="#14-troubleshooting-common-process-problems" id="toc-14-troubleshooting-common-process-problems">14. Troubleshooting common process problems</a>
+<ul>
+<li><a href="#a-program-is-using-too-much-cpu" id="toc-a-program-is-using-too-much-cpu">A program is using too much CPU</a></li>
+<li><a href="#a-program-is-using-too-much-memory" id="toc-a-program-is-using-too-much-memory">A program is using too much memory</a></li>
+<li><a href="#a-process-will-not-terminate" id="toc-a-process-will-not-terminate">A process will not terminate</a></li>
+<li><a href="#a-process-is-a-zombie" id="toc-a-process-is-a-zombie">A process is a zombie</a></li>
+<li><a href="#a-port-is-already-in-use" id="toc-a-port-is-already-in-use">A port is already in use</a></li>
+<li><a href="#a-command-runs-in-the-background-but-disappears-after-logout" id="toc-a-command-runs-in-the-background-but-disappears-after-logout">A command runs in the background but disappears after logout</a></li>
+</ul>
+</li>
+<li><a href="#15-useful-process-signals" id="toc-15-useful-process-signals">15. Useful process signals</a></li>
+<li><a href="#16-practical-examples" id="toc-16-practical-examples">16. Practical examples</a>
+<ul>
+<li><a href="#example-a-find-the-most-cpu-intensive-processes" id="toc-example-a-find-the-most-cpu-intensive-processes">Example A: find the most CPU-intensive processes</a></li>
+<li><a href="#example-b-locate-and-inspect-a-python-server" id="toc-example-b-locate-and-inspect-a-python-server">Example B: locate and inspect a Python server</a></li>
+<li><a href="#example-c-stop-a-process-gracefully" id="toc-example-c-stop-a-process-gracefully">Example C: stop a process gracefully</a></li>
+<li><a href="#example-d-run-a-long-command-with-a-log-file" id="toc-example-d-run-a-long-command-with-a-log-file">Example D: run a long command with a log file</a></li>
+<li><a href="#example-e-lower-a-cpu-intensive-jobs-priority" id="toc-example-e-lower-a-cpu-intensive-jobs-priority">Example E: lower a CPU-intensive job's priority</a></li>
+<li><a href="#example-f-find-the-process-using-a-port" id="toc-example-f-find-the-process-using-a-port">Example F: find the process using a port</a></li>
+<li><a href="#example-g-inspect-a-systemd-services-logs-and-process" id="toc-example-g-inspect-a-systemd-services-logs-and-process">Example G: inspect a systemd service's logs and process</a></li>
+</ul>
+</li>
+<li><a href="#17-quick-reference" id="toc-17-quick-reference">17. Quick reference</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="linux-process-management-cheat-sheet">Linux Process Management Cheat Sheet</h1>
+
+<p>A practical command reference for inspecting, controlling, prioritizing, and troubleshooting processes on Debian 13 and similar Linux distributions.</p>
+
+<blockquote>
+  <p><strong>Caution:</strong> Terminating or changing the priority of the wrong process can interrupt applications or system services. Identify the process carefully, try normal termination first, and use <code class="language-plaintext highlighter-rouge">sudo</code> only when necessary.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#1-what-is-a-process">1. What is a process?</a></li>
+  <li><a href="#2-view-running-processes">2. View running processes</a></li>
+  <li><a href="#3-find-a-process">3. Find a process</a></li>
+  <li><a href="#4-understand-process-ids-and-relationships">4. Understand process IDs and relationships</a></li>
+  <li><a href="#5-monitor-processes-interactively">5. Monitor processes interactively</a></li>
+  <li><a href="#6-start-programs-and-manage-the-shell">6. Start programs and manage the shell</a></li>
+  <li><a href="#7-stop-and-signal-processes">7. Stop and signal processes</a></li>
+  <li><a href="#8-manage-jobs-in-the-current-shell">8. Manage jobs in the current shell</a></li>
+  <li><a href="#9-process-priority-with-nice-and-renice">9. Process priority with nice and renice</a></li>
+  <li><a href="#10-cpu-and-memory-usage">10. CPU and memory usage</a></li>
+  <li><a href="#11-services-and-systemd-processes">11. Services and systemd processes</a></li>
+  <li><a href="#12-inspect-open-files-and-network-sockets">12. Inspect open files and network sockets</a></li>
+  <li><a href="#13-process-limits-and-resource-control">13. Process limits and resource control</a></li>
+  <li><a href="#14-troubleshooting-common-process-problems">14. Troubleshooting common process problems</a></li>
+  <li><a href="#15-useful-process-signals">15. Useful process signals</a></li>
+  <li><a href="#16-practical-examples">16. Practical examples</a></li>
+  <li><a href="#17-quick-reference">17. Quick reference</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-what-is-a-process">1. What is a process?</h2>
+
+<p>A <strong>process</strong> is a running instance of a program. Each process has a process ID (PID), and may have a parent process ID (PPID). A process can create child processes, open files, use memory, consume CPU time, and communicate with other processes.</p>
+
+<p>Related terms:</p>
+
+<ul>
+  <li><strong>Program:</strong> a file containing instructions, such as <code class="language-plaintext highlighter-rouge">/usr/bin/python3</code>.</li>
+  <li><strong>Process:</strong> a running instance of a program.</li>
+  <li><strong>Thread:</strong> a unit of execution within a process. Threads share much of the process's memory and resources.</li>
+  <li><strong>PID:</strong> a unique process identifier while that process exists.</li>
+  <li><strong>PPID:</strong> the PID of a process's parent.</li>
+  <li><strong>Daemon/service:</strong> a background process, often managed by systemd.</li>
+  <li><strong>Job:</strong> a process or pipeline managed by the current shell's job-control features.</li>
+</ul>
+
+<h2 id="2-view-running-processes">2. View running processes</h2>
+
+<h3 id="show-processes-in-a-full-format-listing">Show processes in a full-format listing</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps
+ps <span class="nt">-ef</span>
+ps aux
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ps</code> by itself usually shows processes associated with the current terminal.</li>
+  <li><code class="language-plaintext highlighter-rouge">ps -ef</code> shows a full-format listing of processes.</li>
+  <li><code class="language-plaintext highlighter-rouge">ps aux</code> is a common BSD-style format showing processes from all users, including CPU and memory percentages.</li>
+</ul>
+
+<p>These are alternative formats; the options are not meant to be combined arbitrarily.</p>
+
+<h3 id="select-useful-columns">Select useful columns</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-eo</span> pid,ppid,user,stat,%cpu,%mem,etime,cmd
+</code></pre></div></div>
+
+<p>This displays PID, parent PID, user, process state, CPU percentage, memory percentage, elapsed time, and command.</p>
+
+<p>Show a specific process:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-p</span> 1234 <span class="nt">-o</span> pid,ppid,user,stat,%cpu,%mem,etime,cmd
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">1234</code> with the PID you want to inspect.</p>
+
+<h3 id="show-a-process-tree">Show a process tree</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pstree
+pstree <span class="nt">-p</span>
+pstree <span class="nt">-ap</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-p</code> displays PIDs.</li>
+  <li><code class="language-plaintext highlighter-rouge">-a</code> includes command-line arguments.</li>
+</ul>
+
+<p>Install <code class="language-plaintext highlighter-rouge">pstree</code> if it is not available:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>psmisc
+</code></pre></div></div>
+
+<h3 id="sort-processes-by-cpu-or-memory">Sort processes by CPU or memory</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-eo</span> pid,comm,%cpu,%mem <span class="nt">--sort</span><span class="o">=</span>-%cpu | <span class="nb">head
+</span>ps <span class="nt">-eo</span> pid,comm,%cpu,%mem <span class="nt">--sort</span><span class="o">=</span>-%mem | <span class="nb">head</span>
+</code></pre></div></div>
+
+<p>The leading minus sign sorts from highest to lowest. These commands show a snapshot, not a continuously updating view.</p>
+
+<h2 id="3-find-a-process">3. Find a process</h2>
+
+<h3 id="search-process-listings-with-pgrep">Search process listings with pgrep</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgrep firefox
+pgrep <span class="nt">-a</span> firefox
+pgrep <span class="nt">-af</span> <span class="s1">'python.*server.py'</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">pgrep</code> searches process names.</li>
+  <li><code class="language-plaintext highlighter-rouge">-a</code> shows the command line.</li>
+  <li><code class="language-plaintext highlighter-rouge">-f</code> matches against the full command line.</li>
+</ul>
+
+<p>Be precise with patterns: broad matches can include unrelated processes.</p>
+
+<h3 id="search-by-command-name">Search by command name</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps aux | <span class="nb">grep</span> <span class="s1">'[n]ginx'</span>
+</code></pre></div></div>
+
+<p>The bracket pattern helps avoid matching the <code class="language-plaintext highlighter-rouge">grep</code> command itself. For most simple searches, <code class="language-plaintext highlighter-rouge">pgrep</code> is cleaner.</p>
+
+<h3 id="find-the-executable-path">Find the executable path</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">readlink</span> <span class="nt">-f</span> /proc/1234/exe
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">1234</code> with the PID. Access may be restricted for processes owned by another user.</p>
+
+<h3 id="show-a-processs-command-line">Show a process's command line</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tr</span> <span class="s1">'\0'</span> <span class="s1">' '</span> &lt; /proc/1234/cmdline
+<span class="nb">echo</span>
+</code></pre></div></div>
+
+<p>Linux exposes process details through <code class="language-plaintext highlighter-rouge">/proc</code>. The command line can contain sensitive values, so avoid sharing its output if it includes tokens or passwords.</p>
+
+<h2 id="4-understand-process-ids-and-relationships">4. Understand process IDs and relationships</h2>
+
+<h3 id="show-pid-and-parent-pid">Show PID and parent PID</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-eo</span> pid,ppid,comm
+</code></pre></div></div>
+
+<p>The PPID helps you see which process started another process.</p>
+
+<h3 id="inspect-a-processs-status">Inspect a process's status</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="nt">-E</span> <span class="s1">'^(Name|State|Pid|PPid|Threads|VmRSS|VmSize):'</span> /proc/1234/status
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">VmRSS</code> is resident memory currently held in RAM.</li>
+  <li><code class="language-plaintext highlighter-rouge">VmSize</code> is the process's virtual address-space size; it is not the same as physical RAM usage.</li>
+  <li><code class="language-plaintext highlighter-rouge">Threads</code> reports the number of threads.</li>
+</ul>
+
+<h3 id="process-states">Process states</h3>
+
+<p>Common state letters in <code class="language-plaintext highlighter-rouge">ps</code> include:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>State</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">R</code></td>
+      <td>Running or runnable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">S</code></td>
+      <td>Interruptible sleep, waiting for an event</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D</code></td>
+      <td>Uninterruptible sleep, often waiting on I/O</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">T</code></td>
+      <td>Stopped or job-control stopped</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Z</code></td>
+      <td>Zombie: exited, but not yet reaped by its parent</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">I</code></td>
+      <td>Idle kernel thread on systems that display this state</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A process in <code class="language-plaintext highlighter-rouge">D</code> state may not respond to ordinary signals until the kernel operation it is waiting on finishes. A zombie has already exited and does not consume CPU like a running process; its parent normally needs to collect its exit status.</p>
+
+<h2 id="5-monitor-processes-interactively">5. Monitor processes interactively</h2>
+
+<h3 id="top">top</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>top
+</code></pre></div></div>
+
+<p>Useful keys while <code class="language-plaintext highlighter-rouge">top</code> is open:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">q</code></td>
+      <td>Quit</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">P</code></td>
+      <td>Sort by CPU usage</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">M</code></td>
+      <td>Sort by memory usage</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">k</code></td>
+      <td>Send a signal to a process</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1</code></td>
+      <td>Toggle per-CPU core display</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h</code></td>
+      <td>Help</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Pressing <code class="language-plaintext highlighter-rouge">k</code> can terminate a process, so confirm the PID and signal before proceeding.</p>
+
+<h3 id="htop">htop</h3>
+
+<p><code class="language-plaintext highlighter-rouge">htop</code> provides a more interactive process viewer.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>htop
+htop
+</code></pre></div></div>
+
+<p>Use the interface to sort, search, inspect, and signal processes. It can run without root, but some details about other users' processes may be unavailable.</p>
+
+<h3 id="watch-a-command-repeatedly">Watch a command repeatedly</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>watch <span class="nt">-n</span> 2 <span class="s1">'ps -eo pid,comm,%cpu,%mem --sort=-%cpu | head'</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">watch</code> reruns the command every two seconds. Press <code class="language-plaintext highlighter-rouge">Ctrl+C</code> to stop <code class="language-plaintext highlighter-rouge">watch</code>; it does not terminate the listed processes.</p>
+
+<h2 id="6-start-programs-and-manage-the-shell">6. Start programs and manage the shell</h2>
+
+<h3 id="run-a-program-normally">Run a program normally</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sleep </span>300
+</code></pre></div></div>
+
+<p>The shell waits until the foreground command exits or is stopped.</p>
+
+<h3 id="run-a-program-in-the-background">Run a program in the background</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sleep </span>300 &amp;
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">&amp;</code> runs the job in the background of the current shell. It is still associated with that shell and may not survive logout.</p>
+
+<h3 id="redirect-output">Redirect output</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>long-command <span class="o">&gt;</span> output.log 2&gt;&amp;1 &amp;
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&gt;</code> redirects standard output to a file, replacing its previous contents.</li>
+  <li><code class="language-plaintext highlighter-rouge">2&gt;&amp;1</code> sends standard error to the same destination as standard output.</li>
+  <li><code class="language-plaintext highlighter-rouge">&amp;</code> starts the command in the background.</li>
+</ul>
+
+<p>Append instead of replacing:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>long-command <span class="o">&gt;&gt;</span> output.log 2&gt;&amp;1 &amp;
+</code></pre></div></div>
+
+<h3 id="keep-a-command-running-after-logout-with-nohup">Keep a command running after logout with nohup</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">nohup </span>long-command <span class="o">&gt;</span> output.log 2&gt;&amp;1 &amp;
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">nohup</code> makes the command ignore the hangup signal in the usual case. It does not provide service supervision, automatic restart, or full process management. For long-running services, use systemd or a suitable process manager.</p>
+
+<h3 id="detach-from-a-terminal-session">Detach from a terminal session</h3>
+
+<p>For interactive long-running terminal work, tools such as <code class="language-plaintext highlighter-rouge">tmux</code> or <code class="language-plaintext highlighter-rouge">screen</code> let you detach and reconnect later:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>tmux
+tmux
+</code></pre></div></div>
+
+<p>Detach with <code class="language-plaintext highlighter-rouge">Ctrl+B</code>, then <code class="language-plaintext highlighter-rouge">D</code>. Reattach with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tmux attach
+</code></pre></div></div>
+
+<h2 id="7-stop-and-signal-processes">7. Stop and signal processes</h2>
+
+<p>Linux signals ask a process to take an action. Prefer a graceful signal before forcing termination.</p>
+
+<h3 id="send-sigterm-by-pid">Send SIGTERM by PID</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">kill </span>1234
+<span class="nb">kill</span> <span class="nt">-TERM</span> 1234
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">kill</code> sends <code class="language-plaintext highlighter-rouge">SIGTERM</code> by default. It asks the process to exit and gives it an opportunity to clean up.</p>
+
+<h3 id="send-sigint">Send SIGINT</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">kill</span> <span class="nt">-INT</span> 1234
+</code></pre></div></div>
+
+<p>This is similar to the interrupt commonly sent by pressing <code class="language-plaintext highlighter-rouge">Ctrl+C</code> in a terminal, though application behavior can differ.</p>
+
+<h3 id="force-termination-with-sigkill">Force termination with SIGKILL</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">kill</span> <span class="nt">-KILL</span> 1234
+</code></pre></div></div>
+
+<p>Use this only if a process will not exit after reasonable attempts. <code class="language-plaintext highlighter-rouge">SIGKILL</code> cannot be caught or handled, so the program cannot perform its own cleanup. It also cannot immediately remove a process stuck in uninterruptible kernel sleep.</p>
+
+<h3 id="send-a-signal-by-process-name">Send a signal by process name</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pkill <span class="nt">-TERM</span> process_name
+</code></pre></div></div>
+
+<p>Use a precise process name or pattern. Preview matching PIDs first:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgrep <span class="nt">-a</span> process_name
+</code></pre></div></div>
+
+<h3 id="stop-all-matching-processes">Stop all matching processes</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>killall process_name
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">killall</code> can affect every matching process name visible to the command, depending on options and permissions. Verify the target first; do not use it casually with common names.</p>
+
+<h3 id="list-available-signals">List available signals</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">kill</span> <span class="nt">-l</span>
+</code></pre></div></div>
+
+<h3 id="check-whether-a-pid-still-exists">Check whether a PID still exists</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">kill</span> <span class="nt">-0</span> 1234
+</code></pre></div></div>
+
+<p>Signal <code class="language-plaintext highlighter-rouge">0</code> does not send a terminating signal. It checks whether the process exists and whether you have permission to signal it. A successful result does not guarantee that the process is healthy.</p>
+
+<h2 id="8-manage-jobs-in-the-current-shell">8. Manage jobs in the current shell</h2>
+
+<p>Shell job control is different from system-wide process management.</p>
+
+<h3 id="list-jobs-started-by-the-current-shell">List jobs started by the current shell</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">jobs
+jobs</span> <span class="nt">-l</span>
+</code></pre></div></div>
+
+<h3 id="suspend-a-foreground-job">Suspend a foreground job</h3>
+
+<p>Press:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Ctrl+Z
+</code></pre></div></div>
+
+<p>This stops the foreground job; it does not terminate it.</p>
+
+<h3 id="resume-a-stopped-job-in-the-background">Resume a stopped job in the background</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">bg
+bg</span> %1
+</code></pre></div></div>
+
+<h3 id="bring-a-job-to-the-foreground">Bring a job to the foreground</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">fg
+fg</span> %1
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">%1</code> is job number 1 from the current shell's <code class="language-plaintext highlighter-rouge">jobs</code> listing, not PID 1.</p>
+
+<h3 id="terminate-a-shell-job">Terminate a shell job</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">kill</span> %1
+</code></pre></div></div>
+
+<p>If needed, use <code class="language-plaintext highlighter-rouge">jobs -l</code> to identify its PID and then signal it. Jobs started in another shell are not normally listed by the current shell's <code class="language-plaintext highlighter-rouge">jobs</code> command.</p>
+
+<h2 id="9-process-priority-with-nice-and-renice">9. Process priority with nice and renice</h2>
+
+<p>Linux scheduling priority can influence how CPU time is shared among runnable processes.</p>
+
+<h3 id="start-a-command-with-a-changed-nice-value">Start a command with a changed nice value</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">nice</span> <span class="nt">-n</span> 10 <span class="nb">command</span>
+</code></pre></div></div>
+
+<p>Nice values usually range from <code class="language-plaintext highlighter-rouge">-20</code> (higher scheduling priority) to <code class="language-plaintext highlighter-rouge">19</code> (lower scheduling priority). A higher nice value makes a process “nicer” to other processes by reducing its scheduling priority.</p>
+
+<h3 id="change-an-existing-processs-nice-value">Change an existing process's nice value</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>renice 10 <span class="nt">-p</span> 1234
+</code></pre></div></div>
+
+<p>Increasing the nice value generally lowers priority. Lowering a nice value to raise priority typically requires root privileges or appropriate capabilities.</p>
+
+<h3 id="check-a-processs-nice-value">Check a process's nice value</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-o</span> pid,ni,pri,comm <span class="nt">-p</span> 1234
+</code></pre></div></div>
+
+<p>Nice values affect CPU scheduling, not the process's memory limit or disk priority. They also do not guarantee a fixed amount of CPU time.</p>
+
+<h2 id="10-cpu-and-memory-usage">10. CPU and memory usage</h2>
+
+<h3 id="memory-overview">Memory overview</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>free <span class="nt">-h</span>
+</code></pre></div></div>
+
+<p>This shows system memory and swap usage. The <code class="language-plaintext highlighter-rouge">available</code> column is often more useful than <code class="language-plaintext highlighter-rouge">free</code> alone when judging how much memory can be used without swapping.</p>
+
+<h3 id="per-process-cpu-and-memory-snapshot">Per-process CPU and memory snapshot</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-eo</span> pid,comm,%cpu,%mem,rss,vsz <span class="nt">--sort</span><span class="o">=</span>-%mem | <span class="nb">head</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">%CPU</code>: CPU use as reported by <code class="language-plaintext highlighter-rouge">ps</code>; interpretation can depend on elapsed time and tool conventions.</li>
+  <li><code class="language-plaintext highlighter-rouge">%MEM</code>: approximate share of physical RAM.</li>
+  <li><code class="language-plaintext highlighter-rouge">RSS</code>: resident memory in KiB.</li>
+  <li><code class="language-plaintext highlighter-rouge">VSZ</code>: virtual address-space size in KiB.</li>
+</ul>
+
+<h3 id="see-cpu-and-memory-pressure">See CPU and memory pressure</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">uptime
+</span>vmstat 2
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">uptime</code> shows load averages. <code class="language-plaintext highlighter-rouge">vmstat 2</code> updates every two seconds; the first report often summarizes averages since boot, so use later lines to assess current behavior.</p>
+
+<p>Load average is not a CPU percentage. It reflects tasks running or waiting in uninterruptible sleep, so high load can indicate CPU pressure, storage delays, or both.</p>
+
+<h3 id="check-for-out-of-memory-events">Check for out-of-memory events</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">-k</span> | <span class="nb">grep</span> <span class="nt">-i</span> <span class="nt">-E</span> <span class="s1">'out of memory|oom-killer|killed process'</span>
+</code></pre></div></div>
+
+<p>The system may have limited or rotated logs. An OOM event can cause the kernel to terminate a process when memory pressure becomes severe.</p>
+
+<h2 id="11-services-and-systemd-processes">11. Services and systemd processes</h2>
+
+<p>A system service is usually managed by systemd rather than by manually killing its PID.</p>
+
+<h3 id="show-service-status">Show service status</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status ssh
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">ssh</code> with the relevant service unit name.</p>
+
+<h3 id="start-stop-restart-or-reload-a-service">Start, stop, restart, or reload a service</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl start SERVICE
+<span class="nb">sudo </span>systemctl stop SERVICE
+<span class="nb">sudo </span>systemctl restart SERVICE
+<span class="nb">sudo </span>systemctl reload SERVICE
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">SERVICE</code> with the actual unit name. <code class="language-plaintext highlighter-rouge">reload</code> asks a service to reread its configuration if it supports that operation; it is not available for every service.</p>
+
+<h3 id="enable-or-disable-service-startup-at-boot">Enable or disable service startup at boot</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable </span>SERVICE
+<span class="nb">sudo </span>systemctl disable SERVICE
+</code></pre></div></div>
+
+<p>Enabling a service generally configures it to start automatically; it does not necessarily start it immediately. Use <code class="language-plaintext highlighter-rouge">enable --now</code> to enable and start it together.</p>
+
+<h3 id="find-a-services-main-pid">Find a service's main PID</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl show <span class="nt">-p</span> MainPID SERVICE
+</code></pre></div></div>
+
+<h3 id="read-service-logs">Read service logs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">-u</span> SERVICE
+journalctl <span class="nt">-u</span> SERVICE <span class="nt">-b</span>
+journalctl <span class="nt">-u</span> SERVICE <span class="nt">-f</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-b</code>: logs from the current boot.</li>
+  <li><code class="language-plaintext highlighter-rouge">-f</code>: follow new log entries.</li>
+</ul>
+
+<p>For a systemd-managed service, use <code class="language-plaintext highlighter-rouge">systemctl stop</code> or restart the service rather than killing its process directly. Otherwise, systemd may restart it or the service may be left in an unexpected state.</p>
+
+<h2 id="12-inspect-open-files-and-network-sockets">12. Inspect open files and network sockets</h2>
+
+<h3 id="see-files-opened-by-a-process">See files opened by a process</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>lsof <span class="nt">-p</span> 1234
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">lsof</code> lists open files, which on Linux include regular files, directories, devices, pipes, and sockets.</p>
+
+<p>Install it if needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>lsof
+</code></pre></div></div>
+
+<h3 id="find-which-process-uses-a-file-or-directory">Find which process uses a file or directory</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>lsof /path/to/file
+<span class="nb">sudo </span>fuser <span class="nt">-v</span> /path/to/file
+</code></pre></div></div>
+
+<p>For a mount point that will not unmount:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>fuser <span class="nt">-vm</span> /mnt/data
+</code></pre></div></div>
+
+<h3 id="find-processes-listening-on-network-ports">Find processes listening on network ports</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span>
+<span class="nb">sudo </span>ss <span class="nt">-lunp</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-l</code>: listening sockets.</li>
+  <li><code class="language-plaintext highlighter-rouge">-t</code>: TCP.</li>
+  <li><code class="language-plaintext highlighter-rouge">-u</code>: UDP.</li>
+  <li><code class="language-plaintext highlighter-rouge">-n</code>: numeric addresses and ports.</li>
+  <li><code class="language-plaintext highlighter-rouge">-p</code>: show process information when permissions allow.</li>
+</ul>
+
+<p>Example: inspect what is listening on TCP port 8080:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span> <span class="s1">'sport = :8080'</span>
+</code></pre></div></div>
+
+<p>A process listening on a port is not automatically exposed to the internet; routing, firewall rules, and network configuration also matter.</p>
+
+<h2 id="13-process-limits-and-resource-control">13. Process limits and resource control</h2>
+
+<h3 id="show-the-current-shells-resource-limits">Show the current shell's resource limits</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ulimit</span> <span class="nt">-a</span>
+</code></pre></div></div>
+
+<p>This reports limits such as open files and maximum user processes for the shell and its children.</p>
+
+<p>Set a limit for commands launched from the current shell, where supported:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ulimit</span> <span class="nt">-n</span> 4096
+</code></pre></div></div>
+
+<p>This example changes the shell's soft limit for open file descriptors. It does not retroactively change every running process or configure the limit system-wide.</p>
+
+<h3 id="show-a-processs-limits">Show a process's limits</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> /proc/1234/limits
+</code></pre></div></div>
+
+<h3 id="count-a-processs-open-file-descriptors">Count a process's open file descriptors</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> /proc/1234/fd | <span class="nb">wc</span> <span class="nt">-l</span>
+</code></pre></div></div>
+
+<p>Access may be restricted for processes owned by other users.</p>
+
+<h3 id="systemd-resource-controls">systemd resource controls</h3>
+
+<p>Systemd units can be configured with controls such as <code class="language-plaintext highlighter-rouge">CPUQuota=</code>, <code class="language-plaintext highlighter-rouge">MemoryMax=</code>, and <code class="language-plaintext highlighter-rouge">TasksMax=</code>. These are typically set in a service unit or drop-in override and should be chosen based on the service's requirements. Check the systemd documentation before applying limits to critical services.</p>
+
+<h2 id="14-troubleshooting-common-process-problems">14. Troubleshooting common process problems</h2>
+
+<h3 id="a-program-is-using-too-much-cpu">A program is using too much CPU</h3>
+
+<ol>
+  <li>
+    <p>Identify the process:</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-eo</span> pid,ppid,comm,%cpu,%mem,etime <span class="nt">--sort</span><span class="o">=</span>-%cpu | <span class="nb">head</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Inspect it:</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-p</span> 1234 <span class="nt">-o</span> pid,ppid,user,stat,%cpu,%mem,etime,cmd
+</code></pre></div>    </div>
+  </li>
+  <li>Check its logs if it is a service.</li>
+  <li>Stop it gracefully or adjust its priority only if you understand its role.</li>
+</ol>
+
+<h3 id="a-program-is-using-too-much-memory">A program is using too much memory</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-eo</span> pid,comm,%mem,rss,vsz <span class="nt">--sort</span><span class="o">=</span>-%mem | <span class="nb">head
+</span>free <span class="nt">-h</span>
+</code></pre></div></div>
+
+<p>Check whether memory use is growing over time. High memory use is not automatically a leak; applications may cache data intentionally.</p>
+
+<h3 id="a-process-will-not-terminate">A process will not terminate</h3>
+
+<p>Try a graceful termination first:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">kill</span> <span class="nt">-TERM</span> 1234
+</code></pre></div></div>
+
+<p>Check again:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-p</span> 1234 <span class="nt">-o</span> pid,stat,cmd
+</code></pre></div></div>
+
+<p>Only if appropriate, escalate:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">kill</span> <span class="nt">-KILL</span> 1234
+</code></pre></div></div>
+
+<p>If the process is in <code class="language-plaintext highlighter-rouge">D</code> state, investigate the underlying I/O or device issue. <code class="language-plaintext highlighter-rouge">SIGKILL</code> cannot immediately interrupt an uninterruptible kernel wait.</p>
+
+<h3 id="a-process-is-a-zombie">A process is a zombie</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-eo</span> pid,ppid,stat,cmd | <span class="nb">awk</span> <span class="s1">'$3 ~ /Z/'</span>
+</code></pre></div></div>
+
+<p>A zombie has already exited. You generally cannot fix it by killing the zombie itself. Its parent needs to collect its exit status. Investigate the parent PID and the program responsible; restarting a parent service may be appropriate only after understanding the impact.</p>
+
+<h3 id="a-port-is-already-in-use">A port is already in use</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span> <span class="s1">'sport = :8080'</span>
+</code></pre></div></div>
+
+<p>Identify the process and service before stopping anything. If the process belongs to a systemd service, manage the service with systemd.</p>
+
+<h3 id="a-command-runs-in-the-background-but-disappears-after-logout">A command runs in the background but disappears after logout</h3>
+
+<p>For a simple one-off command, <code class="language-plaintext highlighter-rouge">nohup</code> may help. For interactive sessions, use <code class="language-plaintext highlighter-rouge">tmux</code> or <code class="language-plaintext highlighter-rouge">screen</code>. For a persistent application, create or use a proper systemd service rather than relying on a shell session.</p>
+
+<h2 id="15-useful-process-signals">15. Useful process signals</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Signal</th>
+      <th>Common name</th>
+      <th>Typical meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">SIGHUP</code></td>
+      <td>Hangup; applications may reload configuration or exit</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">SIGINT</code></td>
+      <td>Interrupt, commonly from <code class="language-plaintext highlighter-rouge">Ctrl+C</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">9</code></td>
+      <td><code class="language-plaintext highlighter-rouge">SIGKILL</code></td>
+      <td>Force termination; cannot be caught or handled</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">15</code></td>
+      <td><code class="language-plaintext highlighter-rouge">SIGTERM</code></td>
+      <td>Request graceful termination; default for <code class="language-plaintext highlighter-rouge">kill</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">18</code></td>
+      <td><code class="language-plaintext highlighter-rouge">SIGCONT</code></td>
+      <td>Continue a stopped process</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">19</code></td>
+      <td><code class="language-plaintext highlighter-rouge">SIGSTOP</code></td>
+      <td>Stop a process; cannot be caught or handled</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">20</code></td>
+      <td><code class="language-plaintext highlighter-rouge">SIGTSTP</code></td>
+      <td>Terminal stop, commonly from <code class="language-plaintext highlighter-rouge">Ctrl+Z</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Signal numbers and some details can vary across Unix-like systems. Prefer names such as <code class="language-plaintext highlighter-rouge">TERM</code> and <code class="language-plaintext highlighter-rouge">KILL</code> for readability:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">kill</span> <span class="nt">-TERM</span> 1234
+<span class="nb">kill</span> <span class="nt">-KILL</span> 1234
+</code></pre></div></div>
+
+<h2 id="16-practical-examples">16. Practical examples</h2>
+
+<h3 id="example-a-find-the-most-cpu-intensive-processes">Example A: find the most CPU-intensive processes</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps <span class="nt">-eo</span> pid,user,comm,%cpu,%mem,etime <span class="nt">--sort</span><span class="o">=</span>-%cpu | <span class="nb">head</span> <span class="nt">-n</span> 11
+</code></pre></div></div>
+
+<h3 id="example-b-locate-and-inspect-a-python-server">Example B: locate and inspect a Python server</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgrep <span class="nt">-af</span> <span class="s1">'python.*server.py'</span>
+ps <span class="nt">-p</span> 1234 <span class="nt">-o</span> pid,ppid,user,stat,%cpu,%mem,cmd
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">1234</code> with the PID found in the first command.</p>
+
+<h3 id="example-c-stop-a-process-gracefully">Example C: stop a process gracefully</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgrep <span class="nt">-a</span> PROGRAM_NAME
+<span class="nb">kill</span> <span class="nt">-TERM</span> 1234
+<span class="nb">sleep </span>2
+ps <span class="nt">-p</span> 1234
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">PROGRAM_NAME</code> and <code class="language-plaintext highlighter-rouge">1234</code> with the intended target. If it is a service, prefer <code class="language-plaintext highlighter-rouge">systemctl stop SERVICE</code>.</p>
+
+<h3 id="example-d-run-a-long-command-with-a-log-file">Example D: run a long command with a log file</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">nohup</span> ./long-task.sh <span class="o">&gt;</span> long-task.log 2&gt;&amp;1 &amp;
+<span class="nb">echo</span> <span class="nv">$!</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">$!</code> prints the PID of the most recently backgrounded command in the current shell. This is useful for tracking the process you just started.</p>
+
+<h3 id="example-e-lower-a-cpu-intensive-jobs-priority">Example E: lower a CPU-intensive job's priority</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">nice</span> <span class="nt">-n</span> 10 ./cpu-heavy-task
+</code></pre></div></div>
+
+<p>For an existing process:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>renice 10 <span class="nt">-p</span> 1234
+</code></pre></div></div>
+
+<h3 id="example-f-find-the-process-using-a-port">Example F: find the process using a port</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ss <span class="nt">-ltnp</span> <span class="s1">'sport = :3000'</span>
+</code></pre></div></div>
+
+<p>This is useful when a development server reports that the port is already in use.</p>
+
+<h3 id="example-g-inspect-a-systemd-services-logs-and-process">Example G: inspect a systemd service's logs and process</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status nginx
+systemctl show <span class="nt">-p</span> MainPID nginx
+journalctl <span class="nt">-u</span> nginx <span class="nt">-b</span> <span class="nt">--no-pager</span>
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">nginx</code> with the service you are investigating.</p>
+
+<h2 id="17-quick-reference">17. Quick reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>List all processes</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef</code></td>
+    </tr>
+    <tr>
+      <td>Show detailed process list</td>
+      <td><code class="language-plaintext highlighter-rouge">ps aux</code></td>
+    </tr>
+    <tr>
+      <td>Sort by CPU</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -eo pid,comm,%cpu --sort=-%cpu \| head</code></td>
+    </tr>
+    <tr>
+      <td>Sort by memory</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -eo pid,comm,%mem --sort=-%mem \| head</code></td>
+    </tr>
+    <tr>
+      <td>Find by name</td>
+      <td><code class="language-plaintext highlighter-rouge">pgrep -a NAME</code></td>
+    </tr>
+    <tr>
+      <td>Search full command lines</td>
+      <td><code class="language-plaintext highlighter-rouge">pgrep -af PATTERN</code></td>
+    </tr>
+    <tr>
+      <td>Show process tree</td>
+      <td><code class="language-plaintext highlighter-rouge">pstree -p</code></td>
+    </tr>
+    <tr>
+      <td>Monitor interactively</td>
+      <td><code class="language-plaintext highlighter-rouge">top</code> or <code class="language-plaintext highlighter-rouge">htop</code></td>
+    </tr>
+    <tr>
+      <td>Terminate gracefully</td>
+      <td><code class="language-plaintext highlighter-rouge">kill -TERM PID</code></td>
+    </tr>
+    <tr>
+      <td>Force termination</td>
+      <td><code class="language-plaintext highlighter-rouge">kill -KILL PID</code></td>
+    </tr>
+    <tr>
+      <td>List current shell jobs</td>
+      <td><code class="language-plaintext highlighter-rouge">jobs -l</code></td>
+    </tr>
+    <tr>
+      <td>Resume a job in background</td>
+      <td><code class="language-plaintext highlighter-rouge">bg %1</code></td>
+    </tr>
+    <tr>
+      <td>Bring a job to foreground</td>
+      <td><code class="language-plaintext highlighter-rouge">fg %1</code></td>
+    </tr>
+    <tr>
+      <td>Start with lower CPU priority</td>
+      <td><code class="language-plaintext highlighter-rouge">nice -n 10 COMMAND</code></td>
+    </tr>
+    <tr>
+      <td>Change nice value</td>
+      <td><code class="language-plaintext highlighter-rouge">renice 10 -p PID</code></td>
+    </tr>
+    <tr>
+      <td>Check memory</td>
+      <td><code class="language-plaintext highlighter-rouge">free -h</code></td>
+    </tr>
+    <tr>
+      <td>Inspect open files</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo lsof -p PID</code></td>
+    </tr>
+    <tr>
+      <td>Find listening TCP ports</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo ss -ltnp</code></td>
+    </tr>
+    <tr>
+      <td>Inspect a service</td>
+      <td><code class="language-plaintext highlighter-rouge">systemctl status SERVICE</code></td>
+    </tr>
+    <tr>
+      <td>Read service logs</td>
+      <td><code class="language-plaintext highlighter-rouge">journalctl -u SERVICE -b</code></td>
+    </tr>
+    <tr>
+      <td>Show resource limits</td>
+      <td><code class="language-plaintext highlighter-rouge">ulimit -a</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><strong>Recommended habit:</strong> inspect before acting. Use <code class="language-plaintext highlighter-rouge">ps</code>, <code class="language-plaintext highlighter-rouge">pgrep</code>, <code class="language-plaintext highlighter-rouge">top</code>, or <code class="language-plaintext highlighter-rouge">htop</code> to identify the process, understand whether it is an ordinary program or a system service, and try graceful shutdown before resorting to <code class="language-plaintext highlighter-rouge">SIGKILL</code>.</p>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

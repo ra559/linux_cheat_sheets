@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>GNU sed Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#gnu-sed-cheat-sheet-for-debian-13" id="toc-gnu-sed-cheat-sheet-for-debian-13">GNU <code class="language-plaintext highlighter-rouge">sed</code> Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-check-availability-and-get-help" id="toc-1-check-availability-and-get-help">1. Check availability and get help</a></li>
+<li><a href="#2-how-sed-works" id="toc-2-how-sed-works">2. How sed works</a></li>
+<li><a href="#3-basic-syntax" id="toc-3-basic-syntax">3. Basic syntax</a></li>
+<li><a href="#4-print-and-select-lines" id="toc-4-print-and-select-lines">4. Print and select lines</a></li>
+<li><a href="#5-find-and-replace-text" id="toc-5-find-and-replace-text">5. Find and replace text</a></li>
+<li><a href="#6-regular-expressions" id="toc-6-regular-expressions">6. Regular expressions</a></li>
+<li><a href="#7-address-ranges-and-multiple-commands" id="toc-7-address-ranges-and-multiple-commands">7. Address ranges and multiple commands</a></li>
+<li><a href="#8-edit-files-safely" id="toc-8-edit-files-safely">8. Edit files safely</a></li>
+<li><a href="#9-useful-transformations" id="toc-9-useful-transformations">9. Useful transformations</a></li>
+<li><a href="#10-common-pitfalls-and-safe-habits" id="toc-10-common-pitfalls-and-safe-habits">10. Common pitfalls and safe habits</a></li>
+<li><a href="#11-quick-command-index" id="toc-11-quick-command-index">11. Quick command index</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="gnu-sed-cheat-sheet-for-debian-13">GNU <code class="language-plaintext highlighter-rouge">sed</code> Cheat Sheet for Debian 13</h1>
+
+<blockquote>
+  <p><strong>Purpose:</strong> A practical reference for using <code class="language-plaintext highlighter-rouge">sed</code> to search, select, transform, and edit text streams and files.</p>
+
+  <p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">sed</code><br />
+<strong>Scope:</strong> This guide focuses on common GNU <code class="language-plaintext highlighter-rouge">sed</code> usage on Debian 13. Examples that modify files are clearly marked. Always test commands on sample files before changing important data.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ol>
+  <li><a href="#1-check-availability-and-get-help">Check availability and get help</a></li>
+  <li><a href="#2-how-sed-works">How sed works</a></li>
+  <li><a href="#3-basic-syntax">Basic syntax</a></li>
+  <li><a href="#4-print-and-select-lines">Print and select lines</a></li>
+  <li><a href="#5-find-and-replace-text">Find and replace text</a></li>
+  <li><a href="#6-regular-expressions">Regular expressions</a></li>
+  <li><a href="#7-address-ranges-and-multiple-commands">Address ranges and multiple commands</a></li>
+  <li><a href="#8-edit-files-safely">Edit files safely</a></li>
+  <li><a href="#9-useful-transformations">Useful transformations</a></li>
+  <li><a href="#10-common-pitfalls-and-safe-habits">Common pitfalls and safe habits</a></li>
+  <li><a href="#11-quick-command-index">Quick command index</a></li>
+</ol>
+
+<hr />
+
+<h2 id="1-check-availability-and-get-help">1. Check availability and get help</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command</span> <span class="nt">-v</span> <span class="nb">sed
+</span>dpkg-query <span class="nt">-S</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">command</span> <span class="nt">-v</span> <span class="nb">sed</span><span class="si">)</span><span class="s2">"</span>
+<span class="nb">sed</span> <span class="nt">--version</span>
+man <span class="nb">sed</span>
+</code></pre></div></div>
+
+<p>On Debian, GNU <code class="language-plaintext highlighter-rouge">sed</code> is provided by the <code class="language-plaintext highlighter-rouge">sed</code> package.</p>
+
+<h2 id="2-how-sed-works">2. How sed works</h2>
+
+<p><code class="language-plaintext highlighter-rouge">sed</code> is a <strong>stream editor</strong>. It reads input one line at a time, applies commands, and normally prints the result.</p>
+
+<p>If <code class="language-plaintext highlighter-rouge">names.txt</code> contains:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alice
+bob
+carol
+</code></pre></div></div>
+
+<p>This changes lowercase <code class="language-plaintext highlighter-rouge">a</code> characters to uppercase <code class="language-plaintext highlighter-rouge">A</code> in the output:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/a/A/g'</span> names.txt
+</code></pre></div></div>
+
+<p>By default, <code class="language-plaintext highlighter-rouge">sed</code> does not change the original file. It prints transformed text to standard output.</p>
+
+<h2 id="3-basic-syntax">3. Basic syntax</h2>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sed [OPTIONS] 'COMMAND' FILE
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-n</code></td>
+      <td>Suppress automatic printing; print only when instructed</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-e</code></td>
+      <td>Supply a script of commands</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-f FILE</code></td>
+      <td>Read commands from a script file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-E</code></td>
+      <td>Use extended regular expressions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-i</code></td>
+      <td>Edit files in place</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-i.bak</code></td>
+      <td>Edit in place and keep a backup with the <code class="language-plaintext highlighter-rouge">.bak</code> suffix</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Examples:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/cat/dog/'</span> pets.txt
+<span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'1,5p'</span> notes.txt
+<span class="nb">sed</span> <span class="nt">-E</span> <span class="s1">'s/[0-9]+/NUMBER/g'</span> data.txt
+</code></pre></div></div>
+
+<h2 id="4-print-and-select-lines">4. Print and select lines</h2>
+
+<p>Print line 3 only:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'3p'</span> notes.txt
+</code></pre></div></div>
+
+<p>Print lines 3 through 7:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'3,7p'</span> notes.txt
+</code></pre></div></div>
+
+<p>Print the last line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'$p'</span> notes.txt
+</code></pre></div></div>
+
+<p>Print lines containing <code class="language-plaintext highlighter-rouge">error</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'/error/p'</span> application.log
+</code></pre></div></div>
+
+<p>Print lines that do not contain <code class="language-plaintext highlighter-rouge">error</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'/error/!p'</span> application.log
+</code></pre></div></div>
+
+<h2 id="5-find-and-replace-text">5. Find and replace text</h2>
+
+<p>The substitution command has this general form:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>s/PATTERN/REPLACEMENT/FLAGS
+</code></pre></div></div>
+
+<p>Replace the first match on each line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/cat/dog/'</span> pets.txt
+</code></pre></div></div>
+
+<p>Replace every match on each line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/cat/dog/g'</span> pets.txt
+</code></pre></div></div>
+
+<p>Ignore case (GNU <code class="language-plaintext highlighter-rouge">sed</code> extension):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/error/warning/Ig'</span> application.log
+</code></pre></div></div>
+
+<p>Replace only on line 2:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'2s/draft/final/'</span> notes.txt
+</code></pre></div></div>
+
+<p>Replace text only on lines beginning with <code class="language-plaintext highlighter-rouge">Host </code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'/^Host /s/old.example/new.example/'</span> config.txt
+</code></pre></div></div>
+
+<p>Use a different delimiter when the pattern contains <code class="language-plaintext highlighter-rouge">/</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s|/home/alice|/home/student|g'</span> paths.txt
+</code></pre></div></div>
+
+<p>Use captured text in a replacement:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-E</span> <span class="s1">'s/([A-Za-z]+), ([A-Za-z]+)/\2 \1/'</span> names.txt
+</code></pre></div></div>
+
+<p>For input such as <code class="language-plaintext highlighter-rouge">Smith, Alex</code>, the output is <code class="language-plaintext highlighter-rouge">Alex Smith</code>. In the replacement, <code class="language-plaintext highlighter-rouge">\1</code> and <code class="language-plaintext highlighter-rouge">\2</code> refer to captured groups.</p>
+
+<p>Replace only the second match on each line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/:/-/2'</span> values.txt
+</code></pre></div></div>
+
+<h2 id="6-regular-expressions">6. Regular expressions</h2>
+
+<p>By default, GNU <code class="language-plaintext highlighter-rouge">sed</code> uses basic regular expressions. The <code class="language-plaintext highlighter-rouge">-E</code> option enables extended regular expressions.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pattern</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">.</code></td>
+      <td>Any single character except a newline</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">^</code></td>
+      <td>Start of line</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">$</code></td>
+      <td>End of line</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">[abc]</code></td>
+      <td>One character: <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, or <code class="language-plaintext highlighter-rouge">c</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">[0-9]</code></td>
+      <td>One digit</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">[^0-9]</code></td>
+      <td>One character that is not a digit</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">*</code></td>
+      <td>Zero or more repetitions of the preceding pattern</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\+</code></td>
+      <td>One or more repetitions in basic regular expressions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\?</code></td>
+      <td>Zero or one repetition in basic regular expressions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">+</code></td>
+      <td>One or more repetitions with <code class="language-plaintext highlighter-rouge">-E</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">?</code></td>
+      <td>Zero or one repetition with <code class="language-plaintext highlighter-rouge">-E</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\(...\)</code></td>
+      <td>Grouping in basic regular expressions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">(...)</code></td>
+      <td>Grouping with <code class="language-plaintext highlighter-rouge">-E</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\|</code></td>
+      <td>Alternation in basic regular expressions; use <code class="language-plaintext highlighter-rouge">|</code> with <code class="language-plaintext highlighter-rouge">-E</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Examples:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'/^ERROR/p'</span> application.log
+<span class="nb">sed</span> <span class="nt">-E</span> <span class="s1">'s/[0-9]+/[NUMBER]/g'</span> data.txt
+<span class="nb">sed</span> <span class="nt">-E</span> <span class="s1">'s/(red|blue)/COLOR/g'</span> colors.txt
+</code></pre></div></div>
+
+<h2 id="7-address-ranges-and-multiple-commands">7. Address ranges and multiple commands</h2>
+
+<p>Change text only on lines 2 through 5 in the output:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'2,5s/old/new/g'</span> notes.txt
+</code></pre></div></div>
+
+<p>Print from the first line beginning with <code class="language-plaintext highlighter-rouge">START</code> through the end:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'/^START/,$p'</span> log.txt
+</code></pre></div></div>
+
+<p>Run multiple commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-e</span> <span class="s1">'s/cat/dog/g'</span> <span class="nt">-e</span> <span class="s1">'s/blue/green/g'</span> pets.txt
+</code></pre></div></div>
+
+<p>Or separate commands with semicolons:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/cat/dog/g; s/blue/green/g'</span> pets.txt
+</code></pre></div></div>
+
+<p>Remove lines beginning with <code class="language-plaintext highlighter-rouge">#</code> from the output:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'/^#/d'</span> config.txt
+</code></pre></div></div>
+
+<p>Remove blank lines from the output:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'/^$/d'</span> notes.txt
+</code></pre></div></div>
+
+<p>These examples do not modify the original file.</p>
+
+<h2 id="8-edit-files-safely">8. Edit files safely</h2>
+
+<p>Preview a change first:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/old/new/g'</span> config.txt
+</code></pre></div></div>
+
+<p>Edit in place and save a backup:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-i</span>.bak <span class="s1">'s/old/new/g'</span> config.txt
+</code></pre></div></div>
+
+<p>This changes <code class="language-plaintext highlighter-rouge">config.txt</code> and saves the previous version as <code class="language-plaintext highlighter-rouge">config.txt.bak</code>.</p>
+
+<p>Edit in place without a backup:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/old/new/g'</span> config.txt
+</code></pre></div></div>
+
+<p><strong>Warning:</strong> This modifies the original file directly. Prefer <code class="language-plaintext highlighter-rouge">-i.bak</code> for important files.</p>
+
+<p>Write the result to a new file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/old/new/g'</span> config.txt <span class="o">&gt;</span> config-updated.txt
+</code></pre></div></div>
+
+<p>Do not redirect output to the same file being read; the shell can truncate the file before <code class="language-plaintext highlighter-rouge">sed</code> reads it.</p>
+
+<h2 id="9-useful-transformations">9. Useful transformations</h2>
+
+<p>Remove leading spaces and tabs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/^[[:blank:]]*//'</span> notes.txt
+</code></pre></div></div>
+
+<p>Remove trailing spaces and tabs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/[[:blank:]]*$//'</span> notes.txt
+</code></pre></div></div>
+
+<p>Remove both leading and trailing spaces and tabs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/^[[:blank:]]*//; s/[[:blank:]]*$//'</span> notes.txt
+</code></pre></div></div>
+
+<p>Add a prefix to every line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/^/&gt; /'</span> notes.txt
+</code></pre></div></div>
+
+<p>Add a suffix to every line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/$/;/'</span> values.txt
+</code></pre></div></div>
+
+<p>Remove lines that contain <code class="language-plaintext highlighter-rouge">DEBUG</code> from the output:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'/DEBUG/d'</span> application.log
+</code></pre></div></div>
+
+<p>Convert a simple comma-and-space separator to a tab:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s1">'s/, /\t/g'</span> names.txt
+</code></pre></div></div>
+
+<p>This is suitable only for simple text. It is not a safe general-purpose way to process CSV files with quoted fields.</p>
+
+<h2 id="10-common-pitfalls-and-safe-habits">10. Common pitfalls and safe habits</h2>
+
+<ul>
+  <li><strong>Preview before editing.</strong> Run a command without <code class="language-plaintext highlighter-rouge">-i</code> first to inspect its output.</li>
+  <li><strong>Remember the default behavior.</strong> <code class="language-plaintext highlighter-rouge">sed</code> prints transformed text; it does not normally alter the source file.</li>
+  <li><strong>Use <code class="language-plaintext highlighter-rouge">-n</code> with <code class="language-plaintext highlighter-rouge">p</code> when selecting lines.</strong> Without <code class="language-plaintext highlighter-rouge">-n</code>, selected lines may be printed twice.</li>
+  <li><strong>Understand the <code class="language-plaintext highlighter-rouge">g</code> flag.</strong> Without <code class="language-plaintext highlighter-rouge">g</code>, only the first match on each line is replaced.</li>
+  <li><strong>Quote the script.</strong> Single quotes usually prevent the shell from interpreting characters such as <code class="language-plaintext highlighter-rouge">$</code>, <code class="language-plaintext highlighter-rouge">*</code>, and parentheses before <code class="language-plaintext highlighter-rouge">sed</code> receives them.</li>
+  <li><strong>Be careful with regular expressions.</strong> A dot (<code class="language-plaintext highlighter-rouge">.</code>) is a wildcard unless escaped.</li>
+  <li><strong>Use a backup for in-place edits.</strong> <code class="language-plaintext highlighter-rouge">-i.bak</code> keeps a copy of the original.</li>
+  <li><strong>Do not overwrite the input using redirection.</strong> For example, <code class="language-plaintext highlighter-rouge">sed 's/a/b/g' file.txt &gt; file.txt</code> can empty the file.</li>
+  <li><strong>Consult the manual.</strong> GNU <code class="language-plaintext highlighter-rouge">sed</code> has more features than this beginner-focused reference covers.</li>
+</ul>
+
+<h2 id="11-quick-command-index">11. Quick command index</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Replace first match per line</td>
+      <td><code class="language-plaintext highlighter-rouge">sed 's/old/new/' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Replace all matches per line</td>
+      <td><code class="language-plaintext highlighter-rouge">sed 's/old/new/g' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Replace ignoring case</td>
+      <td><code class="language-plaintext highlighter-rouge">sed 's/old/new/Ig' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Print line 5</td>
+      <td><code class="language-plaintext highlighter-rouge">sed -n '5p' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Print lines 5–10</td>
+      <td><code class="language-plaintext highlighter-rouge">sed -n '5,10p' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Print matching lines</td>
+      <td><code class="language-plaintext highlighter-rouge">sed -n '/word/p' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Delete matching lines from output</td>
+      <td><code class="language-plaintext highlighter-rouge">sed '/word/d' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Remove blank lines from output</td>
+      <td><code class="language-plaintext highlighter-rouge">sed '/^$/d' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Edit with a backup</td>
+      <td><code class="language-plaintext highlighter-rouge">sed -i.bak 's/old/new/g' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Use extended regex</td>
+      <td><code class="language-plaintext highlighter-rouge">sed -E 's/[0-9]+/N/g' file.txt</code></td>
+    </tr>
+    <tr>
+      <td>Check availability</td>
+      <td><code class="language-plaintext highlighter-rouge">command -v sed</code></td>
+    </tr>
+    <tr>
+      <td>Find package ownership</td>
+      <td><code class="language-plaintext highlighter-rouge">dpkg-query -S "$(command -v sed)"</code></td>
+    </tr>
+  </tbody>
+</table>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

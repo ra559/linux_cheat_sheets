@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Git and GitHub CLI Cheat Sheet for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#git-and-github-cli-cheat-sheet-for-debian-13" id="toc-git-and-github-cli-cheat-sheet-for-debian-13">Git and GitHub CLI Cheat Sheet for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of Contents</a></li>
+<li><a href="#1-git-and-github-cli-what-is-the-difference" id="toc-1-git-and-github-cli-what-is-the-difference">1. Git and GitHub CLI: What Is the Difference?</a></li>
+<li><a href="#2-install-git-and-github-cli-on-debian-13" id="toc-2-install-git-and-github-cli-on-debian-13">2. Install Git and GitHub CLI on Debian 13</a>
+<ul>
+<li><a href="#install-git" id="toc-install-git">Install Git</a></li>
+<li><a href="#install-github-cli-gh" id="toc-install-github-cli-gh">Install GitHub CLI (<code class="language-plaintext highlighter-rouge">gh</code>)</a></li>
+</ul>
+</li>
+<li><a href="#3-initial-git-configuration" id="toc-3-initial-git-configuration">3. Initial Git Configuration</a></li>
+<li><a href="#4-authenticate-github-cli" id="toc-4-authenticate-github-cli">4. Authenticate GitHub CLI</a></li>
+<li><a href="#5-create-or-clone-a-repository" id="toc-5-create-or-clone-a-repository">5. Create or Clone a Repository</a>
+<ul>
+<li><a href="#create-a-local-repository" id="toc-create-a-local-repository">Create a local repository</a></li>
+<li><a href="#clone-an-existing-github-repository" id="toc-clone-an-existing-github-repository">Clone an existing GitHub repository</a></li>
+<li><a href="#create-a-github-repository-from-the-current-directory" id="toc-create-a-github-repository-from-the-current-directory">Create a GitHub repository from the current directory</a></li>
+</ul>
+</li>
+<li><a href="#6-everyday-git-workflow" id="toc-6-everyday-git-workflow">6. Everyday Git Workflow</a></li>
+<li><a href="#7-inspect-changes-and-history" id="toc-7-inspect-changes-and-history">7. Inspect Changes and History</a></li>
+<li><a href="#8-branches-and-merging" id="toc-8-branches-and-merging">8. Branches and Merging</a>
+<ul>
+<li><a href="#rebase-a-feature-branch" id="toc-rebase-a-feature-branch">Rebase a feature branch</a></li>
+</ul>
+</li>
+<li><a href="#9-remotes-and-synchronization" id="toc-9-remotes-and-synchronization">9. Remotes and Synchronization</a></li>
+<li><a href="#10-github-cli-repository-commands" id="toc-10-github-cli-repository-commands">10. GitHub CLI Repository Commands</a></li>
+<li><a href="#11-pull-requests" id="toc-11-pull-requests">11. Pull Requests</a></li>
+<li><a href="#12-issues-and-discussions" id="toc-12-issues-and-discussions">12. Issues and Discussions</a></li>
+<li><a href="#13-releases-and-tags" id="toc-13-releases-and-tags">13. Releases and Tags</a></li>
+<li><a href="#14-github-actions" id="toc-14-github-actions">14. GitHub Actions</a></li>
+<li><a href="#15-ssh-setup-for-github" id="toc-15-ssh-setup-for-github">15. SSH Setup for GitHub</a></li>
+<li><a href="#16-undo-and-recover-changes" id="toc-16-undo-and-recover-changes">16. Undo and Recover Changes</a>
+<ul>
+<li><a href="#discard-unstaged-changes-to-a-tracked-file" id="toc-discard-unstaged-changes-to-a-tracked-file">Discard unstaged changes to a tracked file</a></li>
+<li><a href="#unstage-a-file-but-keep-its-edits" id="toc-unstage-a-file-but-keep-its-edits">Unstage a file but keep its edits</a></li>
+<li><a href="#amend-the-most-recent-commit" id="toc-amend-the-most-recent-commit">Amend the most recent commit</a></li>
+<li><a href="#revert-a-commit-safely" id="toc-revert-a-commit-safely">Revert a commit safely</a></li>
+<li><a href="#reset-to-an-earlier-commit" id="toc-reset-to-an-earlier-commit">Reset to an earlier commit</a></li>
+<li><a href="#recover-using-the-reflog" id="toc-recover-using-the-reflog">Recover using the reflog</a></li>
+<li><a href="#remove-an-untracked-file-or-directory" id="toc-remove-an-untracked-file-or-directory">Remove an untracked file or directory</a></li>
+</ul>
+</li>
+<li><a href="#17-ignore-files-and-useful-configuration" id="toc-17-ignore-files-and-useful-configuration">17. Ignore Files and Useful Configuration</a></li>
+<li><a href="#18-troubleshooting" id="toc-18-troubleshooting">18. Troubleshooting</a>
+<ul>
+<li><a href="#origin-already-exists" id="toc-origin-already-exists"><code class="language-plaintext highlighter-rouge">origin</code> already exists</a></li>
+<li><a href="#push-rejected-because-the-remote-has-new-commits" id="toc-push-rejected-because-the-remote-has-new-commits">Push rejected because the remote has new commits</a></li>
+<li><a href="#ssh-permission-denied" id="toc-ssh-permission-denied">SSH permission denied</a></li>
+<li><a href="#gh-is-not-authenticated" id="toc-gh-is-not-authenticated"><code class="language-plaintext highlighter-rouge">gh</code> is not authenticated</a></li>
+<li><a href="#see-which-branch-is-tracking-which-remote-branch" id="toc-see-which-branch-is-tracking-which-remote-branch">See which branch is tracking which remote branch</a></li>
+<li><a href="#check-the-current-branch" id="toc-check-the-current-branch">Check the current branch</a></li>
+</ul>
+</li>
+<li><a href="#19-safety-notes" id="toc-19-safety-notes">19. Safety Notes</a></li>
+<li><a href="#20-quick-reference" id="toc-20-quick-reference">20. Quick Reference</a></li>
+<li><a href="#21-help-and-documentation" id="toc-21-help-and-documentation">21. Help and Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="git-and-github-cli-cheat-sheet-for-debian-13">Git and GitHub CLI Cheat Sheet for Debian 13</h1>
+
+<p>A practical reference for using Git and GitHub CLI (<code class="language-plaintext highlighter-rouge">gh</code>) together from the terminal. Includes installation, repository setup, commits, branches, remotes, SSH, pull requests, issues, releases, Actions, troubleshooting, and recovery commands.</p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+  <li><a href="#1-git-and-github-cli-what-is-the-difference">1. Git and GitHub CLI: What Is the Difference?</a></li>
+  <li><a href="#2-install-git-and-github-cli-on-debian-13">2. Install Git and GitHub CLI on Debian 13</a></li>
+  <li><a href="#3-initial-git-configuration">3. Initial Git Configuration</a></li>
+  <li><a href="#4-authenticate-github-cli">4. Authenticate GitHub CLI</a></li>
+  <li><a href="#5-create-or-clone-a-repository">5. Create or Clone a Repository</a></li>
+  <li><a href="#6-everyday-git-workflow">6. Everyday Git Workflow</a></li>
+  <li><a href="#7-inspect-changes-and-history">7. Inspect Changes and History</a></li>
+  <li><a href="#8-branches-and-merging">8. Branches and Merging</a></li>
+  <li><a href="#9-remotes-and-synchronization">9. Remotes and Synchronization</a></li>
+  <li><a href="#10-github-cli-repository-commands">10. GitHub CLI Repository Commands</a></li>
+  <li><a href="#11-pull-requests">11. Pull Requests</a></li>
+  <li><a href="#12-issues-and-discussions">12. Issues and Discussions</a></li>
+  <li><a href="#13-releases-and-tags">13. Releases and Tags</a></li>
+  <li><a href="#14-github-actions">14. GitHub Actions</a></li>
+  <li><a href="#15-ssh-setup-for-github">15. SSH Setup for GitHub</a></li>
+  <li><a href="#16-undo-and-recover-changes">16. Undo and Recover Changes</a></li>
+  <li><a href="#17-ignore-files-and-useful-configuration">17. Ignore Files and Useful Configuration</a></li>
+  <li><a href="#18-troubleshooting">18. Troubleshooting</a></li>
+  <li><a href="#19-safety-notes">19. Safety Notes</a></li>
+  <li><a href="#20-quick-reference">20. Quick Reference</a></li>
+  <li><a href="#21-help-and-documentation">21. Help and Documentation</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-git-and-github-cli-what-is-the-difference">1. Git and GitHub CLI: What Is the Difference?</h2>
+
+<ul>
+  <li><strong>Git</strong> is a version control system. It tracks changes, creates commits, and manages branches and merges locally.</li>
+  <li><strong>GitHub</strong> is a hosting and collaboration platform for Git repositories.</li>
+  <li><strong>GitHub CLI (<code class="language-plaintext highlighter-rouge">gh</code>)</strong> is GitHub's command-line tool. It helps manage GitHub repositories, pull requests, issues, releases, and Actions from the terminal.</li>
+</ul>
+
+<p>Typical workflow:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Describe the change"</span>
+git push
+gh <span class="nb">pr </span>create
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">git</code> commands work with local repositories and configured remotes. <code class="language-plaintext highlighter-rouge">gh</code> commands generally require GitHub CLI authentication and a GitHub repository context.</p>
+
+<h2 id="2-install-git-and-github-cli-on-debian-13">2. Install Git and GitHub CLI on Debian 13</h2>
+
+<h3 id="install-git">Install Git</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>git
+</code></pre></div></div>
+
+<p>Check the version:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git <span class="nt">--version</span>
+</code></pre></div></div>
+
+<h3 id="install-github-cli-gh">Install GitHub CLI (<code class="language-plaintext highlighter-rouge">gh</code>)</h3>
+
+<p>GitHub CLI may be available in Debian's repositories, but the version can differ from GitHub's official packages. To install the version from GitHub's official APT repository, use the current instructions in the official documentation:</p>
+
+<p>https://github.com/cli/cli/blob/trunk/docs/install_linux.md</p>
+
+<p>The official repository setup commonly uses an APT signing key and a repository entry. Follow the current instructions for Debian rather than copying an old key URL or repository configuration.</p>
+
+<p>If <code class="language-plaintext highlighter-rouge">gh</code> is already available from your configured package sources, you can install it with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>gh
+</code></pre></div></div>
+
+<p>Verify:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nt">--version</span>
+</code></pre></div></div>
+
+<h2 id="3-initial-git-configuration">3. Initial Git Configuration</h2>
+
+<p>Set the name and email to associate with your commits:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> user.name <span class="s2">"Your Name"</span>
+git config <span class="nt">--global</span> user.email <span class="s2">"you@example.com"</span>
+</code></pre></div></div>
+
+<p>Check configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> <span class="nt">--list</span>
+</code></pre></div></div>
+
+<p>Set the default initial branch name:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> init.defaultBranch main
+</code></pre></div></div>
+
+<p>Set Vim as Git's default editor:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> core.editor vim
+</code></pre></div></div>
+
+<p>Check a specific setting:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> user.name
+git config <span class="nt">--global</span> core.editor
+</code></pre></div></div>
+
+<p>Configuration levels:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">--system</code>: applies to all users on the system.</li>
+  <li><code class="language-plaintext highlighter-rouge">--global</code>: applies to your user account.</li>
+  <li><code class="language-plaintext highlighter-rouge">--local</code>: applies only to the current repository.</li>
+</ul>
+
+<p>Local settings override global settings.</p>
+
+<h2 id="4-authenticate-github-cli">4. Authenticate GitHub CLI</h2>
+
+<p>Start the interactive login flow:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh auth login
+</code></pre></div></div>
+
+<p>Choose GitHub.com, then select HTTPS or SSH according to your preferred Git transport. Follow the prompts to authenticate.</p>
+
+<p>Check authentication status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh auth status
+</code></pre></div></div>
+
+<p>View available authentication options:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh auth login <span class="nt">--help</span>
+</code></pre></div></div>
+
+<p>Log out:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh auth <span class="nb">logout</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">gh</code> authentication and Git authentication are related but not identical. Git operations over HTTPS may use credentials managed by GitHub CLI if configured, while SSH operations depend on your SSH keys and agent.</p>
+
+<h2 id="5-create-or-clone-a-repository">5. Create or Clone a Repository</h2>
+
+<h3 id="create-a-local-repository">Create a local repository</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir </span>my-project
+<span class="nb">cd </span>my-project
+git init
+</code></pre></div></div>
+
+<p>Check status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+</code></pre></div></div>
+
+<h3 id="clone-an-existing-github-repository">Clone an existing GitHub repository</h3>
+
+<p>Using SSH:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone git@github.com:USERNAME/REPOSITORY.git
+</code></pre></div></div>
+
+<p>Using HTTPS:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/USERNAME/REPOSITORY.git
+</code></pre></div></div>
+
+<p>Change into the cloned directory:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>REPOSITORY
+</code></pre></div></div>
+
+<p>GitHub CLI can also clone repositories:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo clone USERNAME/REPOSITORY
+</code></pre></div></div>
+
+<h3 id="create-a-github-repository-from-the-current-directory">Create a GitHub repository from the current directory</h3>
+
+<p>From an existing local Git repository:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo create my-project <span class="nt">--source</span><span class="o">=</span><span class="nb">.</span> <span class="nt">--remote</span><span class="o">=</span>origin <span class="nt">--private</span>
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">--public</code> instead of <code class="language-plaintext highlighter-rouge">--private</code> if you intend the repository to be publicly visible. Review the visibility choice before creating the repository.</p>
+
+<p>To create a repository interactively:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo create
+</code></pre></div></div>
+
+<h2 id="6-everyday-git-workflow">6. Everyday Git Workflow</h2>
+
+<p>Check repository status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+</code></pre></div></div>
+
+<p>Stage one file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add README.md
+</code></pre></div></div>
+
+<p>Stage several files:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add file1.rb file2.rb
+</code></pre></div></div>
+
+<p>Stage all changes under the current directory:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>Review staged changes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff <span class="nt">--staged</span>
+</code></pre></div></div>
+
+<p>Commit staged changes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit <span class="nt">-m</span> <span class="s2">"Add README"</span>
+</code></pre></div></div>
+
+<p>Stage and commit tracked-file modifications in one command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit <span class="nt">-am</span> <span class="s2">"Fix validation"</span>
+</code></pre></div></div>
+
+<p><strong>Note:</strong> <code class="language-plaintext highlighter-rouge">git commit -am</code> does not stage new, untracked files.</p>
+
+<p>Push the current branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push
+</code></pre></div></div>
+
+<p>If it has no upstream configured yet:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push <span class="nt">-u</span> origin HEAD
+</code></pre></div></div>
+
+<p>Pull updates from the configured upstream:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git pull
+</code></pre></div></div>
+
+<p>A common cycle:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+git add <span class="nb">.</span>
+git diff <span class="nt">--staged</span>
+git commit <span class="nt">-m</span> <span class="s2">"Describe the change"</span>
+git push
+</code></pre></div></div>
+
+<h2 id="7-inspect-changes-and-history">7. Inspect Changes and History</h2>
+
+<p>Show working tree status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+</code></pre></div></div>
+
+<p>Show unstaged changes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff
+</code></pre></div></div>
+
+<p>Show staged changes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff <span class="nt">--staged</span>
+</code></pre></div></div>
+
+<p>Show recent commits:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--oneline</span>
+</code></pre></div></div>
+
+<p>Show a graph of branches and commits:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--decorate</span> <span class="nt">--all</span>
+</code></pre></div></div>
+
+<p>Show details of the latest commit:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git show
+</code></pre></div></div>
+
+<p>Show changes to one file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff <span class="nt">--</span> README.md
+</code></pre></div></div>
+
+<p>Show which files changed in recent commits:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--stat</span>
+</code></pre></div></div>
+
+<p>List tracked files:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git ls-files
+</code></pre></div></div>
+
+<p>Find who last changed each line in a file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git blame README.md
+</code></pre></div></div>
+
+<h2 id="8-branches-and-merging">8. Branches and Merging</h2>
+
+<p>List local branches:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch
+</code></pre></div></div>
+
+<p>List local and remote-tracking branches:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-a</span>
+</code></pre></div></div>
+
+<p>Create a branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch feature-login
+</code></pre></div></div>
+
+<p>Create and switch to a branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch <span class="nt">-c</span> feature-login
+</code></pre></div></div>
+
+<p>Switch branches:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+</code></pre></div></div>
+
+<p>Merge a branch into the current branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git merge feature-login
+</code></pre></div></div>
+
+<p>Delete a merged local branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-d</span> feature-login
+</code></pre></div></div>
+
+<p>Delete a branch forcefully (only when you are sure it is no longer needed):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-D</span> feature-login
+</code></pre></div></div>
+
+<p>Delete a remote branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin <span class="nt">--delete</span> feature-login
+</code></pre></div></div>
+
+<p>Update remote-tracking references and remove ones that no longer exist remotely:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch <span class="nt">--prune</span>
+</code></pre></div></div>
+
+<h3 id="rebase-a-feature-branch">Rebase a feature branch</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch feature-login
+git fetch origin
+git rebase origin/main
+</code></pre></div></div>
+
+<p>Rebasing rewrites commits. Avoid rebasing shared branches unless the team agrees on that workflow.</p>
+
+<h2 id="9-remotes-and-synchronization">9. Remotes and Synchronization</h2>
+
+<p>List configured remotes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p>Add a remote:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote add origin git@github.com:USERNAME/REPOSITORY.git
+</code></pre></div></div>
+
+<p>Change an existing remote URL:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+</code></pre></div></div>
+
+<p>Verify the remote:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p>Rename a remote:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote rename origin upstream
+</code></pre></div></div>
+
+<p>Remove a remote:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote remove origin
+</code></pre></div></div>
+
+<p>Fetch remote updates without merging:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch origin
+</code></pre></div></div>
+
+<p>Fetch and prune deleted remote branches:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch <span class="nt">--prune</span> origin
+</code></pre></div></div>
+
+<p>Pull updates:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git pull
+</code></pre></div></div>
+
+<p>Push current branch and set upstream:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push <span class="nt">-u</span> origin HEAD
+</code></pre></div></div>
+
+<p>Push an existing branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push
+</code></pre></div></div>
+
+<p>If you accidentally added the wrong remote URL, correct it instead of adding <code class="language-plaintext highlighter-rouge">origin</code> a second time:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+</code></pre></div></div>
+
+<h2 id="10-github-cli-repository-commands">10. GitHub CLI Repository Commands</h2>
+
+<p>Show the current repository in GitHub CLI:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo view
+</code></pre></div></div>
+
+<p>View a particular repository:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo view USERNAME/REPOSITORY
+</code></pre></div></div>
+
+<p>Open the repository in a browser:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo view <span class="nt">--web</span>
+</code></pre></div></div>
+
+<p>List your repositories:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo list
+</code></pre></div></div>
+
+<p>List repositories for an organization:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo list ORGANIZATION
+</code></pre></div></div>
+
+<p>Create a repository:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo create
+</code></pre></div></div>
+
+<p>Clone a repository:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo clone USERNAME/REPOSITORY
+</code></pre></div></div>
+
+<p>Fork a repository:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo fork USERNAME/REPOSITORY
+</code></pre></div></div>
+
+<p>Set the repository's Git remote to an SSH URL:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh repo set-default
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">gh repo set-default</code> selects the default repository for GitHub CLI commands in the current directory; it does not change your Git remote URL.</p>
+
+<h2 id="11-pull-requests">11. Pull Requests</h2>
+
+<p>List open pull requests:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>list
+</code></pre></div></div>
+
+<p>View a pull request:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>view 42
+</code></pre></div></div>
+
+<p>View the pull request in a browser:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>view 42 <span class="nt">--web</span>
+</code></pre></div></div>
+
+<p>Create a pull request interactively:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>create
+</code></pre></div></div>
+
+<p>Create a pull request with a title and body:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>create <span class="nt">--title</span> <span class="s2">"Add login feature"</span> <span class="nt">--body</span> <span class="s2">"Implements login validation."</span>
+</code></pre></div></div>
+
+<p>Check out a pull request locally:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>checkout 42
+</code></pre></div></div>
+
+<p>Review a pull request:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>review 42
+</code></pre></div></div>
+
+<p>Approve a pull request:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>review 42 <span class="nt">--approve</span>
+</code></pre></div></div>
+
+<p>Request changes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>review 42 <span class="nt">--request-changes</span> <span class="nt">--body</span> <span class="s2">"Please add tests."</span>
+</code></pre></div></div>
+
+<p>Merge a pull request:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>merge 42
+</code></pre></div></div>
+
+<p>Choose a merge strategy when merging:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nb">pr </span>merge 42 <span class="nt">--squash</span>
+gh <span class="nb">pr </span>merge 42 <span class="nt">--merge</span>
+gh <span class="nb">pr </span>merge 42 <span class="nt">--rebase</span>
+</code></pre></div></div>
+
+<p>Use only the merge method enabled by the repository's settings and team workflow.</p>
+
+<h2 id="12-issues-and-discussions">12. Issues and Discussions</h2>
+
+<p>List issues:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh issue list
+</code></pre></div></div>
+
+<p>View an issue:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh issue view 123
+</code></pre></div></div>
+
+<p>Create an issue:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh issue create
+</code></pre></div></div>
+
+<p>Create an issue with a title and body:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh issue create <span class="nt">--title</span> <span class="s2">"Fix login bug"</span> <span class="nt">--body</span> <span class="s2">"Describe the steps to reproduce."</span>
+</code></pre></div></div>
+
+<p>Close an issue:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh issue close 123
+</code></pre></div></div>
+
+<p>Reopen an issue:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh issue reopen 123
+</code></pre></div></div>
+
+<p>Search issues:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh issue list <span class="nt">--search</span> <span class="s2">"is:open label:bug"</span>
+</code></pre></div></div>
+
+<p>List discussions, where supported by the repository and CLI version:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh discussion list
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">gh issue --help</code> or <code class="language-plaintext highlighter-rouge">gh discussion --help</code> to check available commands for your installed version and repository permissions.</p>
+
+<h2 id="13-releases-and-tags">13. Releases and Tags</h2>
+
+<p>List releases:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh release list
+</code></pre></div></div>
+
+<p>View a release:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh release view
+</code></pre></div></div>
+
+<p>Create a Git tag:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git tag v1.0.0
+</code></pre></div></div>
+
+<p>Push a tag:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin v1.0.0
+</code></pre></div></div>
+
+<p>List tags:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git tag
+</code></pre></div></div>
+
+<p>Create an annotated tag:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git tag <span class="nt">-a</span> v1.0.0 <span class="nt">-m</span> <span class="s2">"Release 1.0.0"</span>
+</code></pre></div></div>
+
+<p>Create a GitHub release from a tag:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh release create v1.0.0 <span class="nt">--title</span> <span class="s2">"v1.0.0"</span> <span class="nt">--notes</span> <span class="s2">"First stable release."</span>
+</code></pre></div></div>
+
+<p>Create a release and automatically generate notes from repository history:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh release create v1.0.0 <span class="nt">--generate-notes</span>
+</code></pre></div></div>
+
+<p>Upload a release asset:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh release upload v1.0.0 ./build.zip
+</code></pre></div></div>
+
+<h2 id="14-github-actions">14. GitHub Actions</h2>
+
+<p>List recent workflow runs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh run list
+</code></pre></div></div>
+
+<p>View a run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh run view RUN_ID
+</code></pre></div></div>
+
+<p>View logs for a run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh run view RUN_ID <span class="nt">--log</span>
+</code></pre></div></div>
+
+<p>Watch a run until it completes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh run watch RUN_ID
+</code></pre></div></div>
+
+<p>List workflows:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh workflow list
+</code></pre></div></div>
+
+<p>Run a workflow manually when it supports <code class="language-plaintext highlighter-rouge">workflow_dispatch</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh workflow run WORKFLOW_NAME.yml
+</code></pre></div></div>
+
+<p>Rerun a workflow:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh run rerun RUN_ID
+</code></pre></div></div>
+
+<p>Cancel a workflow run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh run cancel RUN_ID
+</code></pre></div></div>
+
+<h2 id="15-ssh-setup-for-github">15. SSH Setup for GitHub</h2>
+
+<p>Check whether you already have SSH keys:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> <span class="nt">-la</span> ~/.ssh
+</code></pre></div></div>
+
+<p>Generate an Ed25519 key:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-keygen <span class="nt">-t</span> ed25519 <span class="nt">-C</span> <span class="s2">"you@example.com"</span>
+</code></pre></div></div>
+
+<p>Start the SSH agent in a typical Bash session and add the key:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">eval</span> <span class="s2">"</span><span class="si">$(</span>ssh-agent <span class="nt">-s</span><span class="si">)</span><span class="s2">"</span>
+ssh-add ~/.ssh/id_ed25519
+</code></pre></div></div>
+
+<p>Print the public key to add to GitHub:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> ~/.ssh/id_ed25519.pub
+</code></pre></div></div>
+
+<p>Add the public key in GitHub account settings under SSH keys. Never share or upload the private key (<code class="language-plaintext highlighter-rouge">~/.ssh/id_ed25519</code>).</p>
+
+<p>Test authentication:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-T</span> git@github.com
+</code></pre></div></div>
+
+<p>Use an SSH remote:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+</code></pre></div></div>
+
+<p>Confirm the URL:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote <span class="nt">-v</span>
+</code></pre></div></div>
+
+<h2 id="16-undo-and-recover-changes">16. Undo and Recover Changes</h2>
+
+<h3 id="discard-unstaged-changes-to-a-tracked-file">Discard unstaged changes to a tracked file</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git restore README.md
+</code></pre></div></div>
+
+<p>This permanently discards unstaged changes in that file.</p>
+
+<h3 id="unstage-a-file-but-keep-its-edits">Unstage a file but keep its edits</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git restore <span class="nt">--staged</span> README.md
+</code></pre></div></div>
+
+<h3 id="amend-the-most-recent-commit">Amend the most recent commit</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit <span class="nt">--amend</span>
+</code></pre></div></div>
+
+<p>Amend without changing the commit message:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit <span class="nt">--amend</span> <span class="nt">--no-edit</span>
+</code></pre></div></div>
+
+<p>Avoid amending commits that have already been shared unless you understand the impact on collaborators.</p>
+
+<h3 id="revert-a-commit-safely">Revert a commit safely</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git revert COMMIT_ID
+</code></pre></div></div>
+
+<p>This creates a new commit that reverses the specified commit's changes.</p>
+
+<h3 id="reset-to-an-earlier-commit">Reset to an earlier commit</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reset <span class="nt">--soft</span> COMMIT_ID
+git reset <span class="nt">--mixed</span> COMMIT_ID
+git reset <span class="nt">--hard</span> COMMIT_ID
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">--soft</code> moves <code class="language-plaintext highlighter-rouge">HEAD</code> but keeps changes staged.</li>
+  <li><code class="language-plaintext highlighter-rouge">--mixed</code> moves <code class="language-plaintext highlighter-rouge">HEAD</code> and leaves changes unstaged (default).</li>
+  <li><code class="language-plaintext highlighter-rouge">--hard</code> resets the index and working tree. Uncommitted changes can be permanently lost.</li>
+</ul>
+
+<h3 id="recover-using-the-reflog">Recover using the reflog</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reflog
+</code></pre></div></div>
+
+<p>The reflog shows recent movements of local references such as <code class="language-plaintext highlighter-rouge">HEAD</code>. It can help find commits that are no longer visible in the current branch history.</p>
+
+<h3 id="remove-an-untracked-file-or-directory">Remove an untracked file or directory</h3>
+
+<p>Preview what would be removed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clean <span class="nt">-n</span>
+</code></pre></div></div>
+
+<p>Remove untracked files:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clean <span class="nt">-f</span>
+</code></pre></div></div>
+
+<p>Preview untracked files and directories:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clean <span class="nt">-nd</span>
+</code></pre></div></div>
+
+<p>Remove untracked files and directories:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clean <span class="nt">-fd</span>
+</code></pre></div></div>
+
+<p>These commands can permanently delete untracked work. Always preview first.</p>
+
+<h2 id="17-ignore-files-and-useful-configuration">17. Ignore Files and Useful Configuration</h2>
+
+<p>Create a <code class="language-plaintext highlighter-rouge">.gitignore</code> file to exclude files that should not be tracked.</p>
+
+<p>Example:</p>
+
+<pre><code class="language-gitignore">.env
+*.log
+tmp/
+vendor/
+node_modules/
+.DS_Store
+</code></pre>
+
+<p>Check whether a file is ignored and why:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git check-ignore <span class="nt">-v</span> .env
+</code></pre></div></div>
+
+<p>If a file is already tracked, adding it to <code class="language-plaintext highlighter-rouge">.gitignore</code> does not untrack it. To stop tracking it while keeping the local file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git <span class="nb">rm</span> <span class="nt">--cached</span> .env
+git commit <span class="nt">-m</span> <span class="s2">"Stop tracking local environment file"</span>
+</code></pre></div></div>
+
+<p>Show configured Git settings and their sources:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--list</span> <span class="nt">--show-origin</span>
+</code></pre></div></div>
+
+<p>Set Vim as the editor:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> core.editor vim
+</code></pre></div></div>
+
+<p>Set pull to use fast-forward only:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> pull.ff only
+</code></pre></div></div>
+
+<p>This prevents <code class="language-plaintext highlighter-rouge">git pull</code> from creating a merge commit automatically; pulls may fail when a fast-forward is not possible.</p>
+
+<h2 id="18-troubleshooting">18. Troubleshooting</h2>
+
+<h3 id="origin-already-exists"><code class="language-plaintext highlighter-rouge">origin</code> already exists</h3>
+
+<p>Inspect remotes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p>Correct the URL:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+</code></pre></div></div>
+
+<h3 id="push-rejected-because-the-remote-has-new-commits">Push rejected because the remote has new commits</h3>
+
+<p>Fetch and inspect:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch origin
+git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--decorate</span> <span class="nt">--all</span>
+</code></pre></div></div>
+
+<p>If appropriate for your workflow, integrate the remote branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git pull <span class="nt">--rebase</span>
+</code></pre></div></div>
+
+<p>Resolve conflicts, then continue the rebase if prompted:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add RESOLVED_FILE
+git rebase <span class="nt">--continue</span>
+</code></pre></div></div>
+
+<p>Abort a rebase if needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git rebase <span class="nt">--abort</span>
+</code></pre></div></div>
+
+<h3 id="ssh-permission-denied">SSH permission denied</h3>
+
+<p>Test the SSH connection:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-T</span> git@github.com
+</code></pre></div></div>
+
+<p>Check the remote URL:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p>Verify that the correct public key is added to GitHub and that the private key is available to your SSH agent.</p>
+
+<h3 id="gh-is-not-authenticated"><code class="language-plaintext highlighter-rouge">gh</code> is not authenticated</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh auth status
+gh auth login
+</code></pre></div></div>
+
+<h3 id="see-which-branch-is-tracking-which-remote-branch">See which branch is tracking which remote branch</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-vv</span>
+</code></pre></div></div>
+
+<h3 id="check-the-current-branch">Check the current branch</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">--show-current</span>
+</code></pre></div></div>
+
+<h2 id="19-safety-notes">19. Safety Notes</h2>
+
+<ul>
+  <li>Review <code class="language-plaintext highlighter-rouge">git status</code> and <code class="language-plaintext highlighter-rouge">git diff --staged</code> before committing.</li>
+  <li>Never commit private SSH keys, passwords, tokens, or <code class="language-plaintext highlighter-rouge">.env</code> files.</li>
+  <li><code class="language-plaintext highlighter-rouge">git reset --hard</code>, <code class="language-plaintext highlighter-rouge">git clean -fd</code>, and force-push operations can destroy work or disrupt collaborators.</li>
+  <li>Prefer <code class="language-plaintext highlighter-rouge">git revert</code> for reversing commits that have already been shared.</li>
+  <li>Before force-pushing a rewritten branch, coordinate with collaborators. If necessary, prefer <code class="language-plaintext highlighter-rouge">git push --force-with-lease</code> over <code class="language-plaintext highlighter-rouge">--force</code>, but understand the consequences.</li>
+  <li>Check repository visibility before creating a public GitHub repository.</li>
+  <li>Review permissions and the target repository before merging pull requests or publishing releases.</li>
+</ul>
+
+<h2 id="20-quick-reference">20. Quick Reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Check status</td>
+      <td><code class="language-plaintext highlighter-rouge">git status</code></td>
+    </tr>
+    <tr>
+      <td>Stage changes</td>
+      <td><code class="language-plaintext highlighter-rouge">git add .</code></td>
+    </tr>
+    <tr>
+      <td>Commit changes</td>
+      <td><code class="language-plaintext highlighter-rouge">git commit -m "Message"</code></td>
+    </tr>
+    <tr>
+      <td>Push branch</td>
+      <td><code class="language-plaintext highlighter-rouge">git push</code></td>
+    </tr>
+    <tr>
+      <td>Set upstream on first push</td>
+      <td><code class="language-plaintext highlighter-rouge">git push -u origin HEAD</code></td>
+    </tr>
+    <tr>
+      <td>Show remotes</td>
+      <td><code class="language-plaintext highlighter-rouge">git remote -v</code></td>
+    </tr>
+    <tr>
+      <td>Change remote URL</td>
+      <td><code class="language-plaintext highlighter-rouge">git remote set-url origin URL</code></td>
+    </tr>
+    <tr>
+      <td>Show history</td>
+      <td><code class="language-plaintext highlighter-rouge">git log --oneline --graph --all</code></td>
+    </tr>
+    <tr>
+      <td>Create branch</td>
+      <td><code class="language-plaintext highlighter-rouge">git switch -c BRANCH</code></td>
+    </tr>
+    <tr>
+      <td>Switch branch</td>
+      <td><code class="language-plaintext highlighter-rouge">git switch BRANCH</code></td>
+    </tr>
+    <tr>
+      <td>Fetch remote changes</td>
+      <td><code class="language-plaintext highlighter-rouge">git fetch</code></td>
+    </tr>
+    <tr>
+      <td>Clone GitHub repo</td>
+      <td><code class="language-plaintext highlighter-rouge">gh repo clone OWNER/REPO</code></td>
+    </tr>
+    <tr>
+      <td>View repository</td>
+      <td><code class="language-plaintext highlighter-rouge">gh repo view</code></td>
+    </tr>
+    <tr>
+      <td>Create pull request</td>
+      <td><code class="language-plaintext highlighter-rouge">gh pr create</code></td>
+    </tr>
+    <tr>
+      <td>List pull requests</td>
+      <td><code class="language-plaintext highlighter-rouge">gh pr list</code></td>
+    </tr>
+    <tr>
+      <td>Create issue</td>
+      <td><code class="language-plaintext highlighter-rouge">gh issue create</code></td>
+    </tr>
+    <tr>
+      <td>List workflow runs</td>
+      <td><code class="language-plaintext highlighter-rouge">gh run list</code></td>
+    </tr>
+    <tr>
+      <td>Check <code class="language-plaintext highlighter-rouge">gh</code> login</td>
+      <td><code class="language-plaintext highlighter-rouge">gh auth status</code></td>
+    </tr>
+    <tr>
+      <td>Test SSH</td>
+      <td><code class="language-plaintext highlighter-rouge">ssh -T git@github.com</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Replace placeholders such as <code class="language-plaintext highlighter-rouge">USERNAME</code>, <code class="language-plaintext highlighter-rouge">REPOSITORY</code>, <code class="language-plaintext highlighter-rouge">BRANCH</code>, and <code class="language-plaintext highlighter-rouge">COMMIT_ID</code> with your actual values.</p>
+
+<h2 id="21-help-and-documentation">21. Help and Documentation</h2>
+
+<p>Git help:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git <span class="nt">--help</span>
+git <span class="nb">help </span>commit
+git <span class="nb">help </span>rebase
+</code></pre></div></div>
+
+<p>GitHub CLI help:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh <span class="nt">--help</span>
+gh repo <span class="nt">--help</span>
+gh <span class="nb">pr</span> <span class="nt">--help</span>
+gh run <span class="nt">--help</span>
+</code></pre></div></div>
+
+<p>Official documentation:</p>
+
+<ul>
+  <li>Git documentation: https://git-scm.com/doc</li>
+  <li>GitHub CLI manual: https://cli.github.com/manual/</li>
+  <li>GitHub CLI installation: https://github.com/cli/cli/blob/trunk/docs/install_linux.md</li>
+  <li>GitHub SSH documentation: https://docs.github.com/en/authentication/connecting-to-github-with-ssh</li>
+</ul>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

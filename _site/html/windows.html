@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Windows Administration Cheat Sheet</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#windows-administration-cheat-sheet" id="toc-windows-administration-cheat-sheet">Windows Administration Cheat Sheet</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-open-administrative-tools" id="toc-1-open-administrative-tools">1. Open administrative tools</a></li>
+<li><a href="#2-open-powershell-and-command-prompt" id="toc-2-open-powershell-and-command-prompt">2. Open PowerShell and Command Prompt</a>
+<ul>
+<li><a href="#open-powershell" id="toc-open-powershell">Open PowerShell</a></li>
+<li><a href="#open-command-prompt" id="toc-open-command-prompt">Open Command Prompt</a></li>
+<li><a href="#check-the-current-user-and-elevation" id="toc-check-the-current-user-and-elevation">Check the current user and elevation</a></li>
+<li><a href="#get-help" id="toc-get-help">Get help</a></li>
+</ul>
+</li>
+<li><a href="#3-local-user-management" id="toc-3-local-user-management">3. Local user management</a>
+<ul>
+<li><a href="#list-local-users" id="toc-list-local-users">List local users</a></li>
+<li><a href="#show-a-users-details" id="toc-show-a-users-details">Show a user's details</a></li>
+<li><a href="#create-a-local-user" id="toc-create-a-local-user">Create a local user</a></li>
+<li><a href="#change-a-local-users-password" id="toc-change-a-local-users-password">Change a local user's password</a></li>
+<li><a href="#enable-or-disable-an-account" id="toc-enable-or-disable-an-account">Enable or disable an account</a></li>
+<li><a href="#rename-a-local-user" id="toc-rename-a-local-user">Rename a local user</a></li>
+<li><a href="#remove-a-local-user" id="toc-remove-a-local-user">Remove a local user</a></li>
+</ul>
+</li>
+<li><a href="#4-local-group-management" id="toc-4-local-group-management">4. Local group management</a>
+<ul>
+<li><a href="#list-local-groups-and-members" id="toc-list-local-groups-and-members">List local groups and members</a></li>
+<li><a href="#add-a-user-to-a-local-group" id="toc-add-a-user-to-a-local-group">Add a user to a local group</a></li>
+<li><a href="#remove-a-user-from-a-local-group" id="toc-remove-a-user-from-a-local-group">Remove a user from a local group</a></li>
+<li><a href="#create-and-remove-a-local-group" id="toc-create-and-remove-a-local-group">Create and remove a local group</a></li>
+</ul>
+</li>
+<li><a href="#5-passwords-and-account-status" id="toc-5-passwords-and-account-status">5. Passwords and account status</a>
+<ul>
+<li><a href="#check-password-and-account-policy" id="toc-check-password-and-account-policy">Check password and account policy</a></li>
+<li><a href="#set-password-policy-for-local-accounts" id="toc-set-password-policy-for-local-accounts">Set password policy for local accounts</a></li>
+<li><a href="#check-whether-a-user-is-an-administrator" id="toc-check-whether-a-user-is-an-administrator">Check whether a user is an administrator</a></li>
+<li><a href="#lockout-and-security-policy" id="toc-lockout-and-security-policy">Lockout and security policy</a></li>
+</ul>
+</li>
+<li><a href="#6-process-management" id="toc-6-process-management">6. Process management</a>
+<ul>
+<li><a href="#list-running-processes" id="toc-list-running-processes">List running processes</a></li>
+<li><a href="#find-a-process" id="toc-find-a-process">Find a process</a></li>
+<li><a href="#stop-a-process" id="toc-stop-a-process">Stop a process</a></li>
+<li><a href="#start-a-process" id="toc-start-a-process">Start a process</a></li>
+<li><a href="#inspect-process-details" id="toc-inspect-process-details">Inspect process details</a></li>
+<li><a href="#open-task-manager" id="toc-open-task-manager">Open Task Manager</a></li>
+</ul>
+</li>
+<li><a href="#7-windows-services" id="toc-7-windows-services">7. Windows services</a>
+<ul>
+<li><a href="#list-and-inspect-services" id="toc-list-and-inspect-services">List and inspect services</a></li>
+<li><a href="#start-stop-and-restart-a-service" id="toc-start-stop-and-restart-a-service">Start, stop, and restart a service</a></li>
+<li><a href="#change-a-services-startup-type" id="toc-change-a-services-startup-type">Change a service's startup type</a></li>
+<li><a href="#command-prompt-service-control" id="toc-command-prompt-service-control">Command Prompt service control</a></li>
+</ul>
+</li>
+<li><a href="#8-network-drives-and-shares" id="toc-8-network-drives-and-shares">8. Network drives and shares</a>
+<ul>
+<li><a href="#map-a-network-drive-with-powershell" id="toc-map-a-network-drive-with-powershell">Map a network drive with PowerShell</a></li>
+<li><a href="#list-mapped-drives" id="toc-list-mapped-drives">List mapped drives</a></li>
+<li><a href="#map-a-drive-with-net-use" id="toc-map-a-drive-with-net-use">Map a drive with <code class="language-plaintext highlighter-rouge">net use</code></a></li>
+<li><a href="#disconnect-a-mapped-drive" id="toc-disconnect-a-mapped-drive">Disconnect a mapped drive</a></li>
+<li><a href="#access-a-share-without-mapping-a-drive" id="toc-access-a-share-without-mapping-a-drive">Access a share without mapping a drive</a></li>
+<li><a href="#list-smb-connections-and-shares" id="toc-list-smb-connections-and-shares">List SMB connections and shares</a></li>
+<li><a href="#troubleshoot-a-mapped-drive" id="toc-troubleshoot-a-mapped-drive">Troubleshoot a mapped drive</a></li>
+</ul>
+</li>
+<li><a href="#9-disks-volumes-and-mounting" id="toc-9-disks-volumes-and-mounting">9. Disks, volumes, and mounting</a>
+<ul>
+<li><a href="#open-disk-management" id="toc-open-disk-management">Open Disk Management</a></li>
+<li><a href="#list-disks-and-volumes" id="toc-list-disks-and-volumes">List disks and volumes</a></li>
+<li><a href="#inspect-a-specific-disk" id="toc-inspect-a-specific-disk">Inspect a specific disk</a></li>
+<li><a href="#assign-a-drive-letter-to-an-existing-partition" id="toc-assign-a-drive-letter-to-an-existing-partition">Assign a drive letter to an existing partition</a></li>
+<li><a href="#remove-a-drive-letter" id="toc-remove-a-drive-letter">Remove a drive letter</a></li>
+<li><a href="#mount-a-volume-into-an-empty-folder" id="toc-mount-a-volume-into-an-empty-folder">Mount a volume into an empty folder</a></li>
+<li><a href="#diskpart" id="toc-diskpart">DiskPart</a></li>
+</ul>
+</li>
+<li><a href="#10-network-troubleshooting" id="toc-10-network-troubleshooting">10. Network troubleshooting</a>
+<ul>
+<li><a href="#show-ip-configuration" id="toc-show-ip-configuration">Show IP configuration</a></li>
+<li><a href="#renew-dhcp-configuration" id="toc-renew-dhcp-configuration">Renew DHCP configuration</a></li>
+<li><a href="#clear-the-dns-resolver-cache" id="toc-clear-the-dns-resolver-cache">Clear the DNS resolver cache</a></li>
+<li><a href="#test-connectivity-and-name-resolution" id="toc-test-connectivity-and-name-resolution">Test connectivity and name resolution</a></li>
+<li><a href="#show-listening-ports-and-connections" id="toc-show-listening-ports-and-connections">Show listening ports and connections</a></li>
+<li><a href="#show-network-adapters" id="toc-show-network-adapters">Show network adapters</a></li>
+</ul>
+</li>
+<li><a href="#11-windows-firewall-management" id="toc-11-windows-firewall-management">11. Windows Firewall management</a>
+<ul>
+<li><a href="#open-the-firewall-console" id="toc-open-the-firewall-console">Open the firewall console</a></li>
+<li><a href="#check-firewall-profiles-and-status" id="toc-check-firewall-profiles-and-status">Check firewall profiles and status</a></li>
+<li><a href="#enable-or-disable-the-firewall" id="toc-enable-or-disable-the-firewall">Enable or disable the firewall</a></li>
+<li><a href="#list-firewall-rules" id="toc-list-firewall-rules">List firewall rules</a></li>
+<li><a href="#create-a-narrow-inbound-port-rule" id="toc-create-a-narrow-inbound-port-rule">Create a narrow inbound port rule</a></li>
+<li><a href="#remove-a-rule" id="toc-remove-a-rule">Remove a rule</a></li>
+<li><a href="#test-connectivity-to-a-port" id="toc-test-connectivity-to-a-port">Test connectivity to a port</a></li>
+</ul>
+</li>
+<li><a href="#12-windows-virus-and-threat-protection" id="toc-12-windows-virus-and-threat-protection">12. Windows virus and threat protection</a>
+<ul>
+<li><a href="#open-windows-security" id="toc-open-windows-security">Open Windows Security</a></li>
+<li><a href="#check-defender-status" id="toc-check-defender-status">Check Defender status</a></li>
+<li><a href="#update-defender-security-intelligence" id="toc-update-defender-security-intelligence">Update Defender security intelligence</a></li>
+<li><a href="#run-a-quick-or-full-scan" id="toc-run-a-quick-or-full-scan">Run a quick or full scan</a></li>
+<li><a href="#scan-a-specific-file-or-folder" id="toc-scan-a-specific-file-or-folder">Scan a specific file or folder</a></li>
+<li><a href="#check-recent-defender-detections" id="toc-check-recent-defender-detections">Check recent Defender detections</a></li>
+<li><a href="#enable-real-time-protection" id="toc-enable-real-time-protection">Enable real-time protection</a></li>
+</ul>
+</li>
+<li><a href="#13-windows-update-management" id="toc-13-windows-update-management">13. Windows Update management</a>
+<ul>
+<li><a href="#open-windows-update" id="toc-open-windows-update">Open Windows Update</a></li>
+<li><a href="#check-installed-hotfixes" id="toc-check-installed-hotfixes">Check installed hotfixes</a></li>
+<li><a href="#scan-and-install-updates" id="toc-scan-and-install-updates">Scan and install updates</a></li>
+<li><a href="#use-winget-for-application-updates-not-windows-os-updates" id="toc-use-winget-for-application-updates-not-windows-os-updates">Use <code class="language-plaintext highlighter-rouge">winget</code> for application updates, not Windows OS updates</a></li>
+<li><a href="#restart-after-updates" id="toc-restart-after-updates">Restart after updates</a></li>
+</ul>
+</li>
+<li><a href="#14-turn-windows-optional-features-on-and-off" id="toc-14-turn-windows-optional-features-on-and-off">14. Turn Windows optional features on and off</a>
+<ul>
+<li><a href="#list-available-windows-optional-features" id="toc-list-available-windows-optional-features">List available Windows optional features</a></li>
+<li><a href="#check-one-features-state" id="toc-check-one-features-state">Check one feature's state</a></li>
+<li><a href="#enable-a-feature" id="toc-enable-a-feature">Enable a feature</a></li>
+<li><a href="#disable-a-feature" id="toc-disable-a-feature">Disable a feature</a></li>
+<li><a href="#list-and-manage-windows-capabilities" id="toc-list-and-manage-windows-capabilities">List and manage Windows capabilities</a></li>
+<li><a href="#dism-alternative-from-powershell-or-command-prompt" id="toc-dism-alternative-from-powershell-or-command-prompt">DISM alternative from PowerShell or Command Prompt</a></li>
+<li><a href="#open-the-graphical-windows-features-dialog" id="toc-open-the-graphical-windows-features-dialog">Open the graphical Windows Features dialog</a></li>
+<li><a href="#important-distinction" id="toc-important-distinction">Important distinction</a></li>
+</ul>
+</li>
+<li><a href="#16-manage-file-explorer-settings-with-powershell" id="toc-16-manage-file-explorer-settings-with-powershell">16. Manage File Explorer settings with PowerShell</a>
+<ul>
+<li><a href="#show-or-hide-file-extensions" id="toc-show-or-hide-file-extensions">Show or hide file extensions</a></li>
+<li><a href="#show-or-hide-hidden-files" id="toc-show-or-hide-hidden-files">Show or hide hidden files</a></li>
+<li><a href="#show-or-hide-protected-operating-system-files" id="toc-show-or-hide-protected-operating-system-files">Show or hide protected operating system files</a></li>
+<li><a href="#enable-or-disable-item-checkboxes" id="toc-enable-or-disable-item-checkboxes">Enable or disable item checkboxes</a></li>
+<li><a href="#open-file-explorer-to-this-pc-or-home" id="toc-open-file-explorer-to-this-pc-or-home">Open File Explorer to This PC or Home</a></li>
+<li><a href="#show-drive-letters-before-drive-names" id="toc-show-drive-letters-before-drive-names">Show drive letters before drive names</a></li>
+<li><a href="#show-thumbnails-or-icons" id="toc-show-thumbnails-or-icons">Show thumbnails or icons</a></li>
+<li><a href="#expand-the-navigation-pane-to-the-current-folder" id="toc-expand-the-navigation-pane-to-the-current-folder">Expand the navigation pane to the current folder</a></li>
+<li><a href="#display-the-full-path-in-the-explorer-title-bar" id="toc-display-the-full-path-in-the-explorer-title-bar">Display the full path in the Explorer title bar</a></li>
+<li><a href="#read-the-current-values" id="toc-read-the-current-values">Read the current values</a></li>
+<li><a href="#refresh-file-explorer" id="toc-refresh-file-explorer">Refresh File Explorer</a></li>
+<li><a href="#open-the-graphical-file-explorer-options-dialog" id="toc-open-the-graphical-file-explorer-options-dialog">Open the graphical File Explorer Options dialog</a></li>
+</ul>
+</li>
+<li><a href="#17-system-information-and-hardware" id="toc-17-system-information-and-hardware">17. System information and hardware</a>
+<ul>
+<li><a href="#windows-version-and-system-information" id="toc-windows-version-and-system-information">Windows version and system information</a></li>
+<li><a href="#cpu-memory-and-disk-overview" id="toc-cpu-memory-and-disk-overview">CPU, memory, and disk overview</a></li>
+<li><a href="#device-manager" id="toc-device-manager">Device Manager</a></li>
+<li><a href="#hardware-inventory-through-powershell" id="toc-hardware-inventory-through-powershell">Hardware inventory through PowerShell</a></li>
+</ul>
+</li>
+<li><a href="#17-applications-and-packages-with-winget" id="toc-17-applications-and-packages-with-winget">17. Applications and packages with winget</a>
+<ul>
+<li><a href="#check-whether-winget-is-available" id="toc-check-whether-winget-is-available">Check whether winget is available</a></li>
+<li><a href="#enable-or-install-winget" id="toc-enable-or-install-winget">Enable or install winget</a></li>
+<li><a href="#search-for-a-package" id="toc-search-for-a-package">Search for a package</a></li>
+<li><a href="#show-package-details" id="toc-show-package-details">Show package details</a></li>
+<li><a href="#install-an-application" id="toc-install-an-application">Install an application</a></li>
+<li><a href="#upgrade-applications" id="toc-upgrade-applications">Upgrade applications</a></li>
+<li><a href="#uninstall-an-application" id="toc-uninstall-an-application">Uninstall an application</a></li>
+<li><a href="#export-and-import-a-package-list" id="toc-export-and-import-a-package-list">Export and import a package list</a></li>
+<li><a href="#manage-sources" id="toc-manage-sources">Manage sources</a></li>
+</ul>
+</li>
+<li><a href="#18-windows-updates-and-reboot-status" id="toc-18-windows-updates-and-reboot-status">18. Windows updates and reboot status</a>
+<ul>
+<li><a href="#open-windows-update-settings" id="toc-open-windows-update-settings">Open Windows Update settings</a></li>
+<li><a href="#check-recent-update-hotfixes" id="toc-check-recent-update-hotfixes">Check recent update hotfixes</a></li>
+<li><a href="#restart-or-shut-down" id="toc-restart-or-shut-down">Restart or shut down</a></li>
+</ul>
+</li>
+<li><a href="#19-files-permissions-and-folders" id="toc-19-files-permissions-and-folders">19. Files, permissions, and folders</a>
+<ul>
+<li><a href="#list-files" id="toc-list-files">List files</a></li>
+<li><a href="#create-copy-move-and-remove" id="toc-create-copy-move-and-remove">Create, copy, move, and remove</a></li>
+<li><a href="#inspect-file-permissions" id="toc-inspect-file-permissions">Inspect file permissions</a></li>
+<li><a href="#grant-and-remove-permissions" id="toc-grant-and-remove-permissions">Grant and remove permissions</a></li>
+<li><a href="#copy-a-directory-tree" id="toc-copy-a-directory-tree">Copy a directory tree</a></li>
+</ul>
+</li>
+<li><a href="#20-event-logs-and-troubleshooting" id="toc-20-event-logs-and-troubleshooting">20. Event logs and troubleshooting</a>
+<ul>
+<li><a href="#open-event-viewer" id="toc-open-event-viewer">Open Event Viewer</a></li>
+<li><a href="#read-recent-system-events" id="toc-read-recent-system-events">Read recent System events</a></li>
+<li><a href="#filter-for-errors" id="toc-filter-for-errors">Filter for errors</a></li>
+<li><a href="#system-file-checks" id="toc-system-file-checks">System file checks</a></li>
+</ul>
+</li>
+<li><a href="#21-remote-administration-and-connectivity" id="toc-21-remote-administration-and-connectivity">21. Remote administration and connectivity</a>
+<ul>
+<li><a href="#check-whether-a-remote-port-is-reachable" id="toc-check-whether-a-remote-port-is-reachable">Check whether a remote port is reachable</a></li>
+<li><a href="#remote-powershell" id="toc-remote-powershell">Remote PowerShell</a></li>
+<li><a href="#connect-to-a-remote-powershell-session" id="toc-connect-to-a-remote-powershell-session">Connect to a remote PowerShell session</a></li>
+<li><a href="#remote-desktop" id="toc-remote-desktop">Remote Desktop</a></li>
+</ul>
+</li>
+<li><a href="#22-useful-keyboard-shortcuts" id="toc-22-useful-keyboard-shortcuts">22. Useful keyboard shortcuts</a></li>
+<li><a href="#23-quick-reference" id="toc-23-quick-reference">23. Quick reference</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="windows-administration-cheat-sheet">Windows Administration Cheat Sheet</h1>
+
+<p>A practical reference for traditional Windows administration using built-in tools, Command Prompt, and PowerShell. Examples cover local users and groups, processes, services, disks, network drives, networking, updates, and <code class="language-plaintext highlighter-rouge">winget</code>.</p>
+
+<blockquote>
+  <p><strong>Edition scope: Windows Pro and Windows Enterprise IoT. Windows Home is excluded.</strong> This guide is written for Windows Pro and Windows Enterprise IoT systems. Some tools, consoles, cmdlets, and management features vary by Windows edition, release, installation type, and organizational policy. Do not assume a command is available merely because it appears here.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Run elevated commands carefully.</strong> Some commands require PowerShell or Command Prompt to be opened with <strong>Run as administrator</strong>. Local-account commands generally apply to standalone PCs; domain and Microsoft Entra ID environments may use different account-management policies.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#1-open-administrative-tools">1. Open administrative tools</a></li>
+  <li><a href="#2-open-powershell-and-command-prompt">2. Open PowerShell and Command Prompt</a></li>
+  <li><a href="#3-local-user-management">3. Local user management</a></li>
+  <li><a href="#4-local-group-management">4. Local group management</a></li>
+  <li><a href="#5-passwords-and-account-status">5. Passwords and account status</a></li>
+  <li><a href="#6-process-management">6. Process management</a></li>
+  <li><a href="#7-windows-services">7. Windows services</a></li>
+  <li><a href="#8-network-drives-and-shares">8. Network drives and shares</a></li>
+  <li><a href="#9-disks-volumes-and-mounting">9. Disks, volumes, and mounting</a></li>
+  <li><a href="#10-network-troubleshooting">10. Network troubleshooting</a></li>
+  <li><a href="#11-windows-firewall-management">11. Windows Firewall management</a></li>
+  <li><a href="#12-windows-virus-and-threat-protection">12. Windows virus and threat protection</a></li>
+  <li><a href="#13-windows-update-management">13. Windows Update management</a></li>
+  <li><a href="#14-turn-windows-optional-features-on-and-off">14. Turn Windows optional features on and off</a></li>
+  <li><a href="#16-manage-file-explorer-settings-with-powershell">16. Manage File Explorer settings with PowerShell</a></li>
+  <li><a href="#17-system-information-and-hardware">17. System information and hardware</a></li>
+  <li><a href="#17-applications-and-packages-with-winget">17. Applications and packages with winget</a></li>
+  <li><a href="#18-windows-updates-and-reboot-status">18. Windows updates and reboot status</a></li>
+  <li><a href="#19-files-permissions-and-folders">19. Files, permissions, and folders</a></li>
+  <li><a href="#20-event-logs-and-troubleshooting">20. Event logs and troubleshooting</a></li>
+  <li><a href="#21-remote-administration-and-connectivity">21. Remote administration and connectivity</a></li>
+  <li><a href="#22-useful-keyboard-shortcuts">22. Useful keyboard shortcuts</a></li>
+  <li><a href="#23-quick-reference">23. Quick reference</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-open-administrative-tools">1. Open administrative tools</h2>
+
+<p>Use <code class="language-plaintext highlighter-rouge">Win + R</code> to open the Run dialog, then enter one of these commands.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Command</th>
+      <th>Opens</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">lusrmgr.msc</code></td>
+      <td>Local Users and Groups</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">compmgmt.msc</code></td>
+      <td>Computer Management</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">services.msc</code></td>
+      <td>Services console</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">taskmgr</code></td>
+      <td>Task Manager</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">devmgmt.msc</code></td>
+      <td>Device Manager</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">diskmgmt.msc</code></td>
+      <td>Disk Management</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">eventvwr.msc</code></td>
+      <td>Event Viewer</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">taskschd.msc</code></td>
+      <td>Task Scheduler</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">secpol.msc</code></td>
+      <td>Local Security Policy, where available</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">gpedit.msc</code></td>
+      <td>Local Group Policy Editor, where available</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">perfmon</code></td>
+      <td>Performance Monitor</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">resmon</code></td>
+      <td>Resource Monitor</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">msinfo32</code></td>
+      <td>System Information</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">dxdiag</code></td>
+      <td>DirectX Diagnostic Tool</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">appwiz.cpl</code></td>
+      <td>Programs and Features</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ncpa.cpl</code></td>
+      <td>Network Connections</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sysdm.cpl</code></td>
+      <td>System Properties</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">control</code></td>
+      <td>Control Panel</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">winver</code></td>
+      <td>Windows version dialog</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">optionalfeatures</code></td>
+      <td>Windows Features dialog</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">wf.msc</code></td>
+      <td>Windows Defender Firewall with Advanced Security</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">printmanagement.msc</code></td>
+      <td>Print Management, where available</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Edition note:</strong> This guide targets Windows Pro and Windows Enterprise IoT. Tool availability can still vary by release, installation type, and policy. If a console is missing, use the relevant PowerShell or <code class="language-plaintext highlighter-rouge">net.exe</code> alternative where supported.</p>
+
+<p>Open a tool elevated when required: search for PowerShell or Terminal in Start, right-click it, then choose <strong>Run as administrator</strong>.</p>
+
+<hr />
+
+<h2 id="2-open-powershell-and-command-prompt">2. Open PowerShell and Command Prompt</h2>
+
+<h3 id="open-powershell">Open PowerShell</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">powershell</span><span class="w">
+</span></code></pre></div></div>
+
+<p>On newer Windows versions, Windows Terminal may be the host application. PowerShell 7, if installed, is usually launched with:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pwsh</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="open-command-prompt">Open Command Prompt</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cmd</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="check-the-current-user-and-elevation">Check the current user and elevation</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">whoami</span><span class="w">
+</span><span class="nx">whoami</span><span class="w"> </span><span class="nx">/groups</span><span class="w">
+</span><span class="n">whoami</span><span class="w"> </span><span class="nx">/priv</span><span class="w">
+</span></code></pre></div></div>
+
+<p>To check whether the current PowerShell session is elevated:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$isAdmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">([</span><span class="n">Security.Principal.WindowsPrincipal</span><span class="p">]</span><span class="w"> </span><span class="se">`</span><span class="w">
+  </span><span class="p">[</span><span class="n">Security.Principal.WindowsIdentity</span><span class="p">]::</span><span class="n">GetCurrent</span><span class="p">()</span><span class="w">
+</span><span class="p">)</span><span class="o">.</span><span class="nf">IsInRole</span><span class="p">([</span><span class="n">Security.Principal.WindowsBuiltInRole</span><span class="p">]::</span><span class="nx">Administrator</span><span class="p">)</span><span class="w">
+
+</span><span class="nv">$isAdmin</span><span class="w">
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">True</code> indicates an elevated administrator session.</p>
+
+<h3 id="get-help">Get help</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Help</span><span class="w"> </span><span class="nx">Get-Process</span><span class="w">
+</span><span class="n">Get-Help</span><span class="w"> </span><span class="nx">Get-Process</span><span class="w"> </span><span class="nt">-Examples</span><span class="w">
+</span><span class="n">Get-Command</span><span class="w"> </span><span class="o">*</span><span class="nx">user</span><span class="o">*</span><span class="w">
+</span><span class="n">Get-Command</span><span class="w"> </span><span class="nt">-Module</span><span class="w"> </span><span class="nx">Microsoft.PowerShell.LocalAccounts</span><span class="w">
+</span></code></pre></div></div>
+
+<p>If local help is not installed, run <code class="language-plaintext highlighter-rouge">Update-Help</code> in an elevated session where appropriate, or use Microsoft's online documentation.</p>
+
+<hr />
+
+<h2 id="3-local-user-management">3. Local user management</h2>
+
+<p>The PowerShell <code class="language-plaintext highlighter-rouge">Microsoft.PowerShell.LocalAccounts</code> module is available on supported Windows client and server editions, but not in 32-bit PowerShell running on 64-bit Windows. Domain accounts should be managed using the appropriate domain tools.</p>
+
+<h3 id="list-local-users">List local users</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-LocalUser</span><span class="w">
+</span><span class="nx">Get-LocalUser</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Format-Table</span><span class="w"> </span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="nx">Enabled</span><span class="p">,</span><span class="w"> </span><span class="nx">LastLogon</span><span class="p">,</span><span class="w"> </span><span class="nx">PasswordRequired</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">net user
+</code></pre>
+
+<h3 id="show-a-users-details">Show a user's details</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-LocalUser</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"alice"</span><span class="w">
+</span><span class="n">net</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="nx">alice</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="create-a-local-user">Create a local user</h3>
+
+<p>Prompt securely for the password:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Read-Host</span><span class="w"> </span><span class="s2">"Enter password for alice"</span><span class="w"> </span><span class="nt">-AsSecureString</span><span class="w">
+</span><span class="n">New-LocalUser</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"alice"</span><span class="w"> </span><span class="nt">-Password</span><span class="w"> </span><span class="nv">$password</span><span class="w"> </span><span class="nt">-FullName</span><span class="w"> </span><span class="s2">"Alice Example"</span><span class="w"> </span><span class="nt">-Description</span><span class="w"> </span><span class="s2">"Local account"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Create a local account without setting a password is generally not recommended. Follow your organization's password and account policies.</p>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">net user alice * /add
+</code></pre>
+
+<p>The <code class="language-plaintext highlighter-rouge">*</code> prompts for the password instead of putting it directly in the command.</p>
+
+<h3 id="change-a-local-users-password">Change a local user's password</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Read-Host</span><span class="w"> </span><span class="s2">"Enter new password"</span><span class="w"> </span><span class="nt">-AsSecureString</span><span class="w">
+</span><span class="n">Set-LocalUser</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"alice"</span><span class="w"> </span><span class="nt">-Password</span><span class="w"> </span><span class="nv">$password</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Or use the interactive Command Prompt command:</p>
+
+<pre><code class="language-cmd">net user alice *
+</code></pre>
+
+<h3 id="enable-or-disable-an-account">Enable or disable an account</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Enable-LocalUser</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"alice"</span><span class="w">
+</span><span class="n">Disable-LocalUser</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"alice"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternatives:</p>
+
+<pre><code class="language-cmd">net user alice /active:yes
+net user alice /active:no
+</code></pre>
+
+<p>Disabling an account prevents ordinary sign-in but does not remove its files or profile.</p>
+
+<h3 id="rename-a-local-user">Rename a local user</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Rename-LocalUser</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"alice"</span><span class="w"> </span><span class="nt">-NewName</span><span class="w"> </span><span class="s2">"alice2"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Renaming the account does not automatically rename the user's profile folder under <code class="language-plaintext highlighter-rouge">C:\Users</code>.</p>
+
+<h3 id="remove-a-local-user">Remove a local user</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Remove-LocalUser</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"alice"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">net user alice /delete
+</code></pre>
+
+<p>Removing an account can affect access and account-specific data. Back up needed files first. Do not assume that deleting the account also deletes its profile folder.</p>
+
+<hr />
+
+<h2 id="4-local-group-management">4. Local group management</h2>
+
+<h3 id="list-local-groups-and-members">List local groups and members</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-LocalGroup</span><span class="w">
+</span><span class="nx">Get-LocalGroupMember</span><span class="w"> </span><span class="nt">-Group</span><span class="w"> </span><span class="s2">"Administrators"</span><span class="w">
+</span><span class="n">Get-LocalGroupMember</span><span class="w"> </span><span class="nt">-Group</span><span class="w"> </span><span class="s2">"Users"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">net localgroup
+net localgroup Administrators
+</code></pre>
+
+<p>The built-in group names may be localized on non-English Windows installations.</p>
+
+<h3 id="add-a-user-to-a-local-group">Add a user to a local group</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Add-LocalGroupMember</span><span class="w"> </span><span class="nt">-Group</span><span class="w"> </span><span class="s2">"Administrators"</span><span class="w"> </span><span class="nt">-Member</span><span class="w"> </span><span class="s2">"alice"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>For a standard user group:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Add-LocalGroupMember</span><span class="w"> </span><span class="nt">-Group</span><span class="w"> </span><span class="s2">"Users"</span><span class="w"> </span><span class="nt">-Member</span><span class="w"> </span><span class="s2">"alice"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">net localgroup Administrators alice /add
+</code></pre>
+
+<p><strong>Security note:</strong> Membership in <code class="language-plaintext highlighter-rouge">Administrators</code> grants extensive control over the PC. Give users standard accounts unless administrator rights are genuinely needed.</p>
+
+<h3 id="remove-a-user-from-a-local-group">Remove a user from a local group</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Remove-LocalGroupMember</span><span class="w"> </span><span class="nt">-Group</span><span class="w"> </span><span class="s2">"Administrators"</span><span class="w"> </span><span class="nt">-Member</span><span class="w"> </span><span class="s2">"alice"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">net localgroup Administrators alice /delete
+</code></pre>
+
+<h3 id="create-and-remove-a-local-group">Create and remove a local group</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">New-LocalGroup</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"LabUsers"</span><span class="w"> </span><span class="nt">-Description</span><span class="w"> </span><span class="s2">"Accounts for the lab"</span><span class="w">
+</span><span class="n">Add-LocalGroupMember</span><span class="w"> </span><span class="nt">-Group</span><span class="w"> </span><span class="s2">"LabUsers"</span><span class="w"> </span><span class="nt">-Member</span><span class="w"> </span><span class="s2">"alice"</span><span class="w">
+</span><span class="n">Remove-LocalGroup</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"LabUsers"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Before removing a group, check its membership and any permissions or policies that depend on it.</p>
+
+<hr />
+
+<h2 id="5-passwords-and-account-status">5. Passwords and account status</h2>
+
+<h3 id="check-password-and-account-policy">Check password and account policy</h3>
+
+<pre><code class="language-cmd">net accounts
+</code></pre>
+
+<h3 id="set-password-policy-for-local-accounts">Set password policy for local accounts</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">net accounts</code> command can configure settings such as minimum password length and password age, subject to Windows policy and edition:</p>
+
+<pre><code class="language-cmd">net accounts /minpwlen:12
+net accounts /maxpwage:90
+</code></pre>
+
+<p>Only set an expiration policy if it matches your security requirements. Organization-managed policies may override local settings.</p>
+
+<h3 id="check-whether-a-user-is-an-administrator">Check whether a user is an administrator</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-LocalGroupMember</span><span class="w"> </span><span class="nt">-Group</span><span class="w"> </span><span class="s2">"Administrators"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Or:</p>
+
+<pre><code class="language-cmd">net localgroup Administrators
+</code></pre>
+
+<h3 id="lockout-and-security-policy">Lockout and security policy</h3>
+
+<p>Use <code class="language-plaintext highlighter-rouge">secpol.msc</code> where available to inspect Account Policies and Local Policies. On managed/domain devices, policies may be controlled centrally.</p>
+
+<p>Avoid storing passwords directly in scripts or command history. Use secure prompts, a credential manager, or an approved secrets-management method.</p>
+
+<hr />
+
+<h2 id="6-process-management">6. Process management</h2>
+
+<h3 id="list-running-processes">List running processes</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Process</span><span class="w">
+</span><span class="nx">Get-Process</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Sort-Object</span><span class="w"> </span><span class="nx">CPU</span><span class="w"> </span><span class="nt">-Descending</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Select-Object</span><span class="w"> </span><span class="nt">-First</span><span class="w"> </span><span class="nx">15</span><span class="w">
+</span><span class="n">Get-Process</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Sort-Object</span><span class="w"> </span><span class="nx">WorkingSet64</span><span class="w"> </span><span class="nt">-Descending</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nt">-First</span><span class="w"> </span><span class="nx">15</span><span class="w"> </span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="nx">Id</span><span class="p">,</span><span class="w"> </span><span class="nx">CPU</span><span class="p">,</span><span class="w"> </span><span class="nx">WorkingSet64</span><span class="w">
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">CPU</code> is accumulated processor time, not a live percentage. <code class="language-plaintext highlighter-rouge">WorkingSet64</code> is memory currently resident in physical RAM.</p>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">tasklist
+tasklist /FI "IMAGENAME eq notepad.exe"
+tasklist /FI "PID eq 1234"
+</code></pre>
+
+<h3 id="find-a-process">Find a process</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Process</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">notepad</span><span class="w">
+</span><span class="n">Get-Process</span><span class="w"> </span><span class="nt">-Id</span><span class="w"> </span><span class="nx">1234</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="stop-a-process">Stop a process</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Stop-Process</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">notepad</span><span class="w">
+</span><span class="n">Stop-Process</span><span class="w"> </span><span class="nt">-Id</span><span class="w"> </span><span class="nx">1234</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Force termination only when necessary:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Stop-Process</span><span class="w"> </span><span class="nt">-Id</span><span class="w"> </span><span class="nx">1234</span><span class="w"> </span><span class="nt">-Force</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">taskkill /PID 1234
+taskkill /IM notepad.exe
+taskkill /PID 1234 /F
+</code></pre>
+
+<p>Unsaved work may be lost. Verify the process name or PID before terminating it.</p>
+
+<h3 id="start-a-process">Start a process</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Process</span><span class="w"> </span><span class="nx">notepad</span><span class="w">
+</span><span class="n">Start-Process</span><span class="w"> </span><span class="s2">"notepad.exe"</span><span class="w"> </span><span class="nt">-ArgumentList</span><span class="w"> </span><span class="s2">"C:\Temp\notes.txt"</span><span class="w">
+</span><span class="n">Start-Process</span><span class="w"> </span><span class="nx">powershell</span><span class="w"> </span><span class="nt">-Verb</span><span class="w"> </span><span class="nx">RunAs</span><span class="w">
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-Verb RunAs</code> requests elevation and may display a User Account Control prompt.</p>
+
+<h3 id="inspect-process-details">Inspect process details</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Process</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">notepad</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Format-List</span><span class="w"> </span><span class="o">*</span><span class="w">
+</span><span class="n">Get-CimInstance</span><span class="w"> </span><span class="nx">Win32_Process</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">ProcessId</span><span class="p">,</span><span class="w"> </span><span class="nx">ParentProcessId</span><span class="p">,</span><span class="w"> </span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="nx">ExecutablePath</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Some process details, including executable paths and command lines, may require elevation.</p>
+
+<h3 id="open-task-manager">Open Task Manager</h3>
+
+<pre><code class="language-cmd">taskmgr
+</code></pre>
+
+<p>Useful Task Manager tabs include Processes, Performance, Users, Details, and Services.</p>
+
+<hr />
+
+<h2 id="7-windows-services">7. Windows services</h2>
+
+<p>Services are background components managed by the Service Control Manager.</p>
+
+<h3 id="list-and-inspect-services">List and inspect services</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Service</span><span class="w">
+</span><span class="nx">Get-Service</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Spooler</span><span class="w">
+</span><span class="n">Get-Service</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="nx">Status</span><span class="w"> </span><span class="o">-eq</span><span class="w"> </span><span class="s2">"Running"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">sc query
+sc query Spooler
+</code></pre>
+
+<h3 id="start-stop-and-restart-a-service">Start, stop, and restart a service</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Service</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Spooler</span><span class="w">
+</span><span class="n">Stop-Service</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Spooler</span><span class="w">
+</span><span class="n">Restart-Service</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Spooler</span><span class="w">
+</span></code></pre></div></div>
+
+<p>A service may depend on other services or reject control due to permissions or policy.</p>
+
+<h3 id="change-a-services-startup-type">Change a service's startup type</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-Service</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Spooler</span><span class="w"> </span><span class="nt">-StartupType</span><span class="w"> </span><span class="nx">Manual</span><span class="w">
+</span><span class="n">Set-Service</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Spooler</span><span class="w"> </span><span class="nt">-StartupType</span><span class="w"> </span><span class="nx">Automatic</span><span class="w">
+</span></code></pre></div></div>
+
+<p>PowerShell commonly accepts <code class="language-plaintext highlighter-rouge">Automatic</code>, <code class="language-plaintext highlighter-rouge">Manual</code>, and <code class="language-plaintext highlighter-rouge">Disabled</code>. Some services use trigger-start behavior or have special configuration.</p>
+
+<h3 id="command-prompt-service-control">Command Prompt service control</h3>
+
+<pre><code class="language-cmd">sc start Spooler
+sc stop Spooler
+sc qc Spooler
+</code></pre>
+
+<p><code class="language-plaintext highlighter-rouge">sc.exe</code> is the executable; in PowerShell, use <code class="language-plaintext highlighter-rouge">sc.exe</code> explicitly because <code class="language-plaintext highlighter-rouge">sc</code> can resolve to a different command or alias.</p>
+
+<p>Do not disable services just because their names are unfamiliar. Doing so can break hardware, updates, sign-in, networking, or security features.</p>
+
+<hr />
+
+<h2 id="8-network-drives-and-shares">8. Network drives and shares</h2>
+
+<h3 id="map-a-network-drive-with-powershell">Map a network drive with PowerShell</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">New-PSDrive</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"Z"</span><span class="w"> </span><span class="nt">-PSProvider</span><span class="w"> </span><span class="nx">FileSystem</span><span class="w"> </span><span class="nt">-Root</span><span class="w"> </span><span class="s2">"\\fileserver\shared"</span><span class="w"> </span><span class="nt">-Persist</span><span class="w">
+</span></code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Z</code>: drive letter.</li>
+  <li><code class="language-plaintext highlighter-rouge">\\fileserver\shared</code>: UNC path to the shared folder.</li>
+  <li><code class="language-plaintext highlighter-rouge">-Persist</code>: creates a mapped drive visible outside the current PowerShell session.</li>
+</ul>
+
+<p>For credentials, prefer an approved credential prompt or Windows Credential Manager rather than putting a password directly into the command.</p>
+
+<h3 id="list-mapped-drives">List mapped drives</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-PSDrive</span><span class="w"> </span><span class="nt">-PSProvider</span><span class="w"> </span><span class="nx">FileSystem</span><span class="w">
+</span><span class="n">Get-SmbMapping</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">net use
+</code></pre>
+
+<h3 id="map-a-drive-with-net-use">Map a drive with <code class="language-plaintext highlighter-rouge">net use</code></h3>
+
+<pre><code class="language-cmd">net use Z: \\fileserver\shared /persistent:yes
+</code></pre>
+
+<p>Prompt for credentials if needed:</p>
+
+<pre><code class="language-cmd">net use Z: \\fileserver\shared /user:DOMAIN\username *
+</code></pre>
+
+<p>For a local account on the file server, the username may need to be specified as <code class="language-plaintext highlighter-rouge">SERVERNAME\username</code>. Do not append a real password to the command; <code class="language-plaintext highlighter-rouge">*</code> prompts for it.</p>
+
+<h3 id="disconnect-a-mapped-drive">Disconnect a mapped drive</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Remove-PSDrive</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Z</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Or:</p>
+
+<pre><code class="language-cmd">net use Z: /delete
+</code></pre>
+
+<p>Disconnect all network mappings only if you intend to remove every one:</p>
+
+<pre><code class="language-cmd">net use * /delete
+</code></pre>
+
+<h3 id="access-a-share-without-mapping-a-drive">Access a share without mapping a drive</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-ChildItem</span><span class="w"> </span><span class="s2">"\\fileserver\shared"</span><span class="w">
+</span><span class="n">Test-Path</span><span class="w"> </span><span class="s2">"\\fileserver\shared"</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="list-smb-connections-and-shares">List SMB connections and shares</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-SmbConnection</span><span class="w">
+</span><span class="nx">Get-SmbMapping</span><span class="w">
+</span></code></pre></div></div>
+
+<p>On a computer hosting shares, inspect them with:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-SmbShare</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Listing or administering shares on a remote server may require appropriate permissions and remote-management configuration.</p>
+
+<h3 id="troubleshoot-a-mapped-drive">Troubleshoot a mapped drive</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Test-NetConnection</span><span class="w"> </span><span class="nx">fileserver</span><span class="w"> </span><span class="nt">-Port</span><span class="w"> </span><span class="nx">445</span><span class="w">
+</span><span class="n">Resolve-DnsName</span><span class="w"> </span><span class="nx">fileserver</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Check the UNC path, server name resolution, SMB connectivity, permissions, firewall rules, and saved credentials. Mapped drives are often scoped to a user's logon session; an elevated process may not see mappings created in a non-elevated session.</p>
+
+<hr />
+
+<h2 id="9-disks-volumes-and-mounting">9. Disks, volumes, and mounting</h2>
+
+<h3 id="open-disk-management">Open Disk Management</h3>
+
+<pre><code class="language-cmd">diskmgmt.msc
+</code></pre>
+
+<h3 id="list-disks-and-volumes">List disks and volumes</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Disk</span><span class="w">
+</span><span class="nx">Get-Partition</span><span class="w">
+</span><span class="n">Get-Volume</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="inspect-a-specific-disk">Inspect a specific disk</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Disk</span><span class="w"> </span><span class="nt">-Number</span><span class="w"> </span><span class="nx">0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Format-List</span><span class="w"> </span><span class="o">*</span><span class="w">
+</span><span class="n">Get-Partition</span><span class="w"> </span><span class="nt">-DiskNumber</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="assign-a-drive-letter-to-an-existing-partition">Assign a drive letter to an existing partition</h3>
+
+<p>First inspect the disk and partition carefully:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Partition</span><span class="w"> </span><span class="nt">-DiskNumber</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Then, if the target partition has no drive letter and you have verified the correct partition:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-Partition</span><span class="w"> </span><span class="nt">-DiskNumber</span><span class="w"> </span><span class="nx">1</span><span class="w"> </span><span class="nt">-PartitionNumber</span><span class="w"> </span><span class="nx">2</span><span class="w"> </span><span class="nt">-NewDriveLetter</span><span class="w"> </span><span class="nx">R</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Use the actual disk and partition numbers from your system. Do not guess them.</p>
+
+<h3 id="remove-a-drive-letter">Remove a drive letter</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Remove-PartitionAccessPath</span><span class="w"> </span><span class="nt">-DiskNumber</span><span class="w"> </span><span class="nx">1</span><span class="w"> </span><span class="nt">-PartitionNumber</span><span class="w"> </span><span class="nx">2</span><span class="w"> </span><span class="nt">-AccessPath</span><span class="w"> </span><span class="s2">"R:\"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Removing a drive letter does not normally erase the volume, but it makes it inaccessible through that path.</p>
+
+<h3 id="mount-a-volume-into-an-empty-folder">Mount a volume into an empty folder</h3>
+
+<p>Windows can mount a supported volume into an empty NTFS folder. Use Disk Management or the DiskPart <code class="language-plaintext highlighter-rouge">assign</code>/<code class="language-plaintext highlighter-rouge">mount</code> workflows after verifying the target volume and folder. Do not mount a volume over a folder containing files you need.</p>
+
+<h3 id="diskpart">DiskPart</h3>
+
+<p>Run from an elevated Command Prompt or Terminal:</p>
+
+<pre><code class="language-cmd">diskpart
+list disk
+list volume
+exit
+</code></pre>
+
+<p><strong>Caution:</strong> DiskPart includes destructive commands such as <code class="language-plaintext highlighter-rouge">clean</code>, <code class="language-plaintext highlighter-rouge">delete</code>, and <code class="language-plaintext highlighter-rouge">format</code>. Do not run these unless you intentionally want to alter or erase the selected disk or volume. Always verify the disk number and back up important data.</p>
+
+<hr />
+
+<h2 id="10-network-troubleshooting">10. Network troubleshooting</h2>
+
+<h3 id="show-ip-configuration">Show IP configuration</h3>
+
+<pre><code class="language-cmd">ipconfig
+ipconfig /all
+</code></pre>
+
+<p>PowerShell alternatives:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-NetIPConfiguration</span><span class="w">
+</span><span class="nx">Get-NetIPAddress</span><span class="w">
+</span><span class="n">Get-NetRoute</span><span class="w">
+</span><span class="nx">Get-DnsClientServerAddress</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="renew-dhcp-configuration">Renew DHCP configuration</h3>
+
+<pre><code class="language-cmd">ipconfig /release
+ipconfig /renew
+</code></pre>
+
+<p>These commands can temporarily disconnect the network adapter. For Wi-Fi or remote systems, ensure you have a recovery path.</p>
+
+<h3 id="clear-the-dns-resolver-cache">Clear the DNS resolver cache</h3>
+
+<pre><code class="language-cmd">ipconfig /flushdns
+</code></pre>
+
+<p>Inspect DNS cache:</p>
+
+<pre><code class="language-cmd">ipconfig /displaydns
+</code></pre>
+
+<h3 id="test-connectivity-and-name-resolution">Test connectivity and name resolution</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Test-Connection</span><span class="w"> </span><span class="nx">1.1.1.1</span><span class="w"> </span><span class="nt">-Count</span><span class="w"> </span><span class="nx">4</span><span class="w">
+</span><span class="n">Test-NetConnection</span><span class="w"> </span><span class="nx">example.com</span><span class="w"> </span><span class="nt">-Port</span><span class="w"> </span><span class="nx">443</span><span class="w">
+</span><span class="n">Resolve-DnsName</span><span class="w"> </span><span class="nx">example.com</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternatives:</p>
+
+<pre><code class="language-cmd">ping 1.1.1.1
+tracert example.com
+nslookup example.com
+</code></pre>
+
+<p>Some hosts block ping, so a failed ping does not necessarily mean the host is down.</p>
+
+<h3 id="show-listening-ports-and-connections">Show listening ports and connections</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-NetTCPConnection</span><span class="w">
+</span><span class="nx">Get-NetTCPConnection</span><span class="w"> </span><span class="nt">-State</span><span class="w"> </span><span class="nx">Listen</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt:</p>
+
+<pre><code class="language-cmd">netstat -ano
+netstat -ano | findstr :443
+</code></pre>
+
+<p>Use the PID from <code class="language-plaintext highlighter-rouge">netstat -ano</code> to find the owning process:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Process</span><span class="w"> </span><span class="nt">-Id</span><span class="w"> </span><span class="nx">1234</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="show-network-adapters">Show network adapters</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-NetAdapter</span><span class="w">
+</span><span class="nx">Get-NetAdapter</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Format-Table</span><span class="w"> </span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="nx">Status</span><span class="p">,</span><span class="w"> </span><span class="nx">LinkSpeed</span><span class="p">,</span><span class="w"> </span><span class="nx">MacAddress</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="11-windows-firewall-management">11. Windows Firewall management</h2>
+
+<p>Windows Defender Firewall helps control inbound and outbound network traffic. Use the built-in PowerShell <code class="language-plaintext highlighter-rouge">NetSecurity</code> cmdlets or the Windows Firewall with Advanced Security console.</p>
+
+<h3 id="open-the-firewall-console">Open the firewall console</h3>
+
+<pre><code class="language-cmd">wf.msc
+</code></pre>
+
+<h3 id="check-firewall-profiles-and-status">Check firewall profiles and status</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-NetFirewallProfile</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Format-Table</span><span class="w"> </span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="nx">Enabled</span><span class="p">,</span><span class="w"> </span><span class="nx">DefaultInboundAction</span><span class="p">,</span><span class="w"> </span><span class="nx">DefaultOutboundAction</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Check the profiles individually:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-NetFirewallProfile</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Domain</span><span class="p">,</span><span class="w"> </span><span class="nx">Private</span><span class="p">,</span><span class="w"> </span><span class="nx">Public</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Windows has Domain, Private, and Public profiles. The active profile depends on the network connection's classification.</p>
+
+<h3 id="enable-or-disable-the-firewall">Enable or disable the firewall</h3>
+
+<p>Enable all profiles:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-NetFirewallProfile</span><span class="w"> </span><span class="nt">-Profile</span><span class="w"> </span><span class="nx">Domain</span><span class="p">,</span><span class="nx">Private</span><span class="p">,</span><span class="nx">Public</span><span class="w"> </span><span class="nt">-Enabled</span><span class="w"> </span><span class="nx">True</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Disable all profiles only for a controlled diagnostic test and only when authorized:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-NetFirewallProfile</span><span class="w"> </span><span class="nt">-Profile</span><span class="w"> </span><span class="nx">Domain</span><span class="p">,</span><span class="nx">Private</span><span class="p">,</span><span class="nx">Public</span><span class="w"> </span><span class="nt">-Enabled</span><span class="w"> </span><span class="nx">False</span><span class="w">
+</span></code></pre></div></div>
+
+<p><strong>Security warning:</strong> Do not leave the firewall disabled. Prefer a narrow, temporary rule to diagnose a specific problem, and restore the intended configuration immediately.</p>
+
+<h3 id="list-firewall-rules">List firewall rules</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-NetFirewallRule</span><span class="w">
+</span><span class="nx">Get-NetFirewallRule</span><span class="w"> </span><span class="nt">-Enabled</span><span class="w"> </span><span class="nx">True</span><span class="w">
+</span><span class="n">Get-NetFirewallRule</span><span class="w"> </span><span class="nt">-Direction</span><span class="w"> </span><span class="nx">Inbound</span><span class="w"> </span><span class="nt">-Enabled</span><span class="w"> </span><span class="nx">True</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Inspect a rule's associated ports and addresses:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-NetFirewallRule</span><span class="w"> </span><span class="nt">-DisplayName</span><span class="w"> </span><span class="s2">"File and Printer Sharing*"</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Get-NetFirewallPortFilter</span><span class="w">
+
+</span><span class="n">Get-NetFirewallRule</span><span class="w"> </span><span class="nt">-DisplayName</span><span class="w"> </span><span class="s2">"File and Printer Sharing*"</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Get-NetFirewallAddressFilter</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The display name can vary by Windows language and rule set.</p>
+
+<h3 id="create-a-narrow-inbound-port-rule">Create a narrow inbound port rule</h3>
+
+<p>Example: allow inbound TCP port 8443 on the Private profile only:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">New-NetFirewallRule</span><span class="w"> </span><span class="se">`
+</span><span class="w">  </span><span class="nt">-DisplayName</span><span class="w"> </span><span class="s2">"Lab HTTPS test on TCP 8443"</span><span class="w"> </span><span class="se">`
+</span><span class="w">  </span><span class="nt">-Direction</span><span class="w"> </span><span class="nx">Inbound</span><span class="w"> </span><span class="se">`
+</span><span class="w">  </span><span class="nt">-Protocol</span><span class="w"> </span><span class="nx">TCP</span><span class="w"> </span><span class="se">`
+</span><span class="w">  </span><span class="nt">-LocalPort</span><span class="w"> </span><span class="nx">8443</span><span class="w"> </span><span class="se">`
+</span><span class="w">  </span><span class="nt">-Action</span><span class="w"> </span><span class="nx">Allow</span><span class="w"> </span><span class="se">`
+</span><span class="w">  </span><span class="nt">-Profile</span><span class="w"> </span><span class="nx">Private</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Only create rules for services that are actually listening and need to be reachable. Restrict the profile, port, and remote addresses as much as the use case permits.</p>
+
+<h3 id="remove-a-rule">Remove a rule</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Remove-NetFirewallRule</span><span class="w"> </span><span class="nt">-DisplayName</span><span class="w"> </span><span class="s2">"Lab HTTPS test on TCP 8443"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Verify the exact rule before removing it. Avoid deleting broad groups of built-in rules unless you understand the effect.</p>
+
+<h3 id="test-connectivity-to-a-port">Test connectivity to a port</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Test-NetConnection</span><span class="w"> </span><span class="nx">server01</span><span class="w"> </span><span class="nt">-Port</span><span class="w"> </span><span class="nx">8443</span><span class="w">
+</span></code></pre></div></div>
+
+<p>A failed connection may indicate a firewall rule, routing issue, DNS problem, or a service that is not listening. A successful test confirms TCP connectivity, not that the application is healthy or secure.</p>
+
+<hr />
+
+<h2 id="12-windows-virus-and-threat-protection">12. Windows virus and threat protection</h2>
+
+<p>Microsoft Defender Antivirus provides built-in malware and threat protection on supported Windows systems. Some settings may be managed by an organization, third-party antivirus, or security policy.</p>
+
+<h3 id="open-windows-security">Open Windows Security</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Process</span><span class="w"> </span><span class="s2">"windowsdefender:"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Or open Windows Security from the Start menu and select <strong>Virus &amp; threat protection</strong>.</p>
+
+<h3 id="check-defender-status">Check Defender status</h3>
+
+<p>In an elevated PowerShell session:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-MpComputerStatus</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">AMServiceEnabled</span><span class="p">,</span><span class="w"> </span><span class="nx">AntivirusEnabled</span><span class="p">,</span><span class="w"> </span><span class="nx">AntispywareEnabled</span><span class="p">,</span><span class="w">
+    </span><span class="n">RealTimeProtectionEnabled</span><span class="p">,</span><span class="w"> </span><span class="nx">BehaviorMonitorEnabled</span><span class="p">,</span><span class="w">
+    </span><span class="n">IoavProtectionEnabled</span><span class="p">,</span><span class="w"> </span><span class="nx">NISEnabled</span><span class="p">,</span><span class="w"> </span><span class="nx">AntivirusSignatureLastUpdated</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Check the preference settings:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-MpPreference</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">DisableRealtimeMonitoring</span><span class="p">,</span><span class="w"> </span><span class="nx">DisableBehaviorMonitoring</span><span class="p">,</span><span class="w">
+    </span><span class="n">DisableIOAVProtection</span><span class="p">,</span><span class="w"> </span><span class="nx">MAPSReporting</span><span class="p">,</span><span class="w"> </span><span class="nx">PUAProtection</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The cmdlets are provided by the Defender module where available. On devices managed by another antivirus product or organization, some values may differ or access may be restricted.</p>
+
+<h3 id="update-defender-security-intelligence">Update Defender security intelligence</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Update-MpSignature</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This requests an update of Defender security intelligence. It does not replace the full Windows Update process.</p>
+
+<h3 id="run-a-quick-or-full-scan">Run a quick or full scan</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-MpScan</span><span class="w"> </span><span class="nt">-ScanType</span><span class="w"> </span><span class="nx">QuickScan</span><span class="w">
+</span><span class="n">Start-MpScan</span><span class="w"> </span><span class="nt">-ScanType</span><span class="w"> </span><span class="nx">FullScan</span><span class="w">
+</span></code></pre></div></div>
+
+<p>A full scan can take considerable time. Save work and allow the scan to finish.</p>
+
+<h3 id="scan-a-specific-file-or-folder">Scan a specific file or folder</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-MpScan</span><span class="w"> </span><span class="nt">-ScanType</span><span class="w"> </span><span class="nx">CustomScan</span><span class="w"> </span><span class="nt">-ScanPath</span><span class="w"> </span><span class="s2">"C:\Lab\Downloads"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Use a path you intend to scan. Verify the path before running commands in scripts.</p>
+
+<h3 id="check-recent-defender-detections">Check recent Defender detections</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-MpThreat</span><span class="w">
+</span><span class="nx">Get-MpThreatDetection</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Review detections in Windows Security as well. Investigate the file path, detection name, timestamp, and action taken before deciding how to respond.</p>
+
+<h3 id="enable-real-time-protection">Enable real-time protection</h3>
+
+<p>If Defender is active and the setting is not controlled by policy, an administrator may be able to enable real-time monitoring with:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-MpPreference</span><span class="w"> </span><span class="nt">-DisableRealtimeMonitoring</span><span class="w"> </span><span class="bp">$false</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Verify the result with <code class="language-plaintext highlighter-rouge">Get-MpComputerStatus</code>. Tamper Protection, organizational policy, or another security product may prevent changes.</p>
+
+<p><strong>Security warning:</strong> Do not casually disable antivirus, real-time protection, cloud-delivered protection, or Tamper Protection to get around a blocked file. Use approved exclusions only when justified, narrowly scoped, documented, and authorized. Broad exclusions can create serious security gaps.</p>
+
+<hr />
+
+<h2 id="13-windows-update-management">13. Windows Update management</h2>
+
+<p>Windows updates deliver security fixes, reliability improvements, and feature updates. The Windows Update settings page is the straightforward built-in method for most client systems. Enterprise devices may use Group Policy, Windows Update for Business, WSUS, or another management platform.</p>
+
+<h3 id="open-windows-update">Open Windows Update</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Process</span><span class="w"> </span><span class="s2">"ms-settings:windowsupdate"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Open update history:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Process</span><span class="w"> </span><span class="s2">"ms-settings:windowsupdate-history"</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="check-installed-hotfixes">Check installed hotfixes</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-HotFix</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Sort-Object</span><span class="w"> </span><span class="nx">InstalledOn</span><span class="w"> </span><span class="nt">-Descending</span><span class="w">
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">Get-HotFix</code> is useful for a quick view but does not show every update type. Use Windows Update history or your organization's management console for a more complete picture.</p>
+
+<h3 id="scan-and-install-updates">Scan and install updates</h3>
+
+<p>The Windows Update PowerShell interface is not identical across all Windows versions. On managed devices, use Windows Update settings or the organization's approved update workflow rather than installing an arbitrary module.</p>
+
+<p>On supported systems where the <code class="language-plaintext highlighter-rouge">UsoClient</code> utility is present, it may be possible to request a scan:</p>
+
+<pre><code class="language-cmd">UsoClient StartScan
+</code></pre>
+
+<p>This utility is not a stable, fully documented administrative interface, and it may provide no visible output. Do not rely on it as the only update-management method.</p>
+
+<h3 id="use-winget-for-application-updates-not-windows-os-updates">Use <code class="language-plaintext highlighter-rouge">winget</code> for application updates, not Windows OS updates</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nx">upgrade</span><span class="w">
+</span><span class="n">winget</span><span class="w"> </span><span class="nx">upgrade</span><span class="w"> </span><span class="nt">--all</span><span class="w">
+</span></code></pre></div></div>
+
+<p>These commands manage supported applications through Windows Package Manager. They do <strong>not</strong> replace Windows Update for operating-system security patches.</p>
+
+<h3 id="restart-after-updates">Restart after updates</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Restart-Computer</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternative:</p>
+
+<pre><code class="language-cmd">shutdown /r /t 0
+</code></pre>
+
+<p>Save work and notify users before restarting shared or production systems. Check update status and reboot requirements through Windows Update settings or your organization's management tools.</p>
+
+<hr />
+
+<h2 id="14-turn-windows-optional-features-on-and-off">14. Turn Windows optional features on and off</h2>
+
+<p>Yes, Windows optional features can be managed through PowerShell on supported Windows Pro and Enterprise IoT installations. The exact cmdlets and feature names depend on the Windows release and feature. Use <code class="language-plaintext highlighter-rouge">Get-WindowsOptionalFeature</code> and <code class="language-plaintext highlighter-rouge">Enable-WindowsOptionalFeature</code> / <code class="language-plaintext highlighter-rouge">Disable-WindowsOptionalFeature</code> for Windows optional components.</p>
+
+<h3 id="list-available-windows-optional-features">List available Windows optional features</h3>
+
+<p>Run PowerShell as administrator:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-WindowsOptionalFeature</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Sort-Object</span><span class="w"> </span><span class="nx">FeatureName</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Format-Table</span><span class="w"> </span><span class="nx">FeatureName</span><span class="p">,</span><span class="w"> </span><span class="nx">State</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Find features by name:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-WindowsOptionalFeature</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Where-Object</span><span class="w"> </span><span class="nx">FeatureName</span><span class="w"> </span><span class="o">-Match</span><span class="w"> </span><span class="s1">'Hyper-V|Telnet|SMB|IIS'</span><span class="w">
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-Online</code> means the currently running Windows installation, not a remote or offline image.</p>
+
+<h3 id="check-one-features-state">Check one feature's state</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-WindowsOptionalFeature</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="nt">-FeatureName</span><span class="w"> </span><span class="s2">"TelnetClient"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Use the exact <code class="language-plaintext highlighter-rouge">FeatureName</code> reported by <code class="language-plaintext highlighter-rouge">Get-WindowsOptionalFeature</code>. A display name shown in Windows Settings may not be the same as the feature identifier.</p>
+
+<h3 id="enable-a-feature">Enable a feature</h3>
+
+<p>Example: enable the Telnet Client optional feature:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Enable-WindowsOptionalFeature</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="nt">-FeatureName</span><span class="w"> </span><span class="s2">"TelnetClient"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>For features that require a restart, Windows may report that one is needed. You can request a restart automatically with <code class="language-plaintext highlighter-rouge">-Restart</code>, but only use that option when an immediate reboot is acceptable:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Enable-WindowsOptionalFeature</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="nt">-FeatureName</span><span class="w"> </span><span class="s2">"TelnetClient"</span><span class="w"> </span><span class="nt">-Restart</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="disable-a-feature">Disable a feature</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Disable-WindowsOptionalFeature</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="nt">-FeatureName</span><span class="w"> </span><span class="s2">"TelnetClient"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>To allow an automatic restart if required:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Disable-WindowsOptionalFeature</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="nt">-FeatureName</span><span class="w"> </span><span class="s2">"TelnetClient"</span><span class="w"> </span><span class="nt">-Restart</span><span class="w">
+</span></code></pre></div></div>
+
+<p><strong>Caution:</strong> Disabling a feature can affect applications or services that depend on it. Review the feature state and dependency information before changing production or remote systems.</p>
+
+<h3 id="list-and-manage-windows-capabilities">List and manage Windows capabilities</h3>
+
+<p>Some optional components are managed as Windows capabilities rather than features. List installed capabilities:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-WindowsCapability</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Where-Object</span><span class="w"> </span><span class="nx">State</span><span class="w"> </span><span class="o">-eq</span><span class="w"> </span><span class="s2">"Installed"</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Sort-Object</span><span class="w"> </span><span class="nx">Name</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Format-Table</span><span class="w"> </span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="nx">State</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Find a capability:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-WindowsCapability</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Where-Object</span><span class="w"> </span><span class="nx">Name</span><span class="w"> </span><span class="o">-Match</span><span class="w"> </span><span class="s1">'OpenSSH|RSAT'</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Add a capability using its exact name:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Add-WindowsCapability</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"OpenSSH.Client~~~~0.0.1.0"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Remove a capability:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Remove-WindowsCapability</span><span class="w"> </span><span class="nt">-Online</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="s2">"OpenSSH.Client~~~~0.0.1.0"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Availability depends on the Windows image, edition, installed components, and update source. Use the exact capability name returned by <code class="language-plaintext highlighter-rouge">Get-WindowsCapability</code>.</p>
+
+<h3 id="dism-alternative-from-powershell-or-command-prompt">DISM alternative from PowerShell or Command Prompt</h3>
+
+<p>DISM can also enumerate and manage optional features:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">DISM</span><span class="w"> </span><span class="nx">/Online</span><span class="w"> </span><span class="nx">/Get-Features</span><span class="w"> </span><span class="nx">/Format:Table</span><span class="w">
+</span><span class="n">DISM</span><span class="w"> </span><span class="nx">/Online</span><span class="w"> </span><span class="nx">/Get-FeatureInfo</span><span class="w"> </span><span class="nx">/FeatureName:TelnetClient</span><span class="w">
+</span><span class="n">DISM</span><span class="w"> </span><span class="nx">/Online</span><span class="w"> </span><span class="nx">/Enable-Feature</span><span class="w"> </span><span class="nx">/FeatureName:TelnetClient</span><span class="w">
+</span><span class="n">DISM</span><span class="w"> </span><span class="nx">/Online</span><span class="w"> </span><span class="nx">/Disable-Feature</span><span class="w"> </span><span class="nx">/FeatureName:TelnetClient</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Run these commands in an elevated terminal. DISM feature names must match the names reported by the system.</p>
+
+<h3 id="open-the-graphical-windows-features-dialog">Open the graphical Windows Features dialog</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Process</span><span class="w"> </span><span class="s2">"optionalfeatures"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This opens the familiar <strong>Turn Windows features on or off</strong> dialog. It can be useful for visually inspecting components before changing them.</p>
+
+<h3 id="important-distinction">Important distinction</h3>
+
+<ul>
+  <li><strong>Windows optional features</strong>: commonly managed by <code class="language-plaintext highlighter-rouge">Get-WindowsOptionalFeature</code>, <code class="language-plaintext highlighter-rouge">Enable-WindowsOptionalFeature</code>, and <code class="language-plaintext highlighter-rouge">Disable-WindowsOptionalFeature</code>.</li>
+  <li><strong>Windows capabilities</strong>: commonly managed by <code class="language-plaintext highlighter-rouge">Get-WindowsCapability</code>, <code class="language-plaintext highlighter-rouge">Add-WindowsCapability</code>, and <code class="language-plaintext highlighter-rouge">Remove-WindowsCapability</code>.</li>
+  <li><strong>Windows roles and role services on Windows Server</strong>: typically managed with the ServerManager module, such as <code class="language-plaintext highlighter-rouge">Get-WindowsFeature</code>, <code class="language-plaintext highlighter-rouge">Install-WindowsFeature</code>, and <code class="language-plaintext highlighter-rouge">Uninstall-WindowsFeature</code>. These are not interchangeable with the client optional-feature cmdlets and are not available in the same way on every Windows client installation.</li>
+</ul>
+
+<hr />
+
+<h2 id="16-manage-file-explorer-settings-with-powershell">16. Manage File Explorer settings with PowerShell</h2>
+
+<p>Many File Explorer preferences are stored in the current user's registry. These commands normally do <strong>not</strong> require an elevated PowerShell session because they modify <code class="language-plaintext highlighter-rouge">HKCU</code> (the current user's settings).</p>
+
+<blockquote>
+  <p><strong>Caution:</strong> Registry settings can vary by Windows version. Change one setting at a time and test it. Restarting Explorer closes open File Explorer windows and briefly restarts the taskbar.</p>
+</blockquote>
+
+<h3 id="show-or-hide-file-extensions">Show or hide file extensions</h3>
+
+<p>Show extensions such as <code class="language-plaintext highlighter-rouge">.txt</code>, <code class="language-plaintext highlighter-rouge">.ps1</code>, and <code class="language-plaintext highlighter-rouge">.exe</code>:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"</span><span class="w">
+</span><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">HideFileExt</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Hide extensions again:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">HideFileExt</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="show-or-hide-hidden-files">Show or hide hidden files</h3>
+
+<p>Show hidden files and folders:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"</span><span class="w">
+</span><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Hidden</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Hide hidden files and folders:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">Hidden</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">2</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="show-or-hide-protected-operating-system-files">Show or hide protected operating system files</h3>
+
+<p>Show protected operating system files:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"</span><span class="w">
+</span><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">ShowSuperHidden</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Hide them again:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">ShowSuperHidden</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span></code></pre></div></div>
+
+<p><strong>Caution:</strong> These files are hidden to reduce accidental changes. Do not delete or modify them just because they are visible.</p>
+
+<h3 id="enable-or-disable-item-checkboxes">Enable or disable item checkboxes</h3>
+
+<p>Enable checkboxes for selecting files:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"</span><span class="w">
+</span><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">AutoCheckSelect</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Disable checkboxes:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">AutoCheckSelect</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="open-file-explorer-to-this-pc-or-home">Open File Explorer to This PC or Home</h3>
+
+<p>Open File Explorer to <strong>This PC</strong>:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"</span><span class="w">
+</span><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">LaunchTo</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Open File Explorer to <strong>Home</strong> (the default on many Windows 11 installations):</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">LaunchTo</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">2</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The displayed start location can vary by Windows release and configuration.</p>
+
+<h3 id="show-drive-letters-before-drive-names">Show drive letters before drive names</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"</span><span class="w">
+</span><span class="n">New-Item</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Force</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Out-Null</span><span class="w">
+</span><span class="nx">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">ShowDriveLettersFirst</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">4</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Set the value to <code class="language-plaintext highlighter-rouge">0</code> to return to the default drive-letter display behavior:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">ShowDriveLettersFirst</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="show-thumbnails-or-icons">Show thumbnails or icons</h3>
+
+<p>Show file thumbnails where supported:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"</span><span class="w">
+</span><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">IconsOnly</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Show icons instead of thumbnails:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">IconsOnly</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Thumbnail availability also depends on file type, folder view settings, performance options, and installed codecs.</p>
+
+<h3 id="expand-the-navigation-pane-to-the-current-folder">Expand the navigation pane to the current folder</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"</span><span class="w">
+</span><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">NavPaneExpandToCurrentFolder</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Disable this behavior:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">NavPaneExpandToCurrentFolder</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="display-the-full-path-in-the-explorer-title-bar">Display the full path in the Explorer title bar</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"</span><span class="w">
+</span><span class="n">New-Item</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Force</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Out-Null</span><span class="w">
+</span><span class="nx">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">FullPath</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">1</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Disable the full path in the title bar:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$path</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">FullPath</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">DWord</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nx">0</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This setting may have limited or different effects on some newer Windows 11 interfaces.</p>
+
+<h3 id="read-the-current-values">Read the current values</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$advanced</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"</span><span class="w">
+
+</span><span class="n">Get-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nv">$advanced</span><span class="w"> </span><span class="o">|</span><span class="w">
+    </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">HideFileExt</span><span class="p">,</span><span class="w"> </span><span class="nx">Hidden</span><span class="p">,</span><span class="w"> </span><span class="nx">ShowSuperHidden</span><span class="p">,</span><span class="w"> </span><span class="nx">AutoCheckSelect</span><span class="p">,</span><span class="w">
+        </span><span class="n">LaunchTo</span><span class="p">,</span><span class="w"> </span><span class="nx">IconsOnly</span><span class="p">,</span><span class="w"> </span><span class="nx">NavPaneExpandToCurrentFolder</span><span class="w">
+</span></code></pre></div></div>
+
+<p>A value may be absent if Windows has not created it or if that setting is not used by the current build.</p>
+
+<h3 id="refresh-file-explorer">Refresh File Explorer</h3>
+
+<p>Some settings take effect immediately; others may need Explorer to refresh. Save file operations first.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Stop-Process</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">explorer</span><span class="w"> </span><span class="nt">-Force</span><span class="w">
+</span><span class="n">Start-Process</span><span class="w"> </span><span class="nx">explorer.exe</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This closes Explorer windows and briefly restarts the taskbar. Avoid doing this in a shared or remote session unless you understand the impact.</p>
+
+<h3 id="open-the-graphical-file-explorer-options-dialog">Open the graphical File Explorer Options dialog</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Process</span><span class="w"> </span><span class="s2">"control.exe"</span><span class="w"> </span><span class="nt">-ArgumentList</span><span class="w"> </span><span class="s2">"folders"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This opens the classic File Explorer Options dialog where supported. Some settings and labels differ between Windows 10 and Windows 11.</p>
+
+<hr />
+
+<h2 id="17-system-information-and-hardware">17. System information and hardware</h2>
+
+<h3 id="windows-version-and-system-information">Windows version and system information</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-ComputerInfo</span><span class="w">
+</span><span class="nx">Get-CimInstance</span><span class="w"> </span><span class="nx">Win32_OperatingSystem</span><span class="w">
+</span><span class="n">Get-CimInstance</span><span class="w"> </span><span class="nx">Win32_ComputerSystem</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Quick Command Prompt tools:</p>
+
+<pre><code class="language-cmd">winver
+systeminfo
+hostname
+whoami
+</code></pre>
+
+<h3 id="cpu-memory-and-disk-overview">CPU, memory, and disk overview</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-CimInstance</span><span class="w"> </span><span class="nx">Win32_Processor</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="nx">NumberOfCores</span><span class="p">,</span><span class="w"> </span><span class="nx">NumberOfLogicalProcessors</span><span class="w">
+
+</span><span class="n">Get-CimInstance</span><span class="w"> </span><span class="nx">Win32_OperatingSystem</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">TotalVisibleMemorySize</span><span class="p">,</span><span class="w"> </span><span class="nx">FreePhysicalMemory</span><span class="w">
+
+</span><span class="n">Get-Volume</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The memory values reported by <code class="language-plaintext highlighter-rouge">Win32_OperatingSystem</code> are in kilobytes.</p>
+
+<h3 id="device-manager">Device Manager</h3>
+
+<pre><code class="language-cmd">devmgmt.msc
+</code></pre>
+
+<h3 id="hardware-inventory-through-powershell">Hardware inventory through PowerShell</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-CimInstance</span><span class="w"> </span><span class="nx">Win32_BIOS</span><span class="w">
+</span><span class="n">Get-CimInstance</span><span class="w"> </span><span class="nx">Win32_PhysicalMemory</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">Manufacturer</span><span class="p">,</span><span class="w"> </span><span class="nx">Capacity</span><span class="p">,</span><span class="w"> </span><span class="nx">Speed</span><span class="w">
+</span><span class="n">Get-CimInstance</span><span class="w"> </span><span class="nx">Win32_LogicalDisk</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">DeviceID</span><span class="p">,</span><span class="w"> </span><span class="nx">VolumeName</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">,</span><span class="w"> </span><span class="nx">FreeSpace</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Some hardware details may be unavailable or vendor-specific.</p>
+
+<hr />
+
+<h2 id="17-applications-and-packages-with-winget">17. Applications and packages with winget</h2>
+
+<p><code class="language-plaintext highlighter-rouge">winget</code> is Microsoft's Windows Package Manager command-line client. It is normally delivered through <strong>App Installer</strong> on supported Windows client systems.</p>
+
+<h3 id="check-whether-winget-is-available">Check whether winget is available</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nt">--version</span><span class="w">
+</span><span class="n">Get-Command</span><span class="w"> </span><span class="nx">winget</span><span class="w"> </span><span class="nt">-ErrorAction</span><span class="w"> </span><span class="nx">SilentlyContinue</span><span class="w">
+</span></code></pre></div></div>
+
+<p>If the command is not found, check Windows version, App Installer, and the current user's application aliases.</p>
+
+<h3 id="enable-or-install-winget">Enable or install winget</h3>
+
+<p>There is not one universal command that enables <code class="language-plaintext highlighter-rouge">winget</code> on every Windows installation. On supported Windows 10/11 systems, try these steps:</p>
+
+<ol>
+  <li>Open Microsoft Store.</li>
+  <li>Search for <strong>App Installer</strong> published by Microsoft.</li>
+  <li>Install or update it.</li>
+  <li>Close and reopen Terminal or PowerShell, then run:</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nt">--version</span><span class="w">
+</span></code></pre></div></div>
+
+<p>You can open the Store's App Installer listing using:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Process</span><span class="w"> </span><span class="s2">"ms-windows-store://pdp/?ProductId=9NBLGGH4NNS1"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>If Microsoft Store is blocked or unavailable, use your organization's approved deployment method or Microsoft's official App Installer distribution/documentation. Avoid downloading installers from untrusted third-party sites.</p>
+
+<p>On some Windows installations, registering App Installer for the current user may help if its package is already installed:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-AppxPackage</span><span class="w"> </span><span class="nx">Microsoft.DesktopAppInstaller</span><span class="w">
+</span></code></pre></div></div>
+
+<p>If it returns a package, try:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-AppxPackage</span><span class="w"> </span><span class="nx">Microsoft.DesktopAppInstaller</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">ForEach-Object</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Add-AppxPackage</span><span class="w"> </span><span class="nt">-DisableDevelopmentMode</span><span class="w"> </span><span class="nt">-Register</span><span class="w"> </span><span class="s2">"</span><span class="si">$(</span><span class="bp">$_</span><span class="o">.</span><span class="nf">InstallLocation</span><span class="si">)</span><span class="s2">\AppxManifest.xml"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This is not a substitute for installing App Installer if it is absent, and it may be restricted by organizational policy.</p>
+
+<h3 id="search-for-a-package">Search for a package</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nx">search</span><span class="w"> </span><span class="nx">vscode</span><span class="w">
+</span><span class="n">winget</span><span class="w"> </span><span class="nx">search</span><span class="w"> </span><span class="nx">7zip</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="show-package-details">Show package details</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nx">show</span><span class="w"> </span><span class="nx">Microsoft.VisualStudioCode</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Package identifiers can change or have multiple matches. Search first and confirm the ID and publisher before installing.</p>
+
+<h3 id="install-an-application">Install an application</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nx">install</span><span class="w"> </span><span class="nt">--id</span><span class="w"> </span><span class="nx">Microsoft.VisualStudioCode</span><span class="w"> </span><span class="nt">-e</span><span class="w">
+</span><span class="n">winget</span><span class="w"> </span><span class="nx">install</span><span class="w"> </span><span class="nt">--id</span><span class="w"> </span><span class="nx">7zip.7zip</span><span class="w"> </span><span class="nt">-e</span><span class="w">
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-e</code> asks <code class="language-plaintext highlighter-rouge">winget</code> to match the package identifier exactly.</p>
+
+<h3 id="upgrade-applications">Upgrade applications</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nx">upgrade</span><span class="w">
+</span><span class="n">winget</span><span class="w"> </span><span class="nx">upgrade</span><span class="w"> </span><span class="nt">--all</span><span class="w">
+</span><span class="n">winget</span><span class="w"> </span><span class="nx">upgrade</span><span class="w"> </span><span class="nt">--id</span><span class="w"> </span><span class="nx">Microsoft.VisualStudioCode</span><span class="w"> </span><span class="nt">-e</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Review the proposed changes before running broad upgrades on production or managed systems.</p>
+
+<h3 id="uninstall-an-application">Uninstall an application</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nx">list</span><span class="w">
+</span><span class="n">winget</span><span class="w"> </span><span class="nx">uninstall</span><span class="w"> </span><span class="nt">--id</span><span class="w"> </span><span class="nx">Microsoft.VisualStudioCode</span><span class="w"> </span><span class="nt">-e</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Some applications are not managed by <code class="language-plaintext highlighter-rouge">winget</code>, and some installers may require separate uninstall handling.</p>
+
+<h3 id="export-and-import-a-package-list">Export and import a package list</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nx">export</span><span class="w"> </span><span class="nt">-o</span><span class="w"> </span><span class="nx">packages.json</span><span class="w">
+</span><span class="n">winget</span><span class="w"> </span><span class="nx">import</span><span class="w"> </span><span class="nt">-i</span><span class="w"> </span><span class="nx">packages.json</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Review exported/imported manifests before using them on another computer. Package availability, source, and installer behavior can differ.</p>
+
+<h3 id="manage-sources">Manage sources</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">winget</span><span class="w"> </span><span class="nx">source</span><span class="w"> </span><span class="nx">list</span><span class="w">
+</span><span class="n">winget</span><span class="w"> </span><span class="nx">source</span><span class="w"> </span><span class="nx">update</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Sources can be managed by policy. Do not reset or add sources casually on managed computers.</p>
+
+<hr />
+
+<h2 id="18-windows-updates-and-reboot-status">18. Windows updates and reboot status</h2>
+
+<h3 id="open-windows-update-settings">Open Windows Update settings</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Process</span><span class="w"> </span><span class="s2">"ms-settings:windowsupdate"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Open update history:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Start-Process</span><span class="w"> </span><span class="s2">"ms-settings:windowsupdate-history"</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="check-recent-update-hotfixes">Check recent update hotfixes</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-HotFix</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Sort-Object</span><span class="w"> </span><span class="nx">InstalledOn</span><span class="w"> </span><span class="nt">-Descending</span><span class="w">
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">Get-HotFix</code> is useful but is not a complete inventory of every update type.</p>
+
+<h3 id="restart-or-shut-down">Restart or shut down</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Restart-Computer</span><span class="w">
+</span><span class="nx">Stop-Computer</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt equivalents:</p>
+
+<pre><code class="language-cmd">shutdown /r /t 0
+shutdown /s /t 0
+</code></pre>
+
+<p>Schedule a restart after 60 seconds:</p>
+
+<pre><code class="language-cmd">shutdown /r /t 60
+</code></pre>
+
+<p>Cancel a pending shutdown:</p>
+
+<pre><code class="language-cmd">shutdown /a
+</code></pre>
+
+<p>Save work and notify users before restarting shared or production systems.</p>
+
+<hr />
+
+<h2 id="19-files-permissions-and-folders">19. Files, permissions, and folders</h2>
+
+<h3 id="list-files">List files</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-ChildItem</span><span class="w">
+</span><span class="nx">Get-ChildItem</span><span class="w"> </span><span class="nx">C:\Windows</span><span class="w">
+</span><span class="n">Get-ChildItem</span><span class="w"> </span><span class="nt">-Force</span><span class="w">
+</span><span class="n">Get-ChildItem</span><span class="w"> </span><span class="nt">-Recurse</span><span class="w"> </span><span class="nt">-Filter</span><span class="w"> </span><span class="s2">"*.log"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt alternatives:</p>
+
+<pre><code class="language-cmd">dir
+dir /a
+</code></pre>
+
+<h3 id="create-copy-move-and-remove">Create, copy, move, and remove</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">New-Item</span><span class="w"> </span><span class="nt">-ItemType</span><span class="w"> </span><span class="nx">Directory</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="nx">C:\Temp\Lab</span><span class="w">
+</span><span class="n">Copy-Item</span><span class="w"> </span><span class="nx">C:\Temp\source.txt</span><span class="w"> </span><span class="nx">C:\Temp\backup.txt</span><span class="w">
+</span><span class="n">Move-Item</span><span class="w"> </span><span class="nx">C:\Temp\backup.txt</span><span class="w"> </span><span class="nx">C:\Temp\Lab\</span><span class="w">
+</span><span class="n">Remove-Item</span><span class="w"> </span><span class="nx">C:\Temp\Lab\backup.txt</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Recursive deletion is powerful; verify the path before using <code class="language-plaintext highlighter-rouge">Remove-Item -Recurse</code>.</p>
+
+<h3 id="inspect-file-permissions">Inspect file permissions</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-Acl</span><span class="w"> </span><span class="nx">C:\Temp</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Command Prompt:</p>
+
+<pre><code class="language-cmd">icacls C:\Temp
+</code></pre>
+
+<h3 id="grant-and-remove-permissions">Grant and remove permissions</h3>
+
+<p><code class="language-plaintext highlighter-rouge">icacls</code> can change NTFS permissions. Example for granting Modify permission to a local user on a specific folder:</p>
+
+<pre><code class="language-cmd">icacls C:\Lab /grant "COMPUTERNAME\alice:(M)"
+</code></pre>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">COMPUTERNAME</code> and <code class="language-plaintext highlighter-rouge">alice</code> with the actual computer and user. Review inheritance and existing ACLs before changing permissions.</p>
+
+<h3 id="copy-a-directory-tree">Copy a directory tree</h3>
+
+<pre><code class="language-cmd">robocopy C:\Source D:\Backup /E
+</code></pre>
+
+<p><code class="language-plaintext highlighter-rouge">/E</code> copies subdirectories, including empty ones. Be careful with mirror options such as <code class="language-plaintext highlighter-rouge">/MIR</code>: they can delete destination files that are not present in the source.</p>
+
+<hr />
+
+<h2 id="20-event-logs-and-troubleshooting">20. Event logs and troubleshooting</h2>
+
+<h3 id="open-event-viewer">Open Event Viewer</h3>
+
+<pre><code class="language-cmd">eventvwr.msc
+</code></pre>
+
+<h3 id="read-recent-system-events">Read recent System events</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-WinEvent</span><span class="w"> </span><span class="nt">-LogName</span><span class="w"> </span><span class="nx">System</span><span class="w"> </span><span class="nt">-MaxEvents</span><span class="w"> </span><span class="nx">50</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">TimeCreated</span><span class="p">,</span><span class="w"> </span><span class="nx">Id</span><span class="p">,</span><span class="w"> </span><span class="nx">LevelDisplayName</span><span class="p">,</span><span class="w"> </span><span class="nx">ProviderName</span><span class="p">,</span><span class="w"> </span><span class="nx">Message</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Read recent Application events:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-WinEvent</span><span class="w"> </span><span class="nt">-LogName</span><span class="w"> </span><span class="nx">Application</span><span class="w"> </span><span class="nt">-MaxEvents</span><span class="w"> </span><span class="nx">50</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">TimeCreated</span><span class="p">,</span><span class="w"> </span><span class="nx">Id</span><span class="p">,</span><span class="w"> </span><span class="nx">LevelDisplayName</span><span class="p">,</span><span class="w"> </span><span class="nx">ProviderName</span><span class="p">,</span><span class="w"> </span><span class="nx">Message</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="filter-for-errors">Filter for errors</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-WinEvent</span><span class="w"> </span><span class="nt">-FilterHashtable</span><span class="w"> </span><span class="p">@{</span><span class="w">
+  </span><span class="nx">LogName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'System'</span><span class="w">
+  </span><span class="nx">Level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">
+  </span><span class="nx">StartTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">(</span><span class="nx">Get</span><span class="err">-</span><span class="nx">Date</span><span class="err">).</span><span class="nx">AddDays</span><span class="err">(-</span><span class="mi">1</span><span class="err">)</span><span class="w">
+</span><span class="p">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Select-Object</span><span class="w"> </span><span class="nx">TimeCreated</span><span class="p">,</span><span class="w"> </span><span class="nx">Id</span><span class="p">,</span><span class="w"> </span><span class="nx">ProviderName</span><span class="p">,</span><span class="w"> </span><span class="nx">Message</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Event log access may be restricted. An empty result does not always mean there are no problems; confirm the log name, time range, and permissions.</p>
+
+<h3 id="system-file-checks">System file checks</h3>
+
+<p>From an elevated Command Prompt or PowerShell:</p>
+
+<pre><code class="language-cmd">sfc /scannow
+DISM /Online /Cleanup-Image /RestoreHealth
+</code></pre>
+
+<p>These tools check and repair Windows system files/component store where possible. They may take time and require access to Windows Update or a repair source.</p>
+
+<hr />
+
+<h2 id="21-remote-administration-and-connectivity">21. Remote administration and connectivity</h2>
+
+<h3 id="check-whether-a-remote-port-is-reachable">Check whether a remote port is reachable</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Test-NetConnection</span><span class="w"> </span><span class="nx">server01</span><span class="w"> </span><span class="nt">-Port</span><span class="w"> </span><span class="nx">445</span><span class="w">
+</span><span class="n">Test-NetConnection</span><span class="w"> </span><span class="nx">server01</span><span class="w"> </span><span class="nt">-Port</span><span class="w"> </span><span class="nx">3389</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Port <code class="language-plaintext highlighter-rouge">445</code> is commonly used for SMB file sharing; <code class="language-plaintext highlighter-rouge">3389</code> is the default RDP port. A successful port test only confirms TCP connectivity to that port, not that authentication will succeed.</p>
+
+<h3 id="remote-powershell">Remote PowerShell</h3>
+
+<p>PowerShell remoting typically requires WinRM configuration, firewall rules, authentication, and policy setup. On a trusted, appropriately managed machine, an administrator may enable remoting with:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Enable-PSRemoting</span><span class="w"> </span><span class="nt">-Force</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Do not enable remote management on untrusted networks without understanding the security implications. Follow organizational guidance for domain, workgroup, and firewall configuration.</p>
+
+<h3 id="connect-to-a-remote-powershell-session">Connect to a remote PowerShell session</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Enter-PSSession</span><span class="w"> </span><span class="nt">-ComputerName</span><span class="w"> </span><span class="nx">server01</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This works only when the target and client are configured for compatible remoting and authentication. For workgroup scenarios, additional configuration may be required; do not broadly weaken authentication or TrustedHosts settings.</p>
+
+<p>Exit the session:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Exit-PSSession</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="remote-desktop">Remote Desktop</h3>
+
+<p>Open Remote Desktop Connection:</p>
+
+<pre><code class="language-cmd">mstsc
+</code></pre>
+
+<p>Remote Desktop hosting availability depends on Windows edition and policy. Do not expose RDP directly to the public internet; use an approved VPN or secure remote-access solution.</p>
+
+<hr />
+
+<h2 id="22-useful-keyboard-shortcuts">22. Useful keyboard shortcuts</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Shortcut</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Win + R</code></td>
+      <td>Open Run</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Win + X</code></td>
+      <td>Open Quick Link menu</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Win + E</code></td>
+      <td>Open File Explorer</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Win + I</code></td>
+      <td>Open Settings</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Ctrl + Shift + Esc</code></td>
+      <td>Open Task Manager</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Win + Pause</code></td>
+      <td>Open system information on versions that support it</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Win + L</code></td>
+      <td>Lock the PC</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Alt + F4</code></td>
+      <td>Close the active app; from desktop, opens shutdown dialog</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Win + X</code>, then <code class="language-plaintext highlighter-rouge">A</code></td>
+      <td>Often opens Terminal/PowerShell as administrator, depending on menu and configuration</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="23-quick-reference">23. Quick reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Local Users and Groups GUI</td>
+      <td><code class="language-plaintext highlighter-rouge">lusrmgr.msc</code></td>
+    </tr>
+    <tr>
+      <td>Computer Management GUI</td>
+      <td><code class="language-plaintext highlighter-rouge">compmgmt.msc</code></td>
+    </tr>
+    <tr>
+      <td>List local users</td>
+      <td><code class="language-plaintext highlighter-rouge">Get-LocalUser</code></td>
+    </tr>
+    <tr>
+      <td>Create local user</td>
+      <td><code class="language-plaintext highlighter-rouge">New-LocalUser</code></td>
+    </tr>
+    <tr>
+      <td>Enable/disable user</td>
+      <td><code class="language-plaintext highlighter-rouge">Enable-LocalUser</code> / <code class="language-plaintext highlighter-rouge">Disable-LocalUser</code></td>
+    </tr>
+    <tr>
+      <td>List local groups</td>
+      <td><code class="language-plaintext highlighter-rouge">Get-LocalGroup</code></td>
+    </tr>
+    <tr>
+      <td>List administrators</td>
+      <td><code class="language-plaintext highlighter-rouge">Get-LocalGroupMember -Group "Administrators"</code></td>
+    </tr>
+    <tr>
+      <td>List processes</td>
+      <td><code class="language-plaintext highlighter-rouge">Get-Process</code></td>
+    </tr>
+    <tr>
+      <td>Stop process</td>
+      <td><code class="language-plaintext highlighter-rouge">Stop-Process -Id 1234</code></td>
+    </tr>
+    <tr>
+      <td>List services</td>
+      <td><code class="language-plaintext highlighter-rouge">Get-Service</code></td>
+    </tr>
+    <tr>
+      <td>Restart service</td>
+      <td><code class="language-plaintext highlighter-rouge">Restart-Service -Name Spooler</code></td>
+    </tr>
+    <tr>
+      <td>Map network drive</td>
+      <td><code class="language-plaintext highlighter-rouge">New-PSDrive -Name Z -PSProvider FileSystem -Root "\\server\share" -Persist</code></td>
+    </tr>
+    <tr>
+      <td>List mapped drives</td>
+      <td><code class="language-plaintext highlighter-rouge">Get-SmbMapping</code></td>
+    </tr>
+    <tr>
+      <td>Show IP configuration</td>
+      <td><code class="language-plaintext highlighter-rouge">ipconfig /all</code></td>
+    </tr>
+    <tr>
+      <td>Renew DHCP</td>
+      <td><code class="language-plaintext highlighter-rouge">ipconfig /renew</code></td>
+    </tr>
+    <tr>
+      <td>Flush DNS cache</td>
+      <td><code class="language-plaintext highlighter-rouge">ipconfig /flushdns</code></td>
+    </tr>
+    <tr>
+      <td>Show disks/volumes</td>
+      <td><code class="language-plaintext highlighter-rouge">Get-Disk</code> / <code class="language-plaintext highlighter-rouge">Get-Volume</code></td>
+    </tr>
+    <tr>
+      <td>Open Disk Management</td>
+      <td><code class="language-plaintext highlighter-rouge">diskmgmt.msc</code></td>
+    </tr>
+    <tr>
+      <td>Check winget</td>
+      <td><code class="language-plaintext highlighter-rouge">winget --version</code></td>
+    </tr>
+    <tr>
+      <td>Search winget packages</td>
+      <td><code class="language-plaintext highlighter-rouge">winget search vscode</code></td>
+    </tr>
+    <tr>
+      <td>Upgrade packages</td>
+      <td><code class="language-plaintext highlighter-rouge">winget upgrade --all</code></td>
+    </tr>
+    <tr>
+      <td>Open Event Viewer</td>
+      <td><code class="language-plaintext highlighter-rouge">eventvwr.msc</code></td>
+    </tr>
+    <tr>
+      <td>Restart computer</td>
+      <td><code class="language-plaintext highlighter-rouge">Restart-Computer</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Good administrative habits</strong></p>
+
+<ol>
+  <li>Inspect before changing: query the account, process, service, drive, or disk first.</li>
+  <li>Use least privilege. Avoid making everyday accounts local administrators.</li>
+  <li>Do not place passwords in command lines or scripts.</li>
+  <li>Check command output and exit status; do not assume a command succeeded.</li>
+  <li>Be especially careful with account deletion, disk commands, recursive file deletion, permissions, and broad package upgrades.</li>
+  <li>For managed PCs, follow the organization's policies rather than trying to bypass restrictions.</li>
+</ol>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

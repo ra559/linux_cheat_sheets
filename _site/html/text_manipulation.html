@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Text-File Manipulation Reference for Debian 13</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#text-file-manipulation-reference-for-debian-13" id="toc-text-file-manipulation-reference-for-debian-13">Text-File Manipulation Reference for Debian 13</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-checking-command-availability" id="toc-1-checking-command-availability">1. Checking command availability</a>
+<ul>
+<li><a href="#check-whether-a-command-is-available" id="toc-check-whether-a-command-is-available">Check whether a command is available</a></li>
+<li><a href="#find-which-installed-package-owns-a-command" id="toc-find-which-installed-package-owns-a-command">Find which installed package owns a command</a></li>
+<li><a href="#check-whether-a-package-is-installed" id="toc-check-whether-a-package-is-installed">Check whether a package is installed</a></li>
+<li><a href="#find-the-package-that-provides-a-missing-command" id="toc-find-the-package-that-provides-a-missing-command">Find the package that provides a missing command</a></li>
+<li><a href="#package-names-versus-project-names" id="toc-package-names-versus-project-names">Package names versus project names</a></li>
+</ul>
+</li>
+<li><a href="#2-viewing-and-inspecting-text-files" id="toc-2-viewing-and-inspecting-text-files">2. Viewing and inspecting text files</a>
+<ul>
+<li><a href="#cat" id="toc-cat"><code class="language-plaintext highlighter-rouge">cat</code></a></li>
+<li><a href="#tac" id="toc-tac"><code class="language-plaintext highlighter-rouge">tac</code></a></li>
+<li><a href="#head" id="toc-head"><code class="language-plaintext highlighter-rouge">head</code></a></li>
+<li><a href="#tail" id="toc-tail"><code class="language-plaintext highlighter-rouge">tail</code></a></li>
+<li><a href="#file" id="toc-file"><code class="language-plaintext highlighter-rouge">file</code></a></li>
+<li><a href="#less" id="toc-less"><code class="language-plaintext highlighter-rouge">less</code></a></li>
+</ul>
+</li>
+<li><a href="#3-counting-numbering-and-selecting-lines" id="toc-3-counting-numbering-and-selecting-lines">3. Counting, numbering, and selecting lines</a>
+<ul>
+<li><a href="#wc" id="toc-wc"><code class="language-plaintext highlighter-rouge">wc</code></a></li>
+<li><a href="#nl" id="toc-nl"><code class="language-plaintext highlighter-rouge">nl</code></a></li>
+<li><a href="#cut" id="toc-cut"><code class="language-plaintext highlighter-rouge">cut</code></a></li>
+<li><a href="#paste" id="toc-paste"><code class="language-plaintext highlighter-rouge">paste</code></a></li>
+</ul>
+</li>
+<li><a href="#4-sorting-comparing-and-deduplicating" id="toc-4-sorting-comparing-and-deduplicating">4. Sorting, comparing, and deduplicating</a>
+<ul>
+<li><a href="#sort" id="toc-sort"><code class="language-plaintext highlighter-rouge">sort</code></a></li>
+<li><a href="#uniq" id="toc-uniq"><code class="language-plaintext highlighter-rouge">uniq</code></a></li>
+<li><a href="#comm" id="toc-comm"><code class="language-plaintext highlighter-rouge">comm</code></a></li>
+<li><a href="#join" id="toc-join"><code class="language-plaintext highlighter-rouge">join</code></a></li>
+<li><a href="#diff" id="toc-diff"><code class="language-plaintext highlighter-rouge">diff</code></a></li>
+<li><a href="#cmp" id="toc-cmp"><code class="language-plaintext highlighter-rouge">cmp</code></a></li>
+<li><a href="#diff3" id="toc-diff3"><code class="language-plaintext highlighter-rouge">diff3</code></a></li>
+</ul>
+</li>
+<li><a href="#5-combining-and-rearranging-text" id="toc-5-combining-and-rearranging-text">5. Combining and rearranging text</a>
+<ul>
+<li><a href="#column" id="toc-column"><code class="language-plaintext highlighter-rouge">column</code></a></li>
+<li><a href="#tee" id="toc-tee"><code class="language-plaintext highlighter-rouge">tee</code></a></li>
+<li><a href="#tr" id="toc-tr"><code class="language-plaintext highlighter-rouge">tr</code></a></li>
+<li><a href="#expand" id="toc-expand"><code class="language-plaintext highlighter-rouge">expand</code></a></li>
+<li><a href="#unexpand" id="toc-unexpand"><code class="language-plaintext highlighter-rouge">unexpand</code></a></li>
+<li><a href="#fmt" id="toc-fmt"><code class="language-plaintext highlighter-rouge">fmt</code></a></li>
+<li><a href="#fold" id="toc-fold"><code class="language-plaintext highlighter-rouge">fold</code></a></li>
+<li><a href="#shuf" id="toc-shuf"><code class="language-plaintext highlighter-rouge">shuf</code></a></li>
+<li><a href="#pr" id="toc-pr"><code class="language-plaintext highlighter-rouge">pr</code></a></li>
+</ul>
+</li>
+<li><a href="#6-formatting-and-transforming-text" id="toc-6-formatting-and-transforming-text">6. Formatting and transforming text</a>
+<ul>
+<li><a href="#printf-is-excluded" id="toc-printf-is-excluded"><code class="language-plaintext highlighter-rouge">printf</code> is excluded</a></li>
+<li><a href="#od" id="toc-od"><code class="language-plaintext highlighter-rouge">od</code></a></li>
+<li><a href="#hexdump" id="toc-hexdump"><code class="language-plaintext highlighter-rouge">hexdump</code></a></li>
+<li><a href="#xxd" id="toc-xxd"><code class="language-plaintext highlighter-rouge">xxd</code></a></li>
+<li><a href="#base64" id="toc-base64"><code class="language-plaintext highlighter-rouge">base64</code></a></li>
+<li><a href="#rev" id="toc-rev"><code class="language-plaintext highlighter-rouge">rev</code></a></li>
+</ul>
+</li>
+<li><a href="#7-splitting-files" id="toc-7-splitting-files">7. Splitting files</a>
+<ul>
+<li><a href="#split" id="toc-split"><code class="language-plaintext highlighter-rouge">split</code></a></li>
+<li><a href="#csplit" id="toc-csplit"><code class="language-plaintext highlighter-rouge">csplit</code></a></li>
+</ul>
+</li>
+<li><a href="#8-editing-files-and-applying-changes" id="toc-8-editing-files-and-applying-changes">8. Editing files and applying changes</a>
+<ul>
+<li><a href="#cp" id="toc-cp"><code class="language-plaintext highlighter-rouge">cp</code></a></li>
+<li><a href="#mv" id="toc-mv"><code class="language-plaintext highlighter-rouge">mv</code></a></li>
+<li><a href="#touch" id="toc-touch"><code class="language-plaintext highlighter-rouge">touch</code></a></li>
+<li><a href="#patch" id="toc-patch"><code class="language-plaintext highlighter-rouge">patch</code></a></li>
+<li><a href="#sponge" id="toc-sponge"><code class="language-plaintext highlighter-rouge">sponge</code></a></li>
+<li><a href="#install" id="toc-install"><code class="language-plaintext highlighter-rouge">install</code></a></li>
+<li><a href="#overwrite-and-append-redirection" id="toc-overwrite-and-append-redirection">Overwrite and append redirection</a></li>
+</ul>
+</li>
+<li><a href="#9-character-encoding-and-line-endings" id="toc-9-character-encoding-and-line-endings">9. Character encoding and line endings</a>
+<ul>
+<li><a href="#iconv" id="toc-iconv"><code class="language-plaintext highlighter-rouge">iconv</code></a></li>
+<li><a href="#dos2unix" id="toc-dos2unix"><code class="language-plaintext highlighter-rouge">dos2unix</code></a></li>
+<li><a href="#unix2dos" id="toc-unix2dos"><code class="language-plaintext highlighter-rouge">unix2dos</code></a></li>
+<li><a href="#check-line-endings" id="toc-check-line-endings">Check line endings</a></li>
+</ul>
+</li>
+<li><a href="#10-installing-missing-utilities" id="toc-10-installing-missing-utilities">10. Installing missing utilities</a></li>
+<li><a href="#11-common-pitfalls-and-safe-habits" id="toc-11-common-pitfalls-and-safe-habits">11. Common pitfalls and safe habits</a></li>
+<li><a href="#12-quick-command-index" id="toc-12-quick-command-index">12. Quick command index</a></li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="text-file-manipulation-reference-for-debian-13">Text-File Manipulation Reference for Debian 13</h1>
+
+<blockquote>
+  <p><strong>Scope warning:</strong> This reference intentionally excludes <code class="language-plaintext highlighter-rouge">find</code>, <code class="language-plaintext highlighter-rouge">xargs</code>, <code class="language-plaintext highlighter-rouge">sed</code>, <code class="language-plaintext highlighter-rouge">awk</code>, <code class="language-plaintext highlighter-rouge">grep</code>, <code class="language-plaintext highlighter-rouge">printf</code>, and <code class="language-plaintext highlighter-rouge">echo</code>. These commands are covered separately or deserve their own focused reference. Consult the corresponding cheat sheets for those utilities.</p>
+</blockquote>
+
+<p>This guide covers practical commands for inspecting, counting, sorting, comparing, combining, formatting, splitting, and making simple changes to text files on Debian 13.</p>
+
+<p><strong>Package note:</strong> Package names below refer to Debian package names, not just upstream projects. Package placement can vary by Debian release and installation. The examples are intended for Debian 13; verify package ownership on your own system using the commands in <a href="#1-checking-command-availability">Checking command availability</a>. Commands are not necessarily installed on every Debian system, especially minimal containers.</p>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ol>
+  <li><a href="#1-checking-command-availability">Checking command availability</a></li>
+  <li><a href="#2-viewing-and-inspecting-text-files">Viewing and inspecting text files</a></li>
+  <li><a href="#3-counting-numbering-and-selecting-lines">Counting, numbering, and selecting lines</a></li>
+  <li><a href="#4-sorting-comparing-and-deduplicating">Sorting, comparing, and deduplicating</a></li>
+  <li><a href="#5-combining-and-rearranging-text">Combining and rearranging text</a></li>
+  <li><a href="#6-formatting-and-transforming-text">Formatting and transforming text</a></li>
+  <li><a href="#7-splitting-files">Splitting files</a></li>
+  <li><a href="#8-editing-files-and-applying-changes">Editing files and applying changes</a></li>
+  <li><a href="#9-character-encoding-and-line-endings">Character encoding and line endings</a></li>
+  <li><a href="#10-installing-missing-utilities">Installing missing utilities</a></li>
+  <li><a href="#11-common-pitfalls-and-safe-habits">Common pitfalls and safe habits</a></li>
+  <li><a href="#12-quick-command-index">Quick command index</a></li>
+</ol>
+
+<hr />
+
+<h2 id="1-checking-command-availability">1. Checking command availability</h2>
+
+<p>Debian installations differ. A desktop installation, server, and minimal container may have different sets of commands.</p>
+
+<h3 id="check-whether-a-command-is-available">Check whether a command is available</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command</span> <span class="nt">-v</span> column
+</code></pre></div></div>
+
+<p>If the command is available through your <code class="language-plaintext highlighter-rouge">PATH</code>, this prints its path, such as <code class="language-plaintext highlighter-rouge">/usr/bin/column</code>. If nothing is printed, the command may not be installed or may not be in your <code class="language-plaintext highlighter-rouge">PATH</code>.</p>
+
+<h3 id="find-which-installed-package-owns-a-command">Find which installed package owns a command</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg-query <span class="nt">-S</span> /usr/bin/column
+</code></pre></div></div>
+
+<p>Or, if the command is available:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg-query <span class="nt">-S</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">command</span> <span class="nt">-v</span> column<span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>This works when the file is owned by an installed Debian package. It may not identify commands that were installed manually or files that do not belong to a package.</p>
+
+<h3 id="check-whether-a-package-is-installed">Check whether a package is installed</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg-query <span class="nt">-W</span> coreutils
+</code></pre></div></div>
+
+<p>If the package is not installed, <code class="language-plaintext highlighter-rouge">dpkg-query</code> may report that it is not known. You can also check package status with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg <span class="nt">-s</span> coreutils
+</code></pre></div></div>
+
+<h3 id="find-the-package-that-provides-a-missing-command">Find the package that provides a missing command</h3>
+
+<p>If <code class="language-plaintext highlighter-rouge">apt-file</code> is installed and its file index has been updated:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-file search /column
+</code></pre></div></div>
+
+<p>Install and update <code class="language-plaintext highlighter-rouge">apt-file</code> if needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>apt-file
+<span class="nb">sudo </span>apt-file update
+</code></pre></div></div>
+
+<p>The package search index may need refreshing after repository changes.</p>
+
+<h3 id="package-names-versus-project-names">Package names versus project names</h3>
+
+<p>The package column in this guide identifies the Debian package expected to provide the utility. For example, <strong>GNU Coreutils</strong> is a software project, while <strong><code class="language-plaintext highlighter-rouge">coreutils</code></strong> is the Debian package name. Use <code class="language-plaintext highlighter-rouge">dpkg-query -S</code> to verify the package that owns a particular command on your installation.</p>
+
+<hr />
+
+<h2 id="2-viewing-and-inspecting-text-files">2. Viewing and inspecting text files</h2>
+
+<h3 id="cat"><code class="language-plaintext highlighter-rouge">cat</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Print files to the terminal or concatenate multiple files.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>notes.txt
+<span class="nb">cat </span>part1.txt part2.txt
+</code></pre></div></div>
+
+<p>Show line-ending characters and other non-printing characters:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="nt">-A</span> notes.txt
+</code></pre></div></div>
+
+<p><strong>Tip:</strong> <code class="language-plaintext highlighter-rouge">cat</code> is useful for short files. For long files, use a pager such as <code class="language-plaintext highlighter-rouge">less</code> if installed.</p>
+
+<h3 id="tac"><code class="language-plaintext highlighter-rouge">tac</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Print a file's lines in reverse order.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tac </span>log.txt
+</code></pre></div></div>
+
+<p>This reverses the order of lines, not the characters within each line.</p>
+
+<h3 id="head"><code class="language-plaintext highlighter-rouge">head</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Display the beginning of a file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">head </span>notes.txt
+<span class="nb">head</span> <span class="nt">-n</span> 5 notes.txt
+</code></pre></div></div>
+
+<p>The first command displays the first 10 lines by default. The second displays the first 5.</p>
+
+<h3 id="tail"><code class="language-plaintext highlighter-rouge">tail</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Display the end of a file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tail </span>notes.txt
+<span class="nb">tail</span> <span class="nt">-n</span> 20 application.log
+</code></pre></div></div>
+
+<p>Follow a growing log file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tail</span> <span class="nt">-f</span> application.log
+</code></pre></div></div>
+
+<p>Press <code class="language-plaintext highlighter-rouge">Ctrl+C</code> to stop following the file.</p>
+
+<h3 id="file"><code class="language-plaintext highlighter-rouge">file</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">file</code><br />
+<strong>Purpose:</strong> Identify a file's likely type and encoding characteristics.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file notes.txt
+file <span class="k">*</span>
+</code></pre></div></div>
+
+<p>The result is an informed identification, not a guarantee that a file's contents are valid or safe.</p>
+
+<h3 id="less"><code class="language-plaintext highlighter-rouge">less</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">less</code><br />
+<strong>Purpose:</strong> Read long files one screen at a time.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>less application.log
+</code></pre></div></div>
+
+<p>Useful keys include <code class="language-plaintext highlighter-rouge">/word</code> to search, <code class="language-plaintext highlighter-rouge">n</code> to move to the next match, and <code class="language-plaintext highlighter-rouge">q</code> to quit. The <code class="language-plaintext highlighter-rouge">less</code> package may not be installed on minimal systems.</p>
+
+<hr />
+
+<h2 id="3-counting-numbering-and-selecting-lines">3. Counting, numbering, and selecting lines</h2>
+
+<h3 id="wc"><code class="language-plaintext highlighter-rouge">wc</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Count lines, words, bytes, or characters.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">wc </span>notes.txt
+<span class="nb">wc</span> <span class="nt">-l</span> notes.txt
+<span class="nb">wc</span> <span class="nt">-w</span> notes.txt
+<span class="nb">wc</span> <span class="nt">-c</span> notes.txt
+<span class="nb">wc</span> <span class="nt">-m</span> notes.txt
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-l</code>: lines</li>
+  <li><code class="language-plaintext highlighter-rouge">-w</code>: words</li>
+  <li><code class="language-plaintext highlighter-rouge">-c</code>: bytes</li>
+  <li><code class="language-plaintext highlighter-rouge">-m</code>: characters, as interpreted using the current locale</li>
+</ul>
+
+<p>A byte count and a character count can differ for UTF-8 text.</p>
+
+<h3 id="nl"><code class="language-plaintext highlighter-rouge">nl</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Add line numbers to text.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">nl </span>notes.txt
+<span class="nb">nl</span> <span class="nt">-ba</span> notes.txt
+</code></pre></div></div>
+
+<p>By default, <code class="language-plaintext highlighter-rouge">nl</code> numbers non-empty lines. The <code class="language-plaintext highlighter-rouge">-ba</code> option numbers all lines.</p>
+
+<h3 id="cut"><code class="language-plaintext highlighter-rouge">cut</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Select characters, bytes, or delimiter-separated fields from each line.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cut</span> <span class="nt">-c</span> 1-10 notes.txt
+<span class="nb">cut</span> <span class="nt">-d</span> <span class="s1">':'</span> <span class="nt">-f</span> 1 /etc/passwd
+<span class="nb">cut</span> <span class="nt">-d</span> <span class="s1">','</span> <span class="nt">-f</span> 1,3 data.csv
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-c</code>: select character positions</li>
+  <li><code class="language-plaintext highlighter-rouge">-d</code>: set a field delimiter</li>
+  <li><code class="language-plaintext highlighter-rouge">-f</code>: select fields</li>
+</ul>
+
+<p><strong>CSV caution:</strong> <code class="language-plaintext highlighter-rouge">cut</code> does not understand quoted CSV fields. A comma inside a quoted field can cause unexpected results.</p>
+
+<h3 id="paste"><code class="language-plaintext highlighter-rouge">paste</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Combine corresponding lines from files, separated by tabs by default.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">paste </span>first-names.txt last-names.txt
+<span class="nb">paste</span> <span class="nt">-d</span> <span class="s1">','</span> first.txt second.txt
+</code></pre></div></div>
+
+<p>The files are combined line by line. <code class="language-plaintext highlighter-rouge">paste</code> does not perform a semantic join based on matching values; use <code class="language-plaintext highlighter-rouge">join</code> for that.</p>
+
+<hr />
+
+<h2 id="4-sorting-comparing-and-deduplicating">4. Sorting, comparing, and deduplicating</h2>
+
+<h3 id="sort"><code class="language-plaintext highlighter-rouge">sort</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Sort lines in a text file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sort </span>names.txt
+<span class="nb">sort</span> <span class="nt">-r</span> names.txt
+<span class="nb">sort</span> <span class="nt">-n</span> numbers.txt
+<span class="nb">sort</span> <span class="nt">-u</span> names.txt
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-r</code>: reverse the sort order</li>
+  <li><code class="language-plaintext highlighter-rouge">-n</code>: compare values numerically</li>
+  <li><code class="language-plaintext highlighter-rouge">-u</code>: output only one line for each distinct sort key</li>
+</ul>
+
+<p>Sort and save the result to a different file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sort </span>names.txt <span class="o">&gt;</span> names-sorted.txt
+</code></pre></div></div>
+
+<p><strong>Locale note:</strong> Sorting order can vary with the current locale. For predictable byte-oriented sorting, you can use <code class="language-plaintext highlighter-rouge">LC_ALL=C sort names.txt</code>.</p>
+
+<h3 id="uniq"><code class="language-plaintext highlighter-rouge">uniq</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Report or remove repeated adjacent lines.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">uniq </span>names-sorted.txt
+<span class="nb">uniq</span> <span class="nt">-c</span> names-sorted.txt
+<span class="nb">uniq</span> <span class="nt">-d</span> names-sorted.txt
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-c</code>: prefix lines with their counts</li>
+  <li><code class="language-plaintext highlighter-rouge">-d</code>: show only repeated lines</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">uniq</code> only detects adjacent duplicate lines. To find duplicates anywhere in a file, sort first:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sort </span>names.txt | <span class="nb">uniq</span>
+</code></pre></div></div>
+
+<h3 id="comm"><code class="language-plaintext highlighter-rouge">comm</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Compare two sorted files line by line.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">comm </span>first-sorted.txt second-sorted.txt
+</code></pre></div></div>
+
+<p>The output has three columns: lines unique to the first file, lines unique to the second file, and lines shared by both. Both input files should be sorted using compatible sorting rules.</p>
+
+<h3 id="join"><code class="language-plaintext highlighter-rouge">join</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Combine lines from two sorted files using a matching field.</p>
+
+<p>Example files, sorted by the first field:</p>
+
+<p><code class="language-plaintext highlighter-rouge">people.txt</code>:</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 Alice
+2 Bob
+3 Carol
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">scores.txt</code>:</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 85
+2 92
+3 78
+</code></pre></div></div>
+
+<p>Join them:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">join </span>people.txt scores.txt
+</code></pre></div></div>
+
+<p>Example output:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 Alice 85
+2 Bob 92
+3 Carol 78
+</code></pre></div></div>
+
+<p>By default, <code class="language-plaintext highlighter-rouge">join</code> uses the first whitespace-separated field as the key. The input files must be sorted by the join field.</p>
+
+<h3 id="diff"><code class="language-plaintext highlighter-rouge">diff</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">diffutils</code><br />
+<strong>Purpose:</strong> Show differences between two files.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diff old.txt new.txt
+diff <span class="nt">-u</span> old.txt new.txt
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">-u</code> option produces a unified diff, a common format for reviewing changes and preparing patches.</p>
+
+<h3 id="cmp"><code class="language-plaintext highlighter-rouge">cmp</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">diffutils</code><br />
+<strong>Purpose:</strong> Compare two files byte by byte.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmp first.bin second.bin
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">cmp</code> is useful for checking whether two files are identical, including files that are not plain text.</p>
+
+<h3 id="diff3"><code class="language-plaintext highlighter-rouge">diff3</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">diffutils</code><br />
+<strong>Purpose:</strong> Compare three versions of a file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diff3 original.txt version-a.txt version-b.txt
+</code></pre></div></div>
+
+<p>This is useful when reviewing changes made independently to a common original.</p>
+
+<hr />
+
+<h2 id="5-combining-and-rearranging-text">5. Combining and rearranging text</h2>
+
+<h3 id="column"><code class="language-plaintext highlighter-rouge">column</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">bsdextrautils</code> (Debian package; verify on your system)<br />
+<strong>Purpose:</strong> Format text into aligned columns or display delimited data in a table.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">printf</span> <span class="s1">'Name Age\nAlice 30\nBob 27\n'</span> | column <span class="nt">-t</span>
+</code></pre></div></div>
+
+<p>Although this example uses a shell builtin, <code class="language-plaintext highlighter-rouge">printf</code> is outside the scope of this reference and is shown only to supply sample input. You can instead put the input in a file:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Name Age
+Alice 30
+Bob 27
+</code></pre></div></div>
+
+<p>Then run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>column <span class="nt">-t</span> table.txt
+</code></pre></div></div>
+
+<p>For delimiter-separated input:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>column <span class="nt">-s</span> <span class="s1">','</span> <span class="nt">-t</span> data.txt
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">column</code> aligns fields for display; it is not a full CSV parser.</p>
+
+<h3 id="tee"><code class="language-plaintext highlighter-rouge">tee</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Write standard input to a file and also display it.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>notes.txt | <span class="nb">tee </span>copy.txt
+</code></pre></div></div>
+
+<p>Write to a file while replacing its previous contents:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>notes.txt | <span class="nb">tee </span>output.txt
+</code></pre></div></div>
+
+<p>Append instead of replacing:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>notes.txt | <span class="nb">tee</span> <span class="nt">-a</span> output.txt
+</code></pre></div></div>
+
+<p>Be careful: without <code class="language-plaintext highlighter-rouge">-a</code>, <code class="language-plaintext highlighter-rouge">tee</code> overwrites the destination file.</p>
+
+<h3 id="tr"><code class="language-plaintext highlighter-rouge">tr</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Translate or delete individual characters in input.</p>
+
+<p>Convert lowercase ASCII letters to uppercase:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>names.txt | <span class="nb">tr</span> <span class="s1">'a-z'</span> <span class="s1">'A-Z'</span>
+</code></pre></div></div>
+
+<p>Replace tabs with spaces:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>data.txt | <span class="nb">tr</span> <span class="s1">'\t'</span> <span class="s1">' '</span>
+</code></pre></div></div>
+
+<p>Delete carriage-return characters:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>windows-text.txt | <span class="nb">tr</span> <span class="nt">-d</span> <span class="s1">'\r'</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">tr</code> works on characters and character sets, not whole words or multi-character strings.</p>
+
+<h3 id="expand"><code class="language-plaintext highlighter-rouge">expand</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Convert tabs into spaces.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">expand </span>notes.txt
+<span class="nb">expand</span> <span class="nt">-t</span> 4 notes.txt
+</code></pre></div></div>
+
+<p>The second example uses a tab stop of four columns.</p>
+
+<h3 id="unexpand"><code class="language-plaintext highlighter-rouge">unexpand</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Convert runs of spaces into tabs where possible.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">unexpand </span>notes.txt
+<span class="nb">unexpand</span> <span class="nt">-a</span> notes.txt
+</code></pre></div></div>
+
+<p>With <code class="language-plaintext highlighter-rouge">-a</code>, spaces throughout each line are considered, rather than only leading whitespace.</p>
+
+<h3 id="fmt"><code class="language-plaintext highlighter-rouge">fmt</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Reflow text paragraphs to a chosen line width.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">fmt </span>notes.txt
+<span class="nb">fmt</span> <span class="nt">-w</span> 60 notes.txt
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">fmt</code> is useful for wrapping prose. It is not appropriate for source code, tables, or formats where line breaks have meaning.</p>
+
+<h3 id="fold"><code class="language-plaintext highlighter-rouge">fold</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Wrap long lines at a selected width.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">fold</span> <span class="nt">-w</span> 80 notes.txt
+<span class="nb">fold</span> <span class="nt">-s</span> <span class="nt">-w</span> 80 notes.txt
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">-s</code> option prefers breaking at spaces. Unlike <code class="language-plaintext highlighter-rouge">fmt</code>, <code class="language-plaintext highlighter-rouge">fold</code> wraps each input line independently.</p>
+
+<h3 id="shuf"><code class="language-plaintext highlighter-rouge">shuf</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Randomize the order of lines.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">shuf </span>names.txt
+<span class="nb">shuf</span> <span class="nt">-n</span> 5 names.txt
+</code></pre></div></div>
+
+<p>The second example selects five lines at random.</p>
+
+<h3 id="pr"><code class="language-plaintext highlighter-rouge">pr</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Prepare text for paginated or multi-column printing.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">pr </span>notes.txt
+<span class="nb">pr</span> <span class="nt">-2</span> names.txt
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">-2</code> option formats the file into two columns.</p>
+
+<hr />
+
+<h2 id="6-formatting-and-transforming-text">6. Formatting and transforming text</h2>
+
+<h3 id="printf-is-excluded"><code class="language-plaintext highlighter-rouge">printf</code> is excluded</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">printf</code> command is intentionally excluded from this reference and should not be treated as a utility covered here. See the scope warning at the top of the document.</p>
+
+<h3 id="od"><code class="language-plaintext highlighter-rouge">od</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Display file contents as octal, hexadecimal, or other representations.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">od</span> <span class="nt">-c</span> notes.txt
+<span class="nb">od</span> <span class="nt">-An</span> <span class="nt">-tx1</span> notes.txt
+</code></pre></div></div>
+
+<p>This can help reveal tabs, line endings, and other characters that are difficult to see.</p>
+
+<h3 id="hexdump"><code class="language-plaintext highlighter-rouge">hexdump</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">bsdextrautils</code> (verify package ownership on your installation)<br />
+<strong>Purpose:</strong> Display a file as hexadecimal and printable characters.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hexdump <span class="nt">-C</span> notes.txt
+</code></pre></div></div>
+
+<p>Useful for investigating invisible characters and binary file contents.</p>
+
+<h3 id="xxd"><code class="language-plaintext highlighter-rouge">xxd</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">xxd</code><br />
+<strong>Purpose:</strong> Display a hexadecimal dump of a file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xxd notes.txt
+xxd <span class="nt">-g</span> 1 notes.txt
+</code></pre></div></div>
+
+<p>The package is commonly named <code class="language-plaintext highlighter-rouge">xxd</code> on Debian. Check availability before using it.</p>
+
+<h3 id="base64"><code class="language-plaintext highlighter-rouge">base64</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Encode or decode data using Base64.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">base64 </span>image-data.bin
+<span class="nb">base64</span> <span class="nt">-d</span> encoded.txt
+</code></pre></div></div>
+
+<p>Base64 is an encoding, not encryption. It does not protect sensitive information.</p>
+
+<h3 id="rev"><code class="language-plaintext highlighter-rouge">rev</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">util-linux</code> (verify package ownership on your installation)<br />
+<strong>Purpose:</strong> Reverse the characters in each line.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rev words.txt
+</code></pre></div></div>
+
+<p>This reverses each line independently, rather than reversing the order of lines.</p>
+
+<hr />
+
+<h2 id="7-splitting-files">7. Splitting files</h2>
+
+<h3 id="split"><code class="language-plaintext highlighter-rouge">split</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Split a file into smaller pieces.</p>
+
+<p>Split into chunks of 1,000 lines:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">split</span> <span class="nt">-l</span> 1000 large.txt chunk-
+</code></pre></div></div>
+
+<p>Split into chunks of 10 megabytes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">split</span> <span class="nt">-b</span> 10M large.txt chunk-
+</code></pre></div></div>
+
+<p>The output files use names such as <code class="language-plaintext highlighter-rouge">chunk-aa</code>, <code class="language-plaintext highlighter-rouge">chunk-ab</code>, and so on.</p>
+
+<h3 id="csplit"><code class="language-plaintext highlighter-rouge">csplit</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Split a file at lines matching a pattern or at specified line numbers.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">csplit </span>document.txt <span class="s1">'/^Chapter 2/'</span> <span class="s1">'{*}'</span>
+</code></pre></div></div>
+
+<p>This is an introductory example; <code class="language-plaintext highlighter-rouge">csplit</code> patterns and repeat expressions have additional rules. Check <code class="language-plaintext highlighter-rouge">man csplit</code> before using it on important files.</p>
+
+<hr />
+
+<h2 id="8-editing-files-and-applying-changes">8. Editing files and applying changes</h2>
+
+<p>This section intentionally uses simple examples. Make a backup before changing important files, and check the command's manual if you are unsure about its behavior.</p>
+
+<h3 id="cp"><code class="language-plaintext highlighter-rouge">cp</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Copy a file, often to create a backup.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cp </span>notes.txt notes.txt.bak
+</code></pre></div></div>
+
+<h3 id="mv"><code class="language-plaintext highlighter-rouge">mv</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Move or rename a file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mv </span>draft.txt final.txt
+</code></pre></div></div>
+
+<p>If the destination exists, it may be overwritten. Use interactive mode to be prompted before overwriting:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mv</span> <span class="nt">-i</span> draft.txt final.txt
+</code></pre></div></div>
+
+<h3 id="touch"><code class="language-plaintext highlighter-rouge">touch</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Create an empty file if it does not exist, or update a file's timestamps.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">touch </span>new-notes.txt
+</code></pre></div></div>
+
+<p>If the file already exists, <code class="language-plaintext highlighter-rouge">touch</code> does not erase its contents.</p>
+
+<h3 id="patch"><code class="language-plaintext highlighter-rouge">patch</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">patch</code><br />
+<strong>Purpose:</strong> Apply changes described in a patch file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>patch &lt; changes.patch
+</code></pre></div></div>
+
+<p>A patch commonly contains changes created by <code class="language-plaintext highlighter-rouge">diff -u</code>. Apply patches in the correct directory and make sure the patch matches the version of the files you have. Back up important files first.</p>
+
+<h3 id="sponge"><code class="language-plaintext highlighter-rouge">sponge</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">moreutils</code><br />
+<strong>Purpose:</strong> Read all input before writing it to a destination file. This can avoid the common problem of truncating a file when a command reads from and writes to the same file.</p>
+
+<p>Example: sort a file and replace it with the sorted result:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sort </span>names.txt | sponge names.txt
+</code></pre></div></div>
+
+<p><strong>Availability:</strong> <code class="language-plaintext highlighter-rouge">sponge</code> is not part of GNU Coreutils and may need to be installed. It is provided by Debian's <code class="language-plaintext highlighter-rouge">moreutils</code> package.</p>
+
+<h3 id="install"><code class="language-plaintext highlighter-rouge">install</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">coreutils</code> (GNU Coreutils)<br />
+<strong>Purpose:</strong> Copy a file while setting permissions or creating destination directories.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">install</span> <span class="nt">-m</span> 644 notes.txt backup/notes.txt
+</code></pre></div></div>
+
+<p>The destination directory must exist for this example. Unlike the name might suggest, <code class="language-plaintext highlighter-rouge">install</code> is also a general-purpose file-copying utility; it is not only for installing software.</p>
+
+<h3 id="overwrite-and-append-redirection">Overwrite and append redirection</h3>
+
+<p>These are shell features rather than standalone commands, but they are important when working with text files.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>notes.txt <span class="o">&gt;</span> copy.txt
+<span class="nb">cat </span>more-notes.txt <span class="o">&gt;&gt;</span> copy.txt
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&gt;</code> creates or replaces the destination file.</li>
+  <li><code class="language-plaintext highlighter-rouge">&gt;&gt;</code> creates the file if needed and appends to it.</li>
+</ul>
+
+<p><strong>Warning:</strong> Do not redirect output to the same file a command is reading unless you know the operation is safe. Shell redirection can truncate the destination before the command begins reading it.</p>
+
+<hr />
+
+<h2 id="9-character-encoding-and-line-endings">9. Character encoding and line endings</h2>
+
+<h3 id="iconv"><code class="language-plaintext highlighter-rouge">iconv</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">libc-bin</code> (verify with <code class="language-plaintext highlighter-rouge">dpkg-query -S "$(command -v iconv)"</code>)<br />
+<strong>Purpose:</strong> Convert text between character encodings.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iconv <span class="nt">-f</span> ISO-8859-1 <span class="nt">-t</span> UTF-8 old.txt <span class="o">&gt;</span> new.txt
+</code></pre></div></div>
+
+<p>This reads text interpreted as ISO-8859-1 and writes UTF-8 output to a separate file. Confirm the input encoding first; guessing incorrectly can corrupt the resulting text.</p>
+
+<h3 id="dos2unix"><code class="language-plaintext highlighter-rouge">dos2unix</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">dos2unix</code><br />
+<strong>Purpose:</strong> Convert Windows-style CRLF line endings to Unix-style LF line endings.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dos2unix notes.txt
+</code></pre></div></div>
+
+<p>To keep the original file, make a copy first:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cp </span>notes.txt notes.txt.bak
+dos2unix notes.txt
+</code></pre></div></div>
+
+<h3 id="unix2dos"><code class="language-plaintext highlighter-rouge">unix2dos</code></h3>
+
+<p><strong>Package:</strong> <code class="language-plaintext highlighter-rouge">dos2unix</code><br />
+<strong>Purpose:</strong> Convert Unix-style LF line endings to Windows-style CRLF line endings.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unix2dos notes.txt
+</code></pre></div></div>
+
+<p>Both <code class="language-plaintext highlighter-rouge">dos2unix</code> and <code class="language-plaintext highlighter-rouge">unix2dos</code> are commonly supplied by the Debian <code class="language-plaintext highlighter-rouge">dos2unix</code> package.</p>
+
+<h3 id="check-line-endings">Check line endings</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file notes.txt
+<span class="nb">cat</span> <span class="nt">-A</span> notes.txt
+<span class="nb">od</span> <span class="nt">-c</span> notes.txt
+</code></pre></div></div>
+
+<p>Windows CRLF line endings contain a carriage return (<code class="language-plaintext highlighter-rouge">\r</code>) followed by a line feed (<code class="language-plaintext highlighter-rouge">\n</code>). Unix-style line endings normally use only a line feed (<code class="language-plaintext highlighter-rouge">\n</code>).</p>
+
+<hr />
+
+<h2 id="10-installing-missing-utilities">10. Installing missing utilities</h2>
+
+<p>Refresh package metadata before installing software:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+</code></pre></div></div>
+
+<p>Install one or more utilities by their Debian package names. Examples:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>moreutils
+<span class="nb">sudo </span>apt <span class="nb">install </span>dos2unix
+<span class="nb">sudo </span>apt <span class="nb">install </span>xxd
+</code></pre></div></div>
+
+<p>You may already have some of these packages installed. To check a package:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg-query <span class="nt">-W</span> moreutils
+</code></pre></div></div>
+
+<p>To check a command after installation:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command</span> <span class="nt">-v</span> sponge
+</code></pre></div></div>
+
+<p>Only install packages from repositories you trust. You do not need to install every utility in this guide; choose the ones that fit your workflow.</p>
+
+<hr />
+
+<h2 id="11-common-pitfalls-and-safe-habits">11. Common pitfalls and safe habits</h2>
+
+<ul>
+  <li><strong>Back up important files</strong> before applying patches or making changes.</li>
+  <li><strong>Understand overwrite versus append.</strong> <code class="language-plaintext highlighter-rouge">&gt;</code> replaces a file; <code class="language-plaintext highlighter-rouge">&gt;&gt;</code> appends to it.</li>
+  <li><strong>Avoid reading and overwriting the same file in one redirection.</strong> Use a temporary file or <code class="language-plaintext highlighter-rouge">sponge</code> where appropriate.</li>
+  <li><strong>Quote filenames containing spaces.</strong> For example: <code class="language-plaintext highlighter-rouge">cat "meeting notes.txt"</code>.</li>
+  <li><strong>Remember that <code class="language-plaintext highlighter-rouge">uniq</code> checks adjacent lines only.</strong> Sort first if you want to identify duplicates anywhere in a file.</li>
+  <li><strong>Be careful with CSV.</strong> <code class="language-plaintext highlighter-rouge">cut</code> and <code class="language-plaintext highlighter-rouge">column</code> do not fully parse CSV quoting rules.</li>
+  <li><strong>Check the locale when sorting.</strong> Results can differ between locales.</li>
+  <li><strong>Keep encodings in mind.</strong> UTF-8 characters may occupy multiple bytes, so byte counts and character counts can differ.</li>
+  <li><strong>Check line endings when files behave unexpectedly.</strong> Files edited on Windows may use CRLF endings.</li>
+  <li><strong>Test on sample data first.</strong> Small test files are a good way to understand a command before using it on important data.</li>
+  <li><strong>Read the manual when needed.</strong> <code class="language-plaintext highlighter-rouge">man command-name</code> opens the manual page if it is installed.</li>
+</ul>
+
+<hr />
+
+<h2 id="12-quick-command-index">12. Quick command index</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Command</th>
+      <th>Debian package</th>
+      <th>Main use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">base64</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Encode/decode Base64</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">cat</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Display or concatenate files</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">column</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bsdextrautils</code></td>
+      <td>Format text in columns</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">comm</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Compare sorted files</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">cp</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Copy files</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">csplit</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Split at patterns or line positions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">cut</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Select fields or character positions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">diff</code></td>
+      <td><code class="language-plaintext highlighter-rouge">diffutils</code></td>
+      <td>Compare text files</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">diff3</code></td>
+      <td><code class="language-plaintext highlighter-rouge">diffutils</code></td>
+      <td>Compare three file versions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">dos2unix</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dos2unix</code></td>
+      <td>Convert CRLF to LF</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">expand</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Convert tabs to spaces</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">file</code></td>
+      <td><code class="language-plaintext highlighter-rouge">file</code></td>
+      <td>Identify file type</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">fold</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Wrap long lines</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">fmt</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Reflow paragraphs</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">head</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Display the start of a file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">hexdump</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bsdextrautils</code></td>
+      <td>Show hexadecimal contents</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">iconv</code></td>
+      <td><code class="language-plaintext highlighter-rouge">libc-bin</code></td>
+      <td>Convert character encodings</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">install</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Copy files and set permissions</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">join</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Join sorted files by a field</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">less</code></td>
+      <td><code class="language-plaintext highlighter-rouge">less</code></td>
+      <td>Page through text</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mv</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Move or rename files</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nl</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Number lines</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">od</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Display character/byte representations</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">paste</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Combine corresponding lines</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">patch</code></td>
+      <td><code class="language-plaintext highlighter-rouge">patch</code></td>
+      <td>Apply a patch</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">pr</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Format for paginated printing</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">rev</code></td>
+      <td><code class="language-plaintext highlighter-rouge">util-linux</code></td>
+      <td>Reverse each line's characters</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">shuf</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Shuffle lines</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sort</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Sort lines</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">split</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Split files into pieces</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sponge</code></td>
+      <td><code class="language-plaintext highlighter-rouge">moreutils</code></td>
+      <td>Safely collect input before writing</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tac</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Reverse line order</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tail</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Display the end of a file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tee</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Write input to a file and the terminal</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">touch</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Create files/update timestamps</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tr</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Translate or delete characters</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">unexpand</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Convert spaces to tabs</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">unix2dos</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dos2unix</code></td>
+      <td>Convert LF to CRLF</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">uniq</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Handle adjacent duplicate lines</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">wc</code></td>
+      <td><code class="language-plaintext highlighter-rouge">coreutils</code></td>
+      <td>Count lines, words, bytes, or characters</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">xxd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">xxd</code></td>
+      <td>Hexadecimal dump</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For any command, verify availability with <code class="language-plaintext highlighter-rouge">command -v command-name</code> and check its package ownership with <code class="language-plaintext highlighter-rouge">dpkg-query -S "$(command -v command-name)"</code>.</p>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>

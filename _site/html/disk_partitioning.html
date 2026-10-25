@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Linux Disk, Partition, Filesystem, and Mounting Cheat Sheet</title>
+
+  <!-- Local stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <!-- Google Fonts: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet"
+  >
+</head>
+
+<body>
+  <div class="page-layout">
+
+    <!-- Navigation sidebar -->
+    <aside class="toc-sidebar" aria-label="Table of contents">
+
+      <!-- Search bar -->
+      <div class="toc-search">
+        <label for="toc-search-input">Search this page</label>
+        <input
+          id="toc-search-input"
+          type="search"
+          placeholder="Search headings..."
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Sidebar heading -->
+      <div class="toc-sidebar__heading">
+        <span class="toc-sidebar__short">TOC</span>
+        <span class="toc-sidebar__full">On this page</span>
+      </div>
+
+      <!-- Generated table of contents -->
+      <ul>
+<li><a href="#linux-disk-partition-filesystem-and-mounting-cheat-sheet" id="toc-linux-disk-partition-filesystem-and-mounting-cheat-sheet">Linux Disk, Partition, Filesystem, and Mounting Cheat Sheet</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of contents</a></li>
+<li><a href="#1-the-storage-layers" id="toc-1-the-storage-layers">1. The storage layers</a></li>
+<li><a href="#2-identify-disks-and-filesystems" id="toc-2-identify-disks-and-filesystems">2. Identify disks and filesystems</a>
+<ul>
+<li><a href="#show-block-devices-in-a-tree" id="toc-show-block-devices-in-a-tree">Show block devices in a tree</a></li>
+<li><a href="#show-filesystem-space-usage" id="toc-show-filesystem-space-usage">Show filesystem space usage</a></li>
+<li><a href="#show-filesystem-signatures-and-uuids" id="toc-show-filesystem-signatures-and-uuids">Show filesystem signatures and UUIDs</a></li>
+<li><a href="#show-partition-tables" id="toc-show-partition-tables">Show partition tables</a></li>
+<li><a href="#show-kernel-messages-about-storage" id="toc-show-kernel-messages-about-storage">Show kernel messages about storage</a></li>
+</ul>
+</li>
+<li><a href="#3-understand-device-names" id="toc-3-understand-device-names">3. Understand device names</a></li>
+<li><a href="#4-partitioning-tools" id="toc-4-partitioning-tools">4. Partitioning tools</a></li>
+<li><a href="#5-create-and-manage-partitions-with-fdisk" id="toc-5-create-and-manage-partitions-with-fdisk">5. Create and manage partitions with fdisk</a></li>
+<li><a href="#6-create-and-manage-partitions-with-parted" id="toc-6-create-and-manage-partitions-with-parted">6. Create and manage partitions with parted</a></li>
+<li><a href="#7-create-filesystems" id="toc-7-create-filesystems">7. Create filesystems</a>
+<ul>
+<li><a href="#ext4-common-linux-choice" id="toc-ext4-common-linux-choice">ext4 (common Linux choice)</a></li>
+<li><a href="#xfs" id="toc-xfs">XFS</a></li>
+<li><a href="#fat32-vfat" id="toc-fat32-vfat">FAT32 / vfat</a></li>
+<li><a href="#exfat" id="toc-exfat">exFAT</a></li>
+<li><a href="#ntfs" id="toc-ntfs">NTFS</a></li>
+<li><a href="#check-the-result" id="toc-check-the-result">Check the result</a></li>
+</ul>
+</li>
+<li><a href="#8-check-and-repair-filesystems" id="toc-8-check-and-repair-filesystems">8. Check and repair filesystems</a>
+<ul>
+<li><a href="#ext2ext3ext4" id="toc-ext2ext3ext4">ext2/ext3/ext4</a></li>
+<li><a href="#xfs-1" id="toc-xfs-1">XFS</a></li>
+<li><a href="#fat-filesystems" id="toc-fat-filesystems">FAT filesystems</a></li>
+</ul>
+</li>
+<li><a href="#9-mount-and-unmount-drives-temporarily" id="toc-9-mount-and-unmount-drives-temporarily">9. Mount and unmount drives temporarily</a>
+<ul>
+<li><a href="#create-a-mount-point" id="toc-create-a-mount-point">Create a mount point</a></li>
+<li><a href="#mount-a-partition" id="toc-mount-a-partition">Mount a partition</a></li>
+<li><a href="#confirm-the-mount" id="toc-confirm-the-mount">Confirm the mount</a></li>
+<li><a href="#browse-and-copy-files" id="toc-browse-and-copy-files">Browse and copy files</a></li>
+<li><a href="#unmount-it" id="toc-unmount-it">Unmount it</a></li>
+</ul>
+</li>
+<li><a href="#10-mount-by-uuid-label-or-device-path" id="toc-10-mount-by-uuid-label-or-device-path">10. Mount by UUID, label, or device path</a>
+<ul>
+<li><a href="#device-path" id="toc-device-path">Device path</a></li>
+<li><a href="#uuid" id="toc-uuid">UUID</a></li>
+<li><a href="#filesystem-label" id="toc-filesystem-label">Filesystem label</a></li>
+</ul>
+</li>
+<li><a href="#11-configure-permanent-mounts-with-etcfstab" id="toc-11-configure-permanent-mounts-with-etcfstab">11. Configure permanent mounts with /etc/fstab</a>
+<ul>
+<li><a href="#step-1-identify-the-filesystem" id="toc-step-1-identify-the-filesystem">Step 1: identify the filesystem</a></li>
+<li><a href="#step-2-create-a-mount-point" id="toc-step-2-create-a-mount-point">Step 2: create a mount point</a></li>
+<li><a href="#step-3-back-up-fstab" id="toc-step-3-back-up-fstab">Step 3: back up fstab</a></li>
+<li><a href="#step-4-add-an-entry" id="toc-step-4-add-an-entry">Step 4: add an entry</a></li>
+<li><a href="#step-5-test-before-rebooting" id="toc-step-5-test-before-rebooting">Step 5: test before rebooting</a></li>
+<li><a href="#common-fstab-options" id="toc-common-fstab-options">Common fstab options</a></li>
+</ul>
+</li>
+<li><a href="#12-permanent-mounting-methods-and-when-to-use-them" id="toc-12-permanent-mounting-methods-and-when-to-use-them">12. Permanent mounting methods and when to use them</a>
+<ul>
+<li><a href="#method-a-etcfstab-for-a-fixed-internal-drive" id="toc-method-a-etcfstab-for-a-fixed-internal-drive">Method A: <code class="language-plaintext highlighter-rouge">/etc/fstab</code> for a fixed internal drive</a></li>
+<li><a href="#method-b-etcfstab-with-nofail-for-optional-drives" id="toc-method-b-etcfstab-with-nofail-for-optional-drives">Method B: <code class="language-plaintext highlighter-rouge">/etc/fstab</code> with <code class="language-plaintext highlighter-rouge">nofail</code> for optional drives</a></li>
+<li><a href="#method-c-systemd-automount" id="toc-method-c-systemd-automount">Method C: systemd automount</a></li>
+<li><a href="#method-d-desktop-automount-for-removable-media" id="toc-method-d-desktop-automount-for-removable-media">Method D: Desktop automount for removable media</a></li>
+<li><a href="#method-e-network-storage-with-etcfstab" id="toc-method-e-network-storage-with-etcfstab">Method E: Network storage with <code class="language-plaintext highlighter-rouge">/etc/fstab</code></a></li>
+<li><a href="#which-method-should-i-choose" id="toc-which-method-should-i-choose">Which method should I choose?</a></li>
+</ul>
+</li>
+<li><a href="#13-ownership-and-permissions-on-mounted-filesystems" id="toc-13-ownership-and-permissions-on-mounted-filesystems">13. Ownership and permissions on mounted filesystems</a>
+<ul>
+<li><a href="#ext4-and-other-unix-style-filesystems" id="toc-ext4-and-other-unix-style-filesystems">ext4 and other Unix-style filesystems</a></li>
+<li><a href="#fat-and-exfat" id="toc-fat-and-exfat">FAT and exFAT</a></li>
+<li><a href="#ntfs-1" id="toc-ntfs-1">NTFS</a></li>
+</ul>
+</li>
+<li><a href="#14-swap-space" id="toc-14-swap-space">14. Swap space</a>
+<ul>
+<li><a href="#show-active-swap" id="toc-show-active-swap">Show active swap</a></li>
+<li><a href="#enable-an-existing-swap-partition" id="toc-enable-an-existing-swap-partition">Enable an existing swap partition</a></li>
+</ul>
+</li>
+<li><a href="#15-lvm-raid-and-encrypted-storage-overview" id="toc-15-lvm-raid-and-encrypted-storage-overview">15. LVM, RAID, and encrypted storage overview</a>
+<ul>
+<li><a href="#lvm-logical-volume-manager" id="toc-lvm-logical-volume-manager">LVM (Logical Volume Manager)</a></li>
+<li><a href="#software-raid" id="toc-software-raid">Software RAID</a></li>
+<li><a href="#luks-encryption" id="toc-luks-encryption">LUKS encryption</a></li>
+</ul>
+</li>
+<li><a href="#16-troubleshooting" id="toc-16-troubleshooting">16. Troubleshooting</a>
+<ul>
+<li><a href="#mount-point-does-not-exist" id="toc-mount-point-does-not-exist">“mount point does not exist”</a></li>
+<li><a href="#wrong-fs-type-bad-superblock-or-unknown-filesystem" id="toc-wrong-fs-type-bad-superblock-or-unknown-filesystem">“wrong fs type”, “bad superblock”, or unknown filesystem</a></li>
+<li><a href="#special-device-does-not-exist" id="toc-special-device-does-not-exist">“special device does not exist”</a></li>
+<li><a href="#target-is-busy-when-unmounting" id="toc-target-is-busy-when-unmounting">“target is busy” when unmounting</a></li>
+<li><a href="#a-permanent-mount-fails-at-boot" id="toc-a-permanent-mount-fails-at-boot">A permanent mount fails at boot</a></li>
+<li><a href="#disk-or-filesystem-io-errors" id="toc-disk-or-filesystem-io-errors">Disk or filesystem I/O errors</a></li>
+</ul>
+</li>
+<li><a href="#17-safe-workflow-examples" id="toc-17-safe-workflow-examples">17. Safe workflow examples</a>
+<ul>
+<li><a href="#example-a-mount-an-existing-linux-data-partition-temporarily" id="toc-example-a-mount-an-existing-linux-data-partition-temporarily">Example A: Mount an existing Linux data partition temporarily</a></li>
+<li><a href="#example-b-prepare-a-new-empty-disk-for-data" id="toc-example-b-prepare-a-new-empty-disk-for-data">Example B: Prepare a new empty disk for data</a></li>
+<li><a href="#example-c-make-a-data-disk-available-to-a-service" id="toc-example-c-make-a-data-disk-available-to-a-service">Example C: Make a data disk available to a service</a></li>
+</ul>
+</li>
+<li><a href="#18-quick-reference" id="toc-18-quick-reference">18. Quick reference</a></li>
+<li><a href="#further-reading" id="toc-further-reading">Further reading</a></li>
+<li><a href="#19-disk-imaging-and-copying-with-dd" id="toc-19-disk-imaging-and-copying-with-dd">19. Disk imaging and copying with <code class="language-plaintext highlighter-rouge">dd</code></a>
+<ul>
+<li><a href="#basic-syntax" id="toc-basic-syntax">Basic syntax</a></li>
+<li><a href="#create-an-image-file-from-a-partition" id="toc-create-an-image-file-from-a-partition">Create an image file from a partition</a></li>
+<li><a href="#image-an-entire-disk" id="toc-image-an-entire-disk">Image an entire disk</a></li>
+<li><a href="#restore-an-image-to-a-disk" id="toc-restore-an-image-to-a-disk">Restore an image to a disk</a></li>
+<li><a href="#copy-an-iso-to-a-usb-drive" id="toc-copy-an-iso-to-a-usb-drive">Copy an ISO to a USB drive</a></li>
+<li><a href="#verify-an-image-with-a-hash" id="toc-verify-an-image-with-a-hash">Verify an image with a hash</a></li>
+<li><a href="#dd-limitations-and-safer-alternatives" id="toc-dd-limitations-and-safer-alternatives"><code class="language-plaintext highlighter-rouge">dd</code> limitations and safer alternatives</a></li>
+</ul>
+</li>
+<li><a href="#20-digital-forensics-and-recovery-tools" id="toc-20-digital-forensics-and-recovery-tools">20. Digital forensics and recovery tools</a>
+<ul>
+<li><a href="#install-commonly-used-tools" id="toc-install-commonly-used-tools">Install commonly used tools</a></li>
+<li><a href="#gnu-ddrescue-recover-data-from-a-failing-disk" id="toc-gnu-ddrescue-recover-data-from-a-failing-disk">GNU ddrescue: recover data from a failing disk</a></li>
+<li><a href="#testdisk-partition-and-filesystem-recovery" id="toc-testdisk-partition-and-filesystem-recovery">TestDisk: partition and filesystem recovery</a></li>
+<li><a href="#photorec-recover-files-by-file-signatures" id="toc-photorec-recover-files-by-file-signatures">PhotoRec: recover files by file signatures</a></li>
+<li><a href="#the-sleuth-kit-inspect-filesystem-artifacts" id="toc-the-sleuth-kit-inspect-filesystem-artifacts">The Sleuth Kit: inspect filesystem artifacts</a></li>
+<li><a href="#smart-health-data-smartmontools" id="toc-smart-health-data-smartmontools">SMART health data: smartmontools</a></li>
+<li><a href="#identify-file-types-and-calculate-hashes" id="toc-identify-file-types-and-calculate-hashes">Identify file types and calculate hashes</a></li>
+<li><a href="#mount-an-image-read-only" id="toc-mount-an-image-read-only">Mount an image read-only</a></li>
+<li><a href="#forensic-image-formats" id="toc-forensic-image-formats">Forensic image formats</a></li>
+</ul>
+</li>
+<li><a href="#21-evidence-handling-workflow" id="toc-21-evidence-handling-workflow">21. Evidence-handling workflow</a>
+<ul>
+<li><a href="#quick-safety-reminders-for-forensic-work" id="toc-quick-safety-reminders-for-forensic-work">Quick safety reminders for forensic work</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+    </aside>
+
+    <!-- Main document content -->
+    <main class="document-content">
+      <h1 id="linux-disk-partition-filesystem-and-mounting-cheat-sheet">Linux Disk, Partition, Filesystem, and Mounting Cheat Sheet</h1>
+
+<p>A practical command reference for managing disks on Debian 13 and similar Linux systems. It covers identifying drives, creating partitions, making filesystems, mounting and unmounting storage, configuring permanent mounts, and troubleshooting.</p>
+
+<blockquote>
+  <p><strong>Warning: destructive operations.</strong> Partitioning, formatting, and some repair commands can destroy data. Identify the correct device carefully before running commands. Examples such as <code class="language-plaintext highlighter-rouge">/dev/sdb</code> and <code class="language-plaintext highlighter-rouge">/dev/sdb1</code> are placeholders; your actual device names may differ. Back up important data first.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#1-the-storage-layers">1. The storage layers</a></li>
+  <li><a href="#2-identify-disks-and-filesystems">2. Identify disks and filesystems</a></li>
+  <li><a href="#3-understand-device-names">3. Understand device names</a></li>
+  <li><a href="#4-partitioning-tools">4. Partitioning tools</a></li>
+  <li><a href="#5-create-and-manage-partitions-with-fdisk">5. Create and manage partitions with fdisk</a></li>
+  <li><a href="#6-create-and-manage-partitions-with-parted">6. Create and manage partitions with parted</a></li>
+  <li><a href="#7-create-filesystems">7. Create filesystems</a></li>
+  <li><a href="#8-check-and-repair-filesystems">8. Check and repair filesystems</a></li>
+  <li><a href="#9-mount-and-unmount-drives-temporarily">9. Mount and unmount drives temporarily</a></li>
+  <li><a href="#10-mount-by-uuid-label-or-device-path">10. Mount by UUID, label, or device path</a></li>
+  <li><a href="#11-configure-permanent-mounts-with-etcfstab">11. Configure permanent mounts with /etc/fstab</a></li>
+  <li><a href="#12-permanent-mounting-methods-and-when-to-use-them">12. Permanent mounting methods and when to use them</a></li>
+  <li><a href="#13-ownership-and-permissions-on-mounted-filesystems">13. Ownership and permissions on mounted filesystems</a></li>
+  <li><a href="#14-swap-space">14. Swap space</a></li>
+  <li><a href="#15-lvm-raid-and-encrypted-storage-overview">15. LVM, RAID, and encrypted storage overview</a></li>
+  <li><a href="#16-troubleshooting">16. Troubleshooting</a></li>
+  <li><a href="#17-safe-workflow-examples">17. Safe workflow examples</a></li>
+  <li><a href="#18-quick-reference">18. Quick reference</a></li>
+  <li><a href="#19-disk-imaging-and-copying-with-dd">19. Disk imaging and copying with dd</a></li>
+  <li><a href="#20-digital-forensics-and-recovery-tools">20. Digital forensics and recovery tools</a></li>
+  <li><a href="#21-evidence-handling-workflow">21. Evidence-handling workflow</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-the-storage-layers">1. The storage layers</h2>
+
+<p>A typical Linux data drive uses several layers:</p>
+
+<ol>
+  <li><strong>Physical device</strong>: the SSD, HDD, USB drive, or virtual disk, such as <code class="language-plaintext highlighter-rouge">/dev/sdb</code>.</li>
+  <li><strong>Partition table</strong>: describes the partitions on a drive. Common formats are GPT and MBR/DOS.</li>
+  <li><strong>Partition</strong>: a section of a drive, such as <code class="language-plaintext highlighter-rouge">/dev/sdb1</code>.</li>
+  <li><strong>Filesystem</strong>: organizes files and directories within a partition, such as ext4, XFS, or FAT32.</li>
+  <li><strong>Mount point</strong>: a directory where the filesystem becomes accessible, such as <code class="language-plaintext highlighter-rouge">/mnt/data</code>.</li>
+</ol>
+
+<p>For example, a drive might be <code class="language-plaintext highlighter-rouge">/dev/sdb</code>, its first partition <code class="language-plaintext highlighter-rouge">/dev/sdb1</code>, formatted as ext4, and mounted at <code class="language-plaintext highlighter-rouge">/mnt/data</code>.</p>
+
+<p><strong>Important:</strong> A partition is not the same as a filesystem, and a filesystem is not the same as a mount point. Creating a partition does not automatically create a filesystem or mount it.</p>
+
+<h2 id="2-identify-disks-and-filesystems">2. Identify disks and filesystems</h2>
+
+<p>Start by inspecting the system before changing anything.</p>
+
+<h3 id="show-block-devices-in-a-tree">Show block devices in a tree</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk
+lsblk <span class="nt">-f</span>
+lsblk <span class="nt">-o</span> NAME,SIZE,TYPE,FSTYPE,LABEL,UUID,MOUNTPOINTS
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">lsblk</code> lists disks, partitions, and other block devices.</li>
+  <li><code class="language-plaintext highlighter-rouge">-f</code> adds filesystem type, label, UUID, and mount information.</li>
+  <li><code class="language-plaintext highlighter-rouge">-o</code> selects the columns to display.</li>
+  <li><code class="language-plaintext highlighter-rouge">MOUNTPOINTS</code> can show more than one mount point when applicable.</li>
+</ul>
+
+<h3 id="show-filesystem-space-usage">Show filesystem space usage</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">df</span> <span class="nt">-h</span>
+<span class="nb">df</span> <span class="nt">-hT</span>
+<span class="nb">df</span> <span class="nt">-h</span> /mnt/data
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">df</code> reports space usage for mounted filesystems. <code class="language-plaintext highlighter-rouge">-h</code> uses human-readable units, and <code class="language-plaintext highlighter-rouge">-T</code> shows filesystem types. It does not list every unmounted partition.</p>
+
+<h3 id="show-filesystem-signatures-and-uuids">Show filesystem signatures and UUIDs</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>blkid
+<span class="nb">sudo </span>blkid /dev/sdb1
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">blkid</code> reports recognized filesystem metadata, including UUIDs and labels.</p>
+
+<h3 id="show-partition-tables">Show partition tables</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>fdisk <span class="nt">-l</span>
+<span class="nb">sudo </span>parted <span class="nt">-l</span>
+</code></pre></div></div>
+
+<p>These commands list partition layouts. They are useful for inspection without entering an interactive partition editor.</p>
+
+<h3 id="show-kernel-messages-about-storage">Show kernel messages about storage</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dmesg <span class="nt">--level</span><span class="o">=</span>err,warn
+journalctl <span class="nt">-k</span> <span class="nt">--since</span> <span class="s2">"today"</span>
+</code></pre></div></div>
+
+<p>Use these to look for device, controller, filesystem, or I/O errors.</p>
+
+<h2 id="3-understand-device-names">3. Understand device names</h2>
+
+<p>Common examples:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Device</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/dev/sda</code></td>
+      <td>Often the first SATA/SCSI-style disk</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/dev/sda1</code></td>
+      <td>First partition on <code class="language-plaintext highlighter-rouge">/dev/sda</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/dev/nvme0n1</code></td>
+      <td>An NVMe disk</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/dev/nvme0n1p1</code></td>
+      <td>First partition on that NVMe disk</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/dev/mmcblk0</code></td>
+      <td>An eMMC or SD-style device</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/dev/mmcblk0p1</code></td>
+      <td>First partition on that device</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/dev/sr0</code></td>
+      <td>Often an optical drive</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/dev/mapper/...</code></td>
+      <td>A device exposed by device-mapper, often LVM or encryption</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Device names can change depending on hardware and boot order. For permanent configuration, prefer a filesystem UUID or label rather than assuming a drive will always be <code class="language-plaintext highlighter-rouge">/dev/sdb</code>.</p>
+
+<h2 id="4-partitioning-tools">4. Partitioning tools</h2>
+
+<p>Common tools include:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">fdisk</code>: interactive partition editor, commonly used for MBR and GPT partition tables.</li>
+  <li><code class="language-plaintext highlighter-rouge">parted</code>: supports GPT and MBR and can work with disks larger than 2 TiB.</li>
+  <li><code class="language-plaintext highlighter-rouge">gdisk</code>: interactive GPT-focused partition editor.</li>
+  <li><code class="language-plaintext highlighter-rouge">cfdisk</code>: menu-based partition editor, useful for beginners.</li>
+  <li><code class="language-plaintext highlighter-rouge">lsblk</code>, <code class="language-plaintext highlighter-rouge">blkid</code>, <code class="language-plaintext highlighter-rouge">fdisk -l</code>, <code class="language-plaintext highlighter-rouge">parted -l</code>: inspect devices and layouts.</li>
+</ul>
+
+<p>Install tools if needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>fdisk parted gdisk
+</code></pre></div></div>
+
+<p>Many minimal Debian installations already include <code class="language-plaintext highlighter-rouge">fdisk</code> and related utilities.</p>
+
+<p><strong>Before partitioning:</strong> confirm the target with <code class="language-plaintext highlighter-rouge">lsblk -f</code> and <code class="language-plaintext highlighter-rouge">sudo fdisk -l</code>. The examples below assume a new, empty disk at <code class="language-plaintext highlighter-rouge">/dev/sdb</code>. Do not copy them blindly onto a disk containing data.</p>
+
+<h2 id="5-create-and-manage-partitions-with-fdisk">5. Create and manage partitions with fdisk</h2>
+
+<p>Launch <code class="language-plaintext highlighter-rouge">fdisk</code> for a disk:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>fdisk /dev/sdb
+</code></pre></div></div>
+
+<p>Inside the interactive prompt, common commands are:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">m</code></td>
+      <td>Show help</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">p</code></td>
+      <td>Print the current partition table</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">g</code></td>
+      <td>Create a new GPT partition table</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">o</code></td>
+      <td>Create a new DOS/MBR partition table</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">n</code></td>
+      <td>Create a new partition</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">d</code></td>
+      <td>Delete a partition</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">t</code></td>
+      <td>Change a partition type</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">w</code></td>
+      <td>Write changes to disk and exit</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">q</code></td>
+      <td>Quit without saving pending changes</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A typical workflow for a <strong>new, empty disk</strong> is:</p>
+
+<ol>
+  <li>Run <code class="language-plaintext highlighter-rouge">sudo fdisk /dev/sdb</code>.</li>
+  <li>Type <code class="language-plaintext highlighter-rouge">g</code> to create a GPT partition table.</li>
+  <li>Type <code class="language-plaintext highlighter-rouge">n</code> to create a partition. Accept defaults to use the available space if that is what you want.</li>
+  <li>Type <code class="language-plaintext highlighter-rouge">p</code> to review the proposed layout.</li>
+  <li>Type <code class="language-plaintext highlighter-rouge">w</code> to write changes and exit.</li>
+</ol>
+
+<p>Creating a new partition table overwrites the old partition-table information and can make existing data inaccessible. Do not use <code class="language-plaintext highlighter-rouge">g</code> or <code class="language-plaintext highlighter-rouge">o</code> on a disk with data you need to preserve.</p>
+
+<p>After writing changes, inspect the result:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk /dev/sdb
+<span class="nb">sudo </span>fdisk <span class="nt">-l</span> /dev/sdb
+</code></pre></div></div>
+
+<p>If the kernel has not picked up the new partition table, you may need to ask it to reread the table or disconnect and reconnect a removable drive. Do not force a reread while partitions on that disk are in active use.</p>
+
+<h2 id="6-create-and-manage-partitions-with-parted">6. Create and manage partitions with parted</h2>
+
+<p>Print the partition table:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>parted /dev/sdb print
+</code></pre></div></div>
+
+<p>For a <strong>new, empty disk</strong>, an example GPT setup using most of the disk is:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>parted /dev/sdb
+</code></pre></div></div>
+
+<p>At the <code class="language-plaintext highlighter-rouge">parted</code> prompt:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mklabel gpt
+mkpart primary ext4 1MiB 100%
+print
+quit
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">mklabel gpt</code> creates a new partition table and destroys the old partition-table layout. <code class="language-plaintext highlighter-rouge">mkpart</code> creates a partition entry but does <strong>not</strong> format it as ext4, despite the <code class="language-plaintext highlighter-rouge">ext4</code> hint in the command.</p>
+
+<p>Check the resulting partition name:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk
+</code></pre></div></div>
+
+<p>Depending on the device, the new partition might be <code class="language-plaintext highlighter-rouge">/dev/sdb1</code> or <code class="language-plaintext highlighter-rouge">/dev/nvme0n1p1</code>.</p>
+
+<p>Other useful commands include:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>parted /dev/sdb print free
+<span class="nb">sudo </span>parted /dev/sdb unit GiB print
+</code></pre></div></div>
+
+<p>These display the partition table, unallocated space, or sizes in GiB. Use the interactive help command <code class="language-plaintext highlighter-rouge">help</code> within <code class="language-plaintext highlighter-rouge">parted</code> for its supported commands.</p>
+
+<h2 id="7-create-filesystems">7. Create filesystems</h2>
+
+<p><strong>Formatting creates a filesystem and normally destroys the existing filesystem's data.</strong> Double-check the partition name.</p>
+
+<h3 id="ext4-common-linux-choice">ext4 (common Linux choice)</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mkfs.ext4 /dev/sdb1
+</code></pre></div></div>
+
+<h3 id="xfs">XFS</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mkfs.xfs /dev/sdb1
+</code></pre></div></div>
+
+<p>XFS is common for large data volumes and server workloads. Do not run <code class="language-plaintext highlighter-rouge">mkfs.xfs</code> on a partition containing data you need.</p>
+
+<h3 id="fat32-vfat">FAT32 / vfat</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mkfs.fat <span class="nt">-F</span> 32 /dev/sdb1
+</code></pre></div></div>
+
+<p>FAT32 is widely compatible with devices but has limitations, including a maximum individual file size of 4 GiB.</p>
+
+<h3 id="exfat">exFAT</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mkfs.exfat /dev/sdb1
+</code></pre></div></div>
+
+<p>Install the formatter if necessary:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>exfatprogs
+</code></pre></div></div>
+
+<p>exFAT is useful for removable drives shared between Linux, Windows, and macOS.</p>
+
+<h3 id="ntfs">NTFS</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mkfs.ntfs <span class="nt">-f</span> /dev/sdb1
+</code></pre></div></div>
+
+<p>Install NTFS tools if necessary:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>ntfs-3g
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">mkfs.ntfs</code> only when creating a new NTFS filesystem. For a Windows data drive, ensure Windows has shut down cleanly and that BitLocker or other encryption requirements are understood before accessing it.</p>
+
+<h3 id="check-the-result">Check the result</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-f</span>
+<span class="nb">sudo </span>blkid /dev/sdb1
+</code></pre></div></div>
+
+<h2 id="8-check-and-repair-filesystems">8. Check and repair filesystems</h2>
+
+<p>Filesystem-check tools depend on the filesystem type. <strong>Unmount the filesystem before running a repair or check that requires exclusive access.</strong> Never run a repair command on a mounted filesystem unless the tool's documentation explicitly supports that operation.</p>
+
+<h3 id="ext2ext3ext4">ext2/ext3/ext4</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>umount /dev/sdb1
+<span class="nb">sudo </span>e2fsck <span class="nt">-f</span> /dev/sdb1
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">e2fsck</code> checks ext-family filesystems. Review proposed repairs carefully; if the data is valuable, make a backup or image first.</p>
+
+<h3 id="xfs-1">XFS</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>umount /dev/sdb1
+<span class="nb">sudo </span>xfs_repair <span class="nt">-n</span> /dev/sdb1
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-n</code> performs a no-modify check. If repair is needed, consult <code class="language-plaintext highlighter-rouge">man xfs_repair</code> before proceeding. Do not run <code class="language-plaintext highlighter-rouge">xfs_repair</code> on a mounted filesystem.</p>
+
+<h3 id="fat-filesystems">FAT filesystems</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>umount /dev/sdb1
+<span class="nb">sudo </span>fsck.fat <span class="nt">-n</span> /dev/sdb1
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">-n</code> option checks without making changes. Tool options vary by filesystem; read the relevant manual page before repair.</p>
+
+<h2 id="9-mount-and-unmount-drives-temporarily">9. Mount and unmount drives temporarily</h2>
+
+<p>A mount point is an existing directory where a filesystem is made accessible.</p>
+
+<h3 id="create-a-mount-point">Create a mount point</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /mnt/data
+</code></pre></div></div>
+
+<h3 id="mount-a-partition">Mount a partition</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mount /dev/sdb1 /mnt/data
+</code></pre></div></div>
+
+<p>For a known filesystem type, you can specify it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mount <span class="nt">-t</span> ext4 /dev/sdb1 /mnt/data
+</code></pre></div></div>
+
+<p>Normally, <code class="language-plaintext highlighter-rouge">mount</code> detects the filesystem type automatically.</p>
+
+<h3 id="confirm-the-mount">Confirm the mount</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>findmnt /mnt/data
+lsblk <span class="nt">-f</span>
+<span class="nb">df</span> <span class="nt">-hT</span> /mnt/data
+</code></pre></div></div>
+
+<h3 id="browse-and-copy-files">Browse and copy files</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> <span class="nt">-la</span> /mnt/data
+<span class="nb">sudo cp </span>example.txt /mnt/data/
+</code></pre></div></div>
+
+<p>A filesystem mounted at <code class="language-plaintext highlighter-rouge">/mnt/data</code> hides any previous contents of that directory until it is unmounted. Use a dedicated, empty mount-point directory.</p>
+
+<h3 id="unmount-it">Unmount it</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>umount /mnt/data
+</code></pre></div></div>
+
+<p>You can also unmount by device:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>umount /dev/sdb1
+</code></pre></div></div>
+
+<p>The command is <code class="language-plaintext highlighter-rouge">umount</code>, not <code class="language-plaintext highlighter-rouge">unmount</code>.</p>
+
+<p>If the filesystem is busy, find processes using it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>fuser <span class="nt">-vm</span> /mnt/data
+<span class="nb">sudo </span>lsof +f <span class="nt">--</span> /mnt/data
+</code></pre></div></div>
+
+<p>Close shells whose current directory is inside the mount, stop applications using files there, and retry. Avoid lazy or forced unmounts as a routine fix; they can conceal the fact that a process still depends on the filesystem.</p>
+
+<h2 id="10-mount-by-uuid-label-or-device-path">10. Mount by UUID, label, or device path</h2>
+
+<p>Linux can identify a filesystem in several ways.</p>
+
+<h3 id="device-path">Device path</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mount /dev/sdb1 /mnt/data
+</code></pre></div></div>
+
+<p>Simple, but names like <code class="language-plaintext highlighter-rouge">/dev/sdb1</code> may change after hardware or boot-order changes.</p>
+
+<h3 id="uuid">UUID</h3>
+
+<p>Get the UUID:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>blkid /dev/sdb1
+</code></pre></div></div>
+
+<p>Then mount using it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mount <span class="nv">UUID</span><span class="o">=</span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx /mnt/data
+</code></pre></div></div>
+
+<p>Replace the example UUID with the actual one. UUIDs are usually the best default for permanent local-disk mounts.</p>
+
+<h3 id="filesystem-label">Filesystem label</h3>
+
+<p>Set a label when creating an ext4 filesystem:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mkfs.ext4 <span class="nt">-L</span> DATA /dev/sdb1
+</code></pre></div></div>
+
+<p>Or change an existing ext2/3/4 label (without reformatting):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>e2label /dev/sdb1 DATA
+</code></pre></div></div>
+
+<p>Mount by label:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mount <span class="nv">LABEL</span><span class="o">=</span>DATA /mnt/data
+</code></pre></div></div>
+
+<p>Labels are human-readable, but labels must be unique if multiple connected filesystems use the same label.</p>
+
+<h2 id="11-configure-permanent-mounts-with-etcfstab">11. Configure permanent mounts with /etc/fstab</h2>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/fstab</code> is the standard configuration file for filesystems that should be mounted automatically, usually at boot. It can also define swap space.</p>
+
+<h3 id="step-1-identify-the-filesystem">Step 1: identify the filesystem</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-f</span>
+<span class="nb">sudo </span>blkid
+</code></pre></div></div>
+
+<p>Record the partition's UUID and filesystem type. Make sure it is the intended data partition, not your root or EFI system partition.</p>
+
+<h3 id="step-2-create-a-mount-point">Step 2: create a mount point</h3>
+
+<p>For example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /mnt/data
+</code></pre></div></div>
+
+<p>Other common choices include <code class="language-plaintext highlighter-rouge">/srv/data</code> for server data or a directory under <code class="language-plaintext highlighter-rouge">/media</code> for removable media. Choose a path that fits your use.</p>
+
+<h3 id="step-3-back-up-fstab">Step 3: back up fstab</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo cp</span> <span class="nt">-a</span> /etc/fstab /etc/fstab.backup
+<span class="nb">sudo </span>vim /etc/fstab
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">vim</code> or your preferred editor with root privileges. Do not delete existing system entries.</p>
+
+<h3 id="step-4-add-an-entry">Step 4: add an entry</h3>
+
+<p>A typical ext4 data-disk entry looks like this:</p>
+
+<pre><code class="language-fstab">UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  /mnt/data  ext4  defaults  0  2
+</code></pre>
+
+<p>Replace the UUID with the real value.</p>
+
+<p>The six fields are:</p>
+
+<ol>
+  <li><strong>Device</strong>: UUID, label, or device path.</li>
+  <li><strong>Mount point</strong>: directory where the filesystem will appear.</li>
+  <li><strong>Filesystem type</strong>: for example, <code class="language-plaintext highlighter-rouge">ext4</code>, <code class="language-plaintext highlighter-rouge">xfs</code>, <code class="language-plaintext highlighter-rouge">exfat</code>, or <code class="language-plaintext highlighter-rouge">ntfs</code>.</li>
+  <li><strong>Options</strong>: comma-separated mount options.</li>
+  <li><strong>Dump field</strong>: normally <code class="language-plaintext highlighter-rouge">0</code>.</li>
+  <li><strong>Pass field</strong>: filesystem-check order at boot. <code class="language-plaintext highlighter-rouge">0</code> disables the traditional fsck pass; <code class="language-plaintext highlighter-rouge">1</code> is normally reserved for the root filesystem; <code class="language-plaintext highlighter-rouge">2</code> is commonly used for other Linux filesystems that support boot-time checks.</li>
+</ol>
+
+<h3 id="step-5-test-before-rebooting">Step 5: test before rebooting</h3>
+
+<p>First ask systemd to reload its view of unit files:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
+</code></pre></div></div>
+
+<p>Then test the fstab entries:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>findmnt <span class="nt">--verify</span> <span class="nt">--verbose</span>
+<span class="nb">sudo </span>mount <span class="nt">-a</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">findmnt --verify</code> checks fstab entries for common problems.</li>
+  <li><code class="language-plaintext highlighter-rouge">mount -a</code> attempts to mount filesystems configured for automatic mounting, excluding entries marked <code class="language-plaintext highlighter-rouge">noauto</code>.</li>
+</ul>
+
+<p>Check the result:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>findmnt /mnt/data
+<span class="nb">df</span> <span class="nt">-hT</span> /mnt/data
+</code></pre></div></div>
+
+<p>If <code class="language-plaintext highlighter-rouge">mount -a</code> reports an error, correct <code class="language-plaintext highlighter-rouge">/etc/fstab</code> before rebooting. A bad fstab entry can cause boot delays or recovery-mode problems. Keep the backup and know how to access a recovery shell.</p>
+
+<h3 id="common-fstab-options">Common fstab options</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">defaults</code></td>
+      <td>Standard default options, generally including read-write access and automatic mounting</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ro</code></td>
+      <td>Mount read-only</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">rw</code></td>
+      <td>Request read-write access</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">noauto</code></td>
+      <td>Do not mount automatically via <code class="language-plaintext highlighter-rouge">mount -a</code> or normal automatic fstab mounting</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nofail</code></td>
+      <td>Do not make boot depend on successful mounting of this filesystem</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">noatime</code></td>
+      <td>Avoid updating file access times on reads</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">user</code></td>
+      <td>Allow an ordinary user to mount the filesystem; normally only the mounting user can unmount it</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">users</code></td>
+      <td>Allow any user to mount and unmount it</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">uid=1000,gid=1000</code></td>
+      <td>Common ownership mapping options for filesystems that do not store Unix ownership, such as many FAT mounts</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">umask=022</code></td>
+      <td>Common permission mask option for FAT-like filesystems; exact support depends on the filesystem driver</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Options are filesystem- and use-case-dependent. Do not paste every option into every entry.</p>
+
+<h2 id="12-permanent-mounting-methods-and-when-to-use-them">12. Permanent mounting methods and when to use them</h2>
+
+<p>“Permanent mounting” usually means the system mounts a filesystem automatically, often at boot. There are several ways to configure this, depending on the type of storage.</p>
+
+<h3 id="method-a-etcfstab-for-a-fixed-internal-drive">Method A: <code class="language-plaintext highlighter-rouge">/etc/fstab</code> for a fixed internal drive</h3>
+
+<p><strong>Best for:</strong> internal SATA/NVMe disks, stable data volumes, and filesystems that should be available during normal boot.</p>
+
+<p>Example:</p>
+
+<pre><code class="language-fstab">UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  /srv/data  ext4  defaults  0  2
+</code></pre>
+
+<p>Prepare the mount point and test it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /srv/data
+<span class="nb">sudo </span>vim /etc/fstab
+<span class="nb">sudo </span>findmnt <span class="nt">--verify</span> <span class="nt">--verbose</span>
+<span class="nb">sudo </span>mount <span class="nt">-a</span>
+findmnt /srv/data
+</code></pre></div></div>
+
+<p>Use the actual UUID from <code class="language-plaintext highlighter-rouge">blkid</code>. A UUID is more reliable than <code class="language-plaintext highlighter-rouge">/dev/sdb1</code> when drive enumeration changes.</p>
+
+<h3 id="method-b-etcfstab-with-nofail-for-optional-drives">Method B: <code class="language-plaintext highlighter-rouge">/etc/fstab</code> with <code class="language-plaintext highlighter-rouge">nofail</code> for optional drives</h3>
+
+<p><strong>Best for:</strong> a secondary disk that may sometimes be disconnected, or storage that should not prevent the machine from booting if unavailable.</p>
+
+<p>Example:</p>
+
+<pre><code class="language-fstab">UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  /mnt/archive  ext4  defaults,nofail  0  2
+</code></pre>
+
+<p><code class="language-plaintext highlighter-rouge">nofail</code> helps avoid making the boot depend on this mount succeeding. It does not make an absent drive available, and dependent services may still need their own configuration.</p>
+
+<p>For removable USB drives, consider whether automatic boot-time mounting is actually desirable. Desktop environments may be better for drives that come and go.</p>
+
+<h3 id="method-c-systemd-automount">Method C: systemd automount</h3>
+
+<p><strong>Best for:</strong> a local or network filesystem that should be mounted on first access rather than mounted immediately during boot.</p>
+
+<p>A systemd automount is usually configured through matching <code class="language-plaintext highlighter-rouge">.mount</code> and <code class="language-plaintext highlighter-rouge">.automount</code> units. Unit names must correspond to the escaped mount path.</p>
+
+<p>For mount point <code class="language-plaintext highlighter-rouge">/mnt/archive</code>, generate the correct unit names with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemd-escape <span class="nt">--path</span> <span class="nt">--suffix</span><span class="o">=</span>mount /mnt/archive
+systemd-escape <span class="nt">--path</span> <span class="nt">--suffix</span><span class="o">=</span>automount /mnt/archive
+</code></pre></div></div>
+
+<p>Create <code class="language-plaintext highlighter-rouge">/etc/systemd/system/mnt-archive.mount</code>:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">Archive filesystem</span>
+<span class="w">
+</span><span class="nn">[Mount]</span><span class="w">
+</span><span class="py">What</span><span class="p">=</span><span class="s">UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+<span class="py">Where</span><span class="p">=</span><span class="s">/mnt/archive</span>
+<span class="py">Type</span><span class="p">=</span><span class="s">ext4</span>
+<span class="py">Options</span><span class="p">=</span><span class="s">defaults</span>
+</code></pre></div></div>
+
+<p>Create <code class="language-plaintext highlighter-rouge">/etc/systemd/system/mnt-archive.automount</code>:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">Automount archive filesystem</span>
+<span class="w">
+</span><span class="nn">[Automount]</span><span class="w">
+</span><span class="py">Where</span><span class="p">=</span><span class="s">/mnt/archive</span>
+<span class="w">
+</span><span class="nn">[Install]</span><span class="w">
+</span><span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+</code></pre></div></div>
+
+<p>Create the directory, reload systemd, and enable the automount:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /mnt/archive
+<span class="nb">sudo </span>systemctl daemon-reload
+<span class="nb">sudo </span>systemctl <span class="nb">enable</span> <span class="nt">--now</span> mnt-archive.automount
+</code></pre></div></div>
+
+<p>Check its state:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl status mnt-archive.automount
+systemctl status mnt-archive.mount
+findmnt /mnt/archive
+</code></pre></div></div>
+
+<p>The filesystem mount is normally activated when something accesses <code class="language-plaintext highlighter-rouge">/mnt/archive</code>. Use this pattern when delayed mounting is useful. For simple internal disks, <code class="language-plaintext highlighter-rouge">/etc/fstab</code> is usually easier. Do not configure the same filesystem/mount point in conflicting ways through both fstab and separate systemd units.</p>
+
+<h3 id="method-d-desktop-automount-for-removable-media">Method D: Desktop automount for removable media</h3>
+
+<p><strong>Best for:</strong> USB sticks, external disks, and SD cards used interactively on a desktop.</p>
+
+<p>GNOME and other desktop environments can mount removable media when inserted and often place it under <code class="language-plaintext highlighter-rouge">/media/$USER/</code>. This is managed by the desktop's storage services, not usually by a permanent <code class="language-plaintext highlighter-rouge">/etc/fstab</code> entry.</p>
+
+<p>Check the mount after inserting a drive:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-f</span>
+findmnt
+</code></pre></div></div>
+
+<p>If you want a removable disk at a predictable path even without a desktop session, an fstab entry may be appropriate. Use its UUID and consider <code class="language-plaintext highlighter-rouge">nofail</code> and <code class="language-plaintext highlighter-rouge">noauto</code> based on your needs.</p>
+
+<h3 id="method-e-network-storage-with-etcfstab">Method E: Network storage with <code class="language-plaintext highlighter-rouge">/etc/fstab</code></h3>
+
+<p><strong>Best for:</strong> a persistent SMB/CIFS or NFS share. Network mounts require extra care because the network or server may not be available during early boot.</p>
+
+<p>For an SMB/CIFS share, install the helper:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>cifs-utils
+</code></pre></div></div>
+
+<p>Create a mount point:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /mnt/sharedrive
+</code></pre></div></div>
+
+<p>Create a root-readable credentials file rather than putting a password directly in <code class="language-plaintext highlighter-rouge">/etc/fstab</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo install</span> <span class="nt">-m</span> 600 /dev/null /etc/samba/credentials-sharedrive
+<span class="nb">sudo </span>vim /etc/samba/credentials-sharedrive
+</code></pre></div></div>
+
+<p>Example contents:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>username=YOUR_USERNAME
+password=YOUR_PASSWORD
+</code></pre></div></div>
+
+<p>Protect the file because it contains a password. For environments requiring a domain, add a <code class="language-plaintext highlighter-rouge">domain=...</code> line if appropriate. Avoid sharing the credentials file.</p>
+
+<p>An illustrative fstab entry:</p>
+
+<pre><code class="language-fstab">//SERVER/SHARE  /mnt/sharedrive  cifs  credentials=/etc/samba/credentials-sharedrive,_netdev,nofail,x-systemd.automount,uid=1000,gid=1000  0  0
+</code></pre>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">SERVER</code>, <code class="language-plaintext highlighter-rouge">SHARE</code>, username, password, and user/group IDs with real values. Confirm the local account IDs with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">id </span>YOUR_LOCAL_USERNAME
+</code></pre></div></div>
+
+<p>Notes:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_netdev</code> tells the system the mount needs network connectivity.</li>
+  <li><code class="language-plaintext highlighter-rouge">nofail</code> helps prevent an unavailable share from blocking boot.</li>
+  <li><code class="language-plaintext highlighter-rouge">x-systemd.automount</code> can delay the actual network mount until access.</li>
+  <li><code class="language-plaintext highlighter-rouge">uid</code> and <code class="language-plaintext highlighter-rouge">gid</code> influence ownership presentation for many CIFS mounts; they do not replace server-side permissions.</li>
+  <li>Some servers require additional security or protocol options. Use options supported by your NAS/server and the installed CIFS client.</li>
+</ul>
+
+<p>For NFS, install the client tools if needed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>nfs-common
+</code></pre></div></div>
+
+<p>An illustrative NFS fstab entry is:</p>
+
+<pre><code class="language-fstab">SERVER:/export/data  /mnt/nfsdata  nfs  _netdev,nofail,x-systemd.automount  0  0
+</code></pre>
+
+<p>Replace the server and export path. Network filesystems have server-side export and permission requirements as well as client mount options.</p>
+
+<h3 id="which-method-should-i-choose">Which method should I choose?</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Storage situation</th>
+      <th>Recommended starting point</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fixed internal Linux data disk</td>
+      <td><code class="language-plaintext highlighter-rouge">/etc/fstab</code> with <code class="language-plaintext highlighter-rouge">UUID=</code></td>
+    </tr>
+    <tr>
+      <td>Optional secondary disk</td>
+      <td><code class="language-plaintext highlighter-rouge">/etc/fstab</code> with <code class="language-plaintext highlighter-rouge">UUID=</code> and often <code class="language-plaintext highlighter-rouge">nofail</code></td>
+    </tr>
+    <tr>
+      <td>Disk should mount on first access</td>
+      <td>systemd automount</td>
+    </tr>
+    <tr>
+      <td>USB drive used interactively in a desktop</td>
+      <td>Desktop automount</td>
+    </tr>
+    <tr>
+      <td>SMB/CIFS network share</td>
+      <td><code class="language-plaintext highlighter-rouge">cifs-utils</code> plus fstab, credentials file, and network-aware options</td>
+    </tr>
+    <tr>
+      <td>NFS share</td>
+      <td><code class="language-plaintext highlighter-rouge">nfs-common</code> plus fstab and network-aware options</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="13-ownership-and-permissions-on-mounted-filesystems">13. Ownership and permissions on mounted filesystems</h2>
+
+<p>Mounting a filesystem does not automatically give every user permission to write to it. Access depends on filesystem permissions, mount options, and sometimes server-side rules.</p>
+
+<h3 id="ext4-and-other-unix-style-filesystems">ext4 and other Unix-style filesystems</h3>
+
+<p>These filesystems store ownership and permissions on disk. Set ownership on the mounted directory when appropriate:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo chown </span>YOUR_USERNAME:YOUR_USERNAME /mnt/data
+<span class="nb">sudo chmod </span>755 /mnt/data
+</code></pre></div></div>
+
+<p>Be careful: changing ownership on the mount point while the drive is <strong>not</strong> mounted affects the underlying directory on the root filesystem, not the contents of the drive. Mount the filesystem first, verify with <code class="language-plaintext highlighter-rouge">findmnt</code>, then change the intended directory.</p>
+
+<p>For an entire data volume, a one-time ownership change may be appropriate, but recursively changing permissions on a large filesystem can take time and may break applications. Avoid <code class="language-plaintext highlighter-rouge">chmod -R 777</code>.</p>
+
+<h3 id="fat-and-exfat">FAT and exFAT</h3>
+
+<p>These filesystems do not store Linux ownership and permission bits in the same way ext4 does. Mount options can present files as owned by a chosen user:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mount <span class="nt">-t</span> exfat <span class="nt">-o</span> <span class="nv">uid</span><span class="o">=</span>1000,gid<span class="o">=</span>1000,umask<span class="o">=</span>022 /dev/sdb1 /mnt/data
+</code></pre></div></div>
+
+<p>Get the correct IDs with <code class="language-plaintext highlighter-rouge">id YOUR_USERNAME</code>. For a permanent mount, put suitable options in the fstab options field.</p>
+
+<h3 id="ntfs-1">NTFS</h3>
+
+<p>NTFS ownership and permission behavior depends on the driver and mount options. If access needs to be assigned to a particular local user, consult the installed NTFS driver's documentation and test the exact options before relying on them.</p>
+
+<h2 id="14-swap-space">14. Swap space</h2>
+
+<p>Swap provides disk-backed memory support. It is separate from a regular data filesystem.</p>
+
+<h3 id="show-active-swap">Show active swap</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>swapon <span class="nt">--show</span>
+free <span class="nt">-h</span>
+</code></pre></div></div>
+
+<h3 id="enable-an-existing-swap-partition">Enable an existing swap partition</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>swapon /dev/sdb2
+</code></pre></div></div>
+
+<p>To make it persistent, add an entry to <code class="language-plaintext highlighter-rouge">/etc/fstab</code> using the actual swap UUID:</p>
+
+<pre><code class="language-fstab">UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  none  swap  sw  0  0
+</code></pre>
+
+<p>Only do this if <code class="language-plaintext highlighter-rouge">/dev/sdb2</code> is already correctly initialized as swap. Creating swap with <code class="language-plaintext highlighter-rouge">mkswap</code> is destructive to existing content on the selected partition.</p>
+
+<h2 id="15-lvm-raid-and-encrypted-storage-overview">15. LVM, RAID, and encrypted storage overview</h2>
+
+<p>Some systems add layers between a physical disk and the filesystem. Identify these before making changes.</p>
+
+<h3 id="lvm-logical-volume-manager">LVM (Logical Volume Manager)</h3>
+
+<p>Useful commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>pvs
+<span class="nb">sudo </span>vgs
+<span class="nb">sudo </span>lvs
+</code></pre></div></div>
+
+<p>LVM groups physical storage into volume groups and allocates logical volumes. Filesystems are commonly created on logical volumes such as <code class="language-plaintext highlighter-rouge">/dev/vgname/lvname</code>. Do not format a physical volume or logical volume until you know which layer it represents.</p>
+
+<h3 id="software-raid">Software RAID</h3>
+
+<p>Useful inspection commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> /proc/mdstat
+<span class="nb">sudo </span>mdadm <span class="nt">--detail</span> <span class="nt">--scan</span>
+</code></pre></div></div>
+
+<p>RAID devices can be assembled from multiple disks. Do not repartition or format a member disk without understanding the array configuration.</p>
+
+<h3 id="luks-encryption">LUKS encryption</h3>
+
+<p>Useful inspection commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-f</span>
+<span class="nb">sudo </span>cryptsetup status NAME
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">cryptsetup status</code> example requires replacing <code class="language-plaintext highlighter-rouge">NAME</code> with the active mapped device name. Encrypted storage may expose a decrypted device under <code class="language-plaintext highlighter-rouge">/dev/mapper/</code>, and the filesystem is created and mounted on the appropriate decrypted layer, not on the raw encrypted container.</p>
+
+<p>These are inspection starting points, not complete setup or recovery procedures. Read the relevant documentation before modifying LVM, RAID, or encrypted devices.</p>
+
+<h2 id="16-troubleshooting">16. Troubleshooting</h2>
+
+<h3 id="mount-point-does-not-exist">“mount point does not exist”</h3>
+
+<p>Create the directory:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /mnt/data
+</code></pre></div></div>
+
+<h3 id="wrong-fs-type-bad-superblock-or-unknown-filesystem">“wrong fs type”, “bad superblock”, or unknown filesystem</h3>
+
+<p>Inspect the device and filesystem metadata:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-f</span>
+<span class="nb">sudo </span>blkid /dev/sdb1
+</code></pre></div></div>
+
+<p>Confirm that you selected the partition, not the whole disk or the wrong layer. Install the correct filesystem tools if needed. Do not immediately format the device; that can destroy recoverable data.</p>
+
+<h3 id="special-device-does-not-exist">“special device does not exist”</h3>
+
+<p>The device name may be wrong or may have changed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk
+<span class="nb">ls</span> <span class="nt">-l</span> /dev/disk/by-uuid/
+</code></pre></div></div>
+
+<p>Use the actual device or UUID shown by the system.</p>
+
+<h3 id="target-is-busy-when-unmounting">“target is busy” when unmounting</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>fuser <span class="nt">-vm</span> /mnt/data
+</code></pre></div></div>
+
+<p>Exit shells or stop applications using the mount and try again.</p>
+
+<h3 id="a-permanent-mount-fails-at-boot">A permanent mount fails at boot</h3>
+
+<p>Check the fstab syntax and test it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>findmnt <span class="nt">--verify</span> <span class="nt">--verbose</span>
+<span class="nb">sudo </span>mount <span class="nt">-a</span>
+systemctl <span class="nt">--failed</span>
+journalctl <span class="nt">-b</span> <span class="nt">-p</span> warning
+</code></pre></div></div>
+
+<p>Verify the UUID, mount point, filesystem type, and options. If a removable drive or network share may be absent at boot, consider whether <code class="language-plaintext highlighter-rouge">nofail</code>, <code class="language-plaintext highlighter-rouge">_netdev</code>, or a systemd automount is appropriate.</p>
+
+<h3 id="disk-or-filesystem-io-errors">Disk or filesystem I/O errors</h3>
+
+<p>Check recent kernel messages:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>journalctl <span class="nt">-k</span> <span class="nt">--since</span> <span class="s2">"1 hour ago"</span>
+dmesg <span class="nt">--level</span><span class="o">=</span>err,warn
+</code></pre></div></div>
+
+<p>Repeated I/O errors may indicate a failing drive, cable, controller, or storage backend. Prioritize a backup or disk image before running repairs that write to the device.</p>
+
+<h2 id="17-safe-workflow-examples">17. Safe workflow examples</h2>
+
+<h3 id="example-a-mount-an-existing-linux-data-partition-temporarily">Example A: Mount an existing Linux data partition temporarily</h3>
+
+<p>Assume the existing filesystem is <code class="language-plaintext highlighter-rouge">/dev/sdb1</code> and is ext4:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-f</span>
+<span class="nb">sudo mkdir</span> <span class="nt">-p</span> /mnt/data
+<span class="nb">sudo </span>mount /dev/sdb1 /mnt/data
+findmnt /mnt/data
+<span class="nb">df</span> <span class="nt">-hT</span> /mnt/data
+</code></pre></div></div>
+
+<p>When finished:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>umount /mnt/data
+</code></pre></div></div>
+
+<h3 id="example-b-prepare-a-new-empty-disk-for-data">Example B: Prepare a new empty disk for data</h3>
+
+<p><strong>This example erases the existing partition layout and filesystem data on the selected disk. Verify the disk first.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-o</span> NAME,SIZE,MODEL,FSTYPE,MOUNTPOINTS
+<span class="nb">sudo </span>fdisk <span class="nt">-l</span>
+<span class="nb">sudo </span>fdisk /dev/sdb
+</code></pre></div></div>
+
+<p>Inside <code class="language-plaintext highlighter-rouge">fdisk</code>, create a GPT table (<code class="language-plaintext highlighter-rouge">g</code>), create a partition (<code class="language-plaintext highlighter-rouge">n</code>), review it (<code class="language-plaintext highlighter-rouge">p</code>), and write changes (<code class="language-plaintext highlighter-rouge">w</code>). Then verify the new partition name:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-f</span>
+</code></pre></div></div>
+
+<p>If the new partition is <code class="language-plaintext highlighter-rouge">/dev/sdb1</code>, format it as ext4:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>mkfs.ext4 <span class="nt">-L</span> DATA /dev/sdb1
+</code></pre></div></div>
+
+<p>Mount it temporarily:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /mnt/data
+<span class="nb">sudo </span>mount <span class="nv">LABEL</span><span class="o">=</span>DATA /mnt/data
+findmnt /mnt/data
+</code></pre></div></div>
+
+<p>For permanent mounting, obtain its UUID with <code class="language-plaintext highlighter-rouge">sudo blkid /dev/sdb1</code>, then add a UUID-based entry to <code class="language-plaintext highlighter-rouge">/etc/fstab</code> as described above. Test with <code class="language-plaintext highlighter-rouge">sudo findmnt --verify --verbose</code> and <code class="language-plaintext highlighter-rouge">sudo mount -a</code> before rebooting.</p>
+
+<h3 id="example-c-make-a-data-disk-available-to-a-service">Example C: Make a data disk available to a service</h3>
+
+<p>For a service that stores files under <code class="language-plaintext highlighter-rouge">/srv/data</code>:</p>
+
+<ol>
+  <li>Create and mount the filesystem at <code class="language-plaintext highlighter-rouge">/srv/data</code>.</li>
+  <li>Confirm the mount with <code class="language-plaintext highlighter-rouge">findmnt /srv/data</code>.</li>
+  <li>Set ownership to the service account or group that needs access.</li>
+  <li>Configure the mount in <code class="language-plaintext highlighter-rouge">/etc/fstab</code> by UUID.</li>
+  <li>Test the entry before rebooting.</li>
+  <li>If the service starts at boot, ensure its systemd service starts after the mount or has an appropriate mount dependency. Avoid letting the service write into an unmounted directory by accident.</li>
+</ol>
+
+<h2 id="18-quick-reference">18. Quick reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>List disks and partitions</td>
+      <td><code class="language-plaintext highlighter-rouge">lsblk -f</code></td>
+    </tr>
+    <tr>
+      <td>Show mounted filesystem space</td>
+      <td><code class="language-plaintext highlighter-rouge">df -hT</code></td>
+    </tr>
+    <tr>
+      <td>Show UUIDs and filesystem types</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo blkid</code></td>
+    </tr>
+    <tr>
+      <td>List partition tables</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo fdisk -l</code></td>
+    </tr>
+    <tr>
+      <td>Edit partition table</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo fdisk /dev/sdb</code></td>
+    </tr>
+    <tr>
+      <td>Inspect with parted</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo parted /dev/sdb print</code></td>
+    </tr>
+    <tr>
+      <td>Create ext4 filesystem</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo mkfs.ext4 /dev/sdb1</code></td>
+    </tr>
+    <tr>
+      <td>Mount temporarily</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo mount /dev/sdb1 /mnt/data</code></td>
+    </tr>
+    <tr>
+      <td>Show mount details</td>
+      <td><code class="language-plaintext highlighter-rouge">findmnt /mnt/data</code></td>
+    </tr>
+    <tr>
+      <td>Unmount</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo umount /mnt/data</code></td>
+    </tr>
+    <tr>
+      <td>Check fstab</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo findmnt --verify --verbose</code></td>
+    </tr>
+    <tr>
+      <td>Mount fstab entries</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo mount -a</code></td>
+    </tr>
+    <tr>
+      <td>See active swap</td>
+      <td><code class="language-plaintext highlighter-rouge">swapon --show</code></td>
+    </tr>
+    <tr>
+      <td>Find processes using mount</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo fuser -vm /mnt/data</code></td>
+    </tr>
+    <tr>
+      <td>Inspect kernel warnings</td>
+      <td><code class="language-plaintext highlighter-rouge">journalctl -k -p warning</code></td>
+    </tr>
+    <tr>
+      <td>Copy raw data to an image</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo dd if=/dev/sdb of=disk.img bs=4M status=progress</code></td>
+    </tr>
+    <tr>
+      <td>Recover a failing disk</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo ddrescue -n /dev/sdb disk.img disk.map</code></td>
+    </tr>
+    <tr>
+      <td>List partitions in an image</td>
+      <td><code class="language-plaintext highlighter-rouge">mmls disk.img</code></td>
+    </tr>
+    <tr>
+      <td>Check drive SMART data</td>
+      <td><code class="language-plaintext highlighter-rouge">sudo smartctl -a /dev/sda</code></td>
+    </tr>
+    <tr>
+      <td>Hash an image</td>
+      <td><code class="language-plaintext highlighter-rouge">sha256sum disk.img</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="further-reading">Further reading</h2>
+
+<ul>
+  <li><a href="https://debian-handbook.info/">Debian Administrator's Handbook</a></li>
+  <li><a href="https://manpages.debian.org/mount">Linux <code class="language-plaintext highlighter-rouge">mount</code> manual</a></li>
+  <li><a href="https://manpages.debian.org/fstab">Linux <code class="language-plaintext highlighter-rouge">fstab</code> manual</a></li>
+  <li><a href="https://manpages.debian.org/lsblk">Linux <code class="language-plaintext highlighter-rouge">lsblk</code> manual</a></li>
+  <li><a href="https://www.gnu.org/software/parted/manual/">GNU Parted documentation</a></li>
+  <li><a href="https://nvmexpress.org/">NVM Express (NVMe) overview</a></li>
+</ul>
+
+<hr />
+
+<p><strong>Recommended habit:</strong> inspect with <code class="language-plaintext highlighter-rouge">lsblk -f</code> before every storage change. For a fixed internal disk, use a UUID-based <code class="language-plaintext highlighter-rouge">/etc/fstab</code> entry, then verify it and test with <code class="language-plaintext highlighter-rouge">mount -a</code> before rebooting.</p>
+
+<h2 id="19-disk-imaging-and-copying-with-dd">19. Disk imaging and copying with <code class="language-plaintext highlighter-rouge">dd</code></h2>
+
+<p><code class="language-plaintext highlighter-rouge">dd</code> copies data from an input (<code class="language-plaintext highlighter-rouge">if=</code>) to an output (<code class="language-plaintext highlighter-rouge">of=</code>). It works at the byte level, so it can copy files, partitions, entire disks, and disk images. It does not understand filesystems and can overwrite a destination without asking.</p>
+
+<blockquote>
+  <p><strong>Extreme caution:</strong> a mistaken <code class="language-plaintext highlighter-rouge">of=</code> path can destroy the data on the wrong disk. Always identify source and destination with <code class="language-plaintext highlighter-rouge">lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,MOUNTPOINTS</code> before using <code class="language-plaintext highlighter-rouge">dd</code>. Unmount source partitions before imaging when possible, and never write an image to the source device.</p>
+</blockquote>
+
+<h3 id="basic-syntax">Basic syntax</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">dd </span><span class="k">if</span><span class="o">=</span>SOURCE <span class="nv">of</span><span class="o">=</span>DESTINATION <span class="nv">bs</span><span class="o">=</span>BLOCK_SIZE <span class="nv">status</span><span class="o">=</span>progress
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">if=</code>: input file or device.</li>
+  <li><code class="language-plaintext highlighter-rouge">of=</code>: output file or device.</li>
+  <li><code class="language-plaintext highlighter-rouge">bs=</code>: block size used for reading and writing.</li>
+  <li><code class="language-plaintext highlighter-rouge">status=progress</code>: display ongoing transfer progress on supported GNU <code class="language-plaintext highlighter-rouge">dd</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">conv=noerror,sync</code>: in some recovery workflows, continue past read errors and pad unreadable blocks; this is not a substitute for a forensic imaging tool that logs bad sectors and acquisition details.</li>
+</ul>
+
+<h3 id="create-an-image-file-from-a-partition">Create an image file from a partition</h3>
+
+<p>Example: image <code class="language-plaintext highlighter-rouge">/dev/sdb1</code> into a file on a different mounted drive with sufficient free space:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo dd </span><span class="k">if</span><span class="o">=</span>/dev/sdb1 <span class="nv">of</span><span class="o">=</span>/mnt/backup/sdb1.img <span class="nv">bs</span><span class="o">=</span>4M <span class="nv">status</span><span class="o">=</span>progress
+<span class="nb">sync</span>
+</code></pre></div></div>
+
+<p>This reads the partition and writes a raw image file. Make sure <code class="language-plaintext highlighter-rouge">/mnt/backup</code> is on a different storage device with enough free space.</p>
+
+<h3 id="image-an-entire-disk">Image an entire disk</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo dd </span><span class="k">if</span><span class="o">=</span>/dev/sdb <span class="nv">of</span><span class="o">=</span>/mnt/backup/sdb-disk.img <span class="nv">bs</span><span class="o">=</span>4M <span class="nv">status</span><span class="o">=</span>progress
+<span class="nb">sync</span>
+</code></pre></div></div>
+
+<p>This copies the whole device, including its partition table and unused space. The image size will generally be as large as the source disk's addressable capacity.</p>
+
+<h3 id="restore-an-image-to-a-disk">Restore an image to a disk</h3>
+
+<p><strong>This overwrites the destination disk. Verify the destination device carefully before running it.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-o</span> NAME,SIZE,MODEL,SERIAL,MOUNTPOINTS
+<span class="nb">sudo dd </span><span class="k">if</span><span class="o">=</span>/mnt/backup/sdb-disk.img <span class="nv">of</span><span class="o">=</span>/dev/sdc <span class="nv">bs</span><span class="o">=</span>4M <span class="nv">status</span><span class="o">=</span>progress
+<span class="nb">sync</span>
+</code></pre></div></div>
+
+<p>Here <code class="language-plaintext highlighter-rouge">/dev/sdc</code> is only an example destination. Never use it unless you have positively identified it as the intended target. Unmount any mounted partitions on the destination first. The destination must be at least as large as the image's original device, unless you have a deliberately prepared smaller-image workflow.</p>
+
+<h3 id="copy-an-iso-to-a-usb-drive">Copy an ISO to a USB drive</h3>
+
+<p>This is a common way to write a Linux installer image to a USB stick. It erases the USB stick's existing contents.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk <span class="nt">-o</span> NAME,SIZE,MODEL,TRAN,MOUNTPOINTS
+<span class="nb">sudo </span>umount /dev/sdX<span class="k">*</span> 2&gt;/dev/null
+<span class="nb">sudo dd </span><span class="k">if</span><span class="o">=</span>debian.iso <span class="nv">of</span><span class="o">=</span>/dev/sdX <span class="nv">bs</span><span class="o">=</span>4M <span class="nv">status</span><span class="o">=</span>progress <span class="nv">conv</span><span class="o">=</span>fsync
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">debian.iso</code> with the actual ISO path and <code class="language-plaintext highlighter-rouge">/dev/sdX</code> with the <strong>whole USB device</strong>, not a partition such as <code class="language-plaintext highlighter-rouge">/dev/sdX1</code>. Check the target carefully. A graphical image writer is often safer for beginners.</p>
+
+<h3 id="verify-an-image-with-a-hash">Verify an image with a hash</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sha256sum</span> /mnt/backup/sdb-disk.img
+<span class="nb">sha256sum </span>debian.iso
+</code></pre></div></div>
+
+<p>For a downloaded ISO, compare the hash against a trusted value published by the distributor. A hash only proves equality with the value you compare against; it does not prove authenticity if the reference value itself is untrusted.</p>
+
+<h3 id="dd-limitations-and-safer-alternatives"><code class="language-plaintext highlighter-rouge">dd</code> limitations and safer alternatives</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">dd</code> copies raw bytes and does not create a forensic report or automatically preserve a detailed bad-sector map.</li>
+  <li>If a disk is failing, repeated reads can stress it. Consider using GNU <code class="language-plaintext highlighter-rouge">ddrescue</code> rather than plain <code class="language-plaintext highlighter-rouge">dd</code>.</li>
+  <li>A live filesystem may change while it is being copied. For consistent system images, use an offline source, a suitable snapshot, or a forensic acquisition workflow.</li>
+  <li>Do not mount or modify the original evidence drive if preserving evidence is important.</li>
+</ul>
+
+<h2 id="20-digital-forensics-and-recovery-tools">20. Digital forensics and recovery tools</h2>
+
+<p>Digital forensics is the process of collecting and examining digital evidence in a controlled, repeatable way. For important investigations, follow your organization's procedures and applicable law. The tools below serve different purposes; no single tool replaces a sound evidence-handling process.</p>
+
+<h3 id="install-commonly-used-tools">Install commonly used tools</h3>
+
+<p>Some tools are in Debian repositories; others may require separate packages or trusted vendor instructions. Check package availability on your Debian release before installing:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt search gddrescue
+apt search testdisk
+apt search sleuthkit
+apt search ewf
+apt search smartmontools
+</code></pre></div></div>
+
+<p>Common package names include:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>gddrescue testdisk sleuthkit smartmontools
+</code></pre></div></div>
+
+<p>Optional tools such as <code class="language-plaintext highlighter-rouge">ewf-tools</code> may be available depending on the configured repositories. Do not add an unfamiliar repository solely to install a forensic tool without evaluating its trustworthiness.</p>
+
+<h3 id="gnu-ddrescue-recover-data-from-a-failing-disk">GNU ddrescue: recover data from a failing disk</h3>
+
+<p>GNU <code class="language-plaintext highlighter-rouge">ddrescue</code> is designed to copy data from devices with read errors and maintain a mapfile so interrupted recovery can resume.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ddrescue <span class="nt">-n</span> /dev/sdb /mnt/backup/sdb.img /mnt/backup/sdb.map
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">/dev/sdb</code>: example source device.</li>
+  <li><code class="language-plaintext highlighter-rouge">sdb.img</code>: image written to a healthy destination drive.</li>
+  <li><code class="language-plaintext highlighter-rouge">sdb.map</code>: mapfile recording which areas have been copied.</li>
+</ul>
+
+<p>The example uses <code class="language-plaintext highlighter-rouge">-n</code> to perform an initial pass without scraping. For a failing disk, work from an image where possible and consult <code class="language-plaintext highlighter-rouge">man ddrescue</code> before deciding whether additional retries are appropriate. Keep the mapfile on healthy storage and never place the image or mapfile on the failing source.</p>
+
+<h3 id="testdisk-partition-and-filesystem-recovery">TestDisk: partition and filesystem recovery</h3>
+
+<p>TestDisk can help find lost partitions and recover some filesystem structures.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>testdisk
+</code></pre></div></div>
+
+<p>It is interactive. If the goal is to preserve evidence, use a write-blocked source or work on a verified copy/image and avoid writing recovered partition structures back to the original drive.</p>
+
+<h3 id="photorec-recover-files-by-file-signatures">PhotoRec: recover files by file signatures</h3>
+
+<p>PhotoRec, distributed with TestDisk, can recover files based on their contents rather than relying solely on filesystem directory metadata.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>photorec
+</code></pre></div></div>
+
+<p>Save recovered files to a different physical drive. Recovered files may lose their original names and directory structure. Never save recovered data onto the source drive, because doing so may overwrite data that has not yet been recovered.</p>
+
+<h3 id="the-sleuth-kit-inspect-filesystem-artifacts">The Sleuth Kit: inspect filesystem artifacts</h3>
+
+<p>The Sleuth Kit provides command-line tools for examining disk images and filesystems. Useful commands include:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mmls disk.img
+fsstat disk.img
+fls <span class="nt">-r</span> disk.img
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">mmls</code> lists partition-layout information in supported images.</li>
+  <li><code class="language-plaintext highlighter-rouge">fsstat</code> displays filesystem details.</li>
+  <li><code class="language-plaintext highlighter-rouge">fls -r</code> recursively lists file and directory entries, including entries that may be deleted if supported by the filesystem and image.</li>
+</ul>
+
+<p>These tools are generally used on image files or suitable device inputs. Exact options vary; consult the relevant manual pages. Avoid changing the evidence source during examination.</p>
+
+<h3 id="smart-health-data-smartmontools">SMART health data: smartmontools</h3>
+
+<p>SMART information can help assess a drive's reported health, though it cannot guarantee that a disk will not fail.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>smartctl <span class="nt">--scan</span>
+<span class="nb">sudo </span>smartctl <span class="nt">-a</span> /dev/sda
+</code></pre></div></div>
+
+<p>For NVMe devices, the appropriate device path and output may differ. Some USB adapters do not pass SMART data through. If a drive is failing and contains important data, prioritize copying or imaging the data rather than running unnecessary tests.</p>
+
+<h3 id="identify-file-types-and-calculate-hashes">Identify file types and calculate hashes</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file suspicious-file
+<span class="nb">sha256sum </span>disk.img
+<span class="nb">sha256sum </span>recovered-file
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">file</code> identifies likely file formats from their contents. SHA-256 hashes can help document whether an image or file changed between stages, provided the hashes are recorded and handled correctly.</p>
+
+<h3 id="mount-an-image-read-only">Mount an image read-only</h3>
+
+<p>For a filesystem image that contains a filesystem directly, a read-only loop mount may be possible:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /mnt/evidence
+<span class="nb">sudo </span>mount <span class="nt">-o</span> loop,ro,nosuid,nodev,noexec disk-partition.img /mnt/evidence
+</code></pre></div></div>
+
+<p>This example applies only when the image itself contains a filesystem. A full-disk image includes a partition table, so identify the partition offset or use a forensic tool designed to access partitions within the image. Do not guess offsets. Some filesystems may replay a journal or otherwise write metadata unless suitable read-only procedures are used; for evidence-sensitive work, use a forensic workflow and write-blocking where appropriate.</p>
+
+<p>Unmount when finished:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>umount /mnt/evidence
+</code></pre></div></div>
+
+<h3 id="forensic-image-formats">Forensic image formats</h3>
+
+<p>A raw image (<code class="language-plaintext highlighter-rouge">.img</code> or <code class="language-plaintext highlighter-rouge">.dd</code>) is a byte-for-byte copy and is broadly supported. The Expert Witness Format (EWF), commonly using <code class="language-plaintext highlighter-rouge">.E01</code> files, supports metadata and acquisition-related information such as segmented images and integrity checks, depending on the tools used. Tool support and commands vary, so consult the installed <code class="language-plaintext highlighter-rouge">ewf-tools</code> documentation or the acquisition tool's manual.</p>
+
+<h2 id="21-evidence-handling-workflow">21. Evidence-handling workflow</h2>
+
+<p>For an incident response, recovery job, or formal investigation, a disciplined workflow is more important than any single command.</p>
+
+<ol>
+  <li><strong>Record the source.</strong> Note the device model, serial number, capacity, date/time, who handled it, and why it is being acquired.</li>
+  <li><strong>Avoid writes to the source.</strong> Use a hardware write blocker when evidence preservation requires it. A software read-only mount alone is not the same as a hardware write blocker.</li>
+  <li><strong>Prepare a separate destination.</strong> Store images, mapfiles, recovered files, and notes on healthy storage with enough capacity.</li>
+  <li><strong>Acquire an image.</strong> Use a suitable tool. For failing media, GNU <code class="language-plaintext highlighter-rouge">ddrescue</code> is often preferable to plain <code class="language-plaintext highlighter-rouge">dd</code>.</li>
+  <li><strong>Record hashes.</strong> Calculate and record cryptographic hashes for the resulting image and preserve the records with the case notes.</li>
+  <li><strong>Analyze a copy.</strong> Use tools such as The Sleuth Kit, TestDisk, or PhotoRec on copies where possible.</li>
+  <li><strong>Document commands and results.</strong> Keep timestamps, tool versions, options, logs, and any errors encountered.</li>
+  <li><strong>Preserve originals and outputs.</strong> Restrict access, retain originals safely, and follow applicable policy and legal requirements.</li>
+</ol>
+
+<p>Example: hash an acquired image and save the output to a log file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sha256sum</span> /mnt/backup/sdb.img | <span class="nb">tee</span> /mnt/backup/sdb.img.sha256
+</code></pre></div></div>
+
+<p>To check the image later against the saved hash file, run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> /mnt/backup
+<span class="nb">sha256sum</span> <span class="nt">-c</span> sdb.img.sha256
+</code></pre></div></div>
+
+<p>A matching hash indicates the file matches the recorded digest. It does not independently prove that the acquisition captured every readable sector or that the source was authentic.</p>
+
+<h3 id="quick-safety-reminders-for-forensic-work">Quick safety reminders for forensic work</h3>
+
+<ul>
+  <li>Do not experiment on the only copy of important data.</li>
+  <li>Do not save recovered files to the source disk.</li>
+  <li>Avoid running filesystem repair tools on the original evidence.</li>
+  <li>Keep images and logs access-controlled; disk images may contain passwords, private files, and personal data.</li>
+  <li>If legal admissibility or incident-response integrity matters, follow established procedures and consult a qualified examiner.</li>
+</ul>
+
+
+    </main>
+
+  </div>
+
+  <!-- Back to top button -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <span aria-hidden="true">↑</span>
+    <span class="back-to-top__label">Top</span>
+  </button>
+
+  <!-- Local JavaScript -->
+  <script src="../js/nav-search.js" defer></script>
+  <script src="../js/copy-code.js" defer></script>
+  <script src="../js/back-to-top.js" defer></script>
+</body>
+</html>
